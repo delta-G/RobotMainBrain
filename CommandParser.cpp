@@ -34,17 +34,6 @@ void CommandParser::run() {
 
 void CommandParser::parseCommandString() {
 	if (inputBuffer[0] == START_OP) {
-//		char delimiters[2] = { START_OP, END_OP };
-//		for (char* p = strtok(inputBuffer, delimiters); p != NULL;
-//				p = strtok(NULL, delimiters)) {
-//			for (int i = 0; i < numCommands; i++) {
-//				if (commands[i].match(p)) {
-//					commands[i].run(p);
-//				}
-//			}
-//
-//		}
-
 		for(int i = 0; i < numCommands; i++) {
 			if (commands[i].match(inputBuffer + 1)) {
 				commands[i].run(inputBuffer);
