@@ -9,7 +9,7 @@
 #define COMMANDFUNCTIONS_H_
 
 #include <Arduino.h>
-//#include "Defines.h"
+#include "Defines.h"
 #include "CommandParser.h"
 //#include "Joint.h"
 

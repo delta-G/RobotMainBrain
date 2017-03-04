@@ -6,14 +6,6 @@
  */
 #include "CommandFunctions.h"
 
-const int motor_R_Enable = 5;
-const int motorOut1 = 6;
-const int motorOut2 = 7;
-
-const int motor_L_Enable = 10;
-const int motorOut3 = 8;
-const int motorOut4 = 9;
-
 Command commands[] = {
 		{ 'R', requestFromBot },
 		{ 'M', motorControl },
@@ -40,33 +32,29 @@ void motorControl(char* p) {
 	if (p[1] == 'M') {
 		if (p[2] == 'R') {
 			if (p[4] == '1') {
-				digitalWrite(motorOut1, LOW);
-				digitalWrite(motorOut2, HIGH);
-				digitalWrite(motor_R_Enable, HIGH);
+				digitalWrite(RIGHT_MOTOR_DIRECTION_PIN, LOW);
+				digitalWrite(RIGHT_MOTOR_ENABLE_PIN, HIGH);
 				Serial.println("Right-LHH");
 			} else if (p[4] == '-' && p[5] == '1') {
-				digitalWrite(motorOut1, HIGH);
-				digitalWrite(motorOut2, LOW);
-				digitalWrite(motor_R_Enable, HIGH);
+				digitalWrite(RIGHT_MOTOR_DIRECTION_PIN, HIGH);
+				digitalWrite(RIGHT_MOTOR_ENABLE_PIN, HIGH);
 				Serial.println("Right-HLH");
 			} else {
-				digitalWrite(motor_R_Enable, LOW);
+				digitalWrite(RIGHT_MOTOR_ENABLE_PIN, LOW);
 				Serial.println("Right---L");
 			}
 		}
 		else if (p[2] == 'L') {
 			if (p[4] == '1') {
-				digitalWrite(motorOut3, HIGH);
-				digitalWrite(motorOut4, LOW);
-				digitalWrite(motor_L_Enable, HIGH);
+				digitalWrite(LEFT_MOTOR_DIRECTION_PIN, HIGH);
+				digitalWrite(LEFT_MOTOR_ENABLE_PIN, HIGH);
 				Serial.println("Left-HLH");
 			} else if (p[4] == '-' && p[5] == '1') {
-				digitalWrite(motorOut3, LOW);
-				digitalWrite(motorOut4, HIGH);
-				digitalWrite(motor_L_Enable, HIGH);
+				digitalWrite(LEFT_MOTOR_DIRECTION_PIN, LOW);
+				digitalWrite(LEFT_MOTOR_ENABLE_PIN, HIGH);
 				Serial.println("Left-LHH");
 			} else {
-				digitalWrite(motor_L_Enable, LOW);
+				digitalWrite(LEFT_MOTOR_ENABLE_PIN, LOW);
 				Serial.println("Left---L");
 			}
 		}
