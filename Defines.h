@@ -53,6 +53,7 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 
 #define HEADLIGHT_PIN 15
 
+#define HEARTBEAT_PIN 31
 
 
 #endif /* DEFINES_H_ */
