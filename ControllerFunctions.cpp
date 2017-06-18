@@ -93,12 +93,16 @@ void driveWithTwoSticks() {
 		leftMotor->driveForward();
 	} else if (leftVal < -DEFAULT_DEADZONE) {
 		leftMotor->driveBackward();
+	} else {
+		leftMotor->stop();
 	}
 
 	if (rightVal > DEFAULT_DEADZONE) {
 		rightMotor->driveForward();
 	} else if (rightVal < -DEFAULT_DEADZONE) {
 		rightMotor->driveBackward();
+	} else {
+		rightMotor->stop();
 	}
 
 }
