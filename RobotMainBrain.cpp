@@ -42,12 +42,19 @@ void setup() {
 
 	Serial.print("<RobotMainBrain Active>");
 
+	// Connect to Arm Controller
+
+	Serial1.begin(115200);
+	delay(250);
+	// See CommandFunctions.cpp
+	// If we get a response to this we'll enable the arm
+//	Serial1.print("<C,CHECK>");
+
 }
 
 void loop() {
 	heartBeat();
 	cp.run();
-
 }
 
 void heartBeat() {
@@ -62,6 +69,8 @@ void heartBeat() {
 		heartState = !heartState;
 		digitalWrite(HEARTBEAT_PIN, heartState);
 		counter++;
+		// Send HB to controller every 5 seconds or so
+		// It doesn't get scared until it loses it for at least 10
 		if(counter == (5000 / heartbeatInterval)){
 			Serial.print("<RMB HB>");
 			counter = 0;

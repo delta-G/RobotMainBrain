@@ -20,6 +20,9 @@ void CommandParser::run() {
 		if (receiving) {
 			inputBuffer[index] = c;
 			inputBuffer[++index] = 0;
+			if(index >= MAX_COMMAND_LENGTH){
+				index--;
+			}
 
 			if (c == END_OP) {
 				receiving = false;

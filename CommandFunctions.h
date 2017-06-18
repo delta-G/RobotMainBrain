@@ -17,6 +17,8 @@
 #define NUM_ELEMENTS(x) ((sizeof(x)) / (sizeof(x[0])))
 #endif
 
+void enableArm(char*);
+
 void requestFromBot(char*);
 void motorControl(char*);
 void armControl(char*);

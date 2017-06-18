@@ -30,7 +30,7 @@ struct Command {
 class CommandParser {
 
 private:
-	char inputBuffer[MAX_COMMAND_LENGTH];
+	char inputBuffer[MAX_COMMAND_LENGTH + 1];
 	uint8_t index = 0;
 	boolean receiving = false;
 

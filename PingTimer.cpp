@@ -36,12 +36,16 @@ PingTimer::PingTimer(){
 
 void PingTimer::sendPing(){
 
+	// make pin output and low
 	DDRD |= PING_PIN_MASK;
 	PING_PIN_PORT &= ~PING_PIN_MASK;
 	delayMicroseconds(4);
+	// send high pulse
 	PING_PIN_PORT |= PING_PIN_MASK;
 	delayMicroseconds(10);
+	//end high pulse
 	PING_PIN_PORT &= ~PING_PIN_MASK;
+	//make pin input and pull-up on
 	DDRD &= ~PING_PIN_MASK;
 	PING_PIN_PORT |= PING_PIN_MASK;
 
