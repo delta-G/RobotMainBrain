@@ -7,6 +7,8 @@
 #include "CommandParser.h"
 #include "CommandFunctions.h"
 
+#include "Motor.h"
+
 
 void setup();
 void loop();

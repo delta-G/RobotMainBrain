@@ -4,20 +4,13 @@ extern CommandParser cp;
 
 unsigned int heartbeatInterval = 500;
 
+Motor leftMotor(LEFT_MOTOR_DIRECTION_PIN, LEFT_MOTOR_ENABLE_PIN, true );
+Motor rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false );
+
 void setup() {
 
-	pinMode(RIGHT_MOTOR_ENABLE_PIN, OUTPUT);
-	digitalWrite(RIGHT_MOTOR_ENABLE_PIN, LOW);
-
-	pinMode(LEFT_MOTOR_ENABLE_PIN, OUTPUT);
-	digitalWrite(LEFT_MOTOR_ENABLE_PIN, LOW);
-
-	pinMode(RIGHT_MOTOR_DIRECTION_PIN, OUTPUT);
-	digitalWrite(RIGHT_MOTOR_DIRECTION_PIN, LOW);
-
-	pinMode(LEFT_MOTOR_DIRECTION_PIN, OUTPUT);
-	digitalWrite(LEFT_MOTOR_DIRECTION_PIN, LOW);
-
+	leftMotor.init();
+	rightMotor.init();
 
 
 	pinMode(HEARTBEAT_PIN, OUTPUT);
@@ -68,13 +61,13 @@ void heartBeat() {
 		preMil = curMil;
 		heartState = !heartState;
 		digitalWrite(HEARTBEAT_PIN, heartState);
-		counter++;
-		// Send HB to controller every 5 seconds or so
-		// It doesn't get scared until it loses it for at least 10
-		if(counter == (5000 / heartbeatInterval)){
-			Serial.print("<RMB HB>");
-			counter = 0;
-		}
+//		counter++;
+//		// Send HB to controller every 5 seconds or so
+//		// It doesn't get scared until it loses it for at least 10
+//		if(counter == (5000 / heartbeatInterval)){
+//			Serial.print("<RMB HB>");
+//			counter = 0;
+//		}
 
 	}
 
