@@ -11,11 +11,15 @@
 
 void XboxHandler::handleIncoming(char* aPacket){
 
+	//save old hat state
+	memcpy (oldHatState, readUnion.values.hatValues, 8);
+
 	if(aPacket[0] == '<' && aPacket[1] == 'X' && aPacket[17] == '>'){
 		memcpy(readUnion.rawBuffer, aPacket + 3, 14);
 		newData = true;
 
-		buttonClickState = readUnion.values.buttonState & ~oldButtonState;
+		//  Use OR Equal to preserve clicks that haven been read yet
+		buttonClickState |= readUnion.values.buttonState & ~oldButtonState;
 		oldButtonState = readUnion.values.buttonState;
 
 		if(((uint8_t)oldTriggerState = 0) && readUnion.values.rightTrigger != 0){
@@ -65,6 +69,13 @@ boolean XboxHandler::isPressed(ButtonMaskEnum aButton) {
 		return (boolean)readUnion.values.leftTrigger;
 	}
 	return (boolean)readUnion.values.rightTrigger;
+
+}
+
+
+int16_t XboxHandler::getHatValue(HatEnum aHat){
+
+	return readUnion.values.hatValues[aHat];
 
 }
 

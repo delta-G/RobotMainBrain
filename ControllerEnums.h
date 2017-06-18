@@ -82,16 +82,12 @@ enum ButtonMaskEnum {
 //};
 
 /** Joysticks on the PS3 and Xbox controllers. */
-//enum AnalogHatEnum {
-//        /** Left joystick x-axis */
-//        LeftHatX = 0,
-//        /** Left joystick y-axis */
-//        LeftHatY = 1,
-//        /** Right joystick x-axis */
-//        RightHatX = 2,
-//        /** Right joystick y-axis */
-//        RightHatY = 3,
-//};
+enum HatEnum {
+        LeftHatX = 0,
+        LeftHatY = 1,
+        RightHatX = 2,
+        RightHatY = 3,
+};
 
 
 

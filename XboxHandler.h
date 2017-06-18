@@ -31,10 +31,7 @@ private:
 			uint16_t buttonState;
 			uint8_t leftTrigger;
 			uint8_t rightTrigger;
-			int16_t leftHatX;
-			int16_t leftHatY;
-			int16_t rightHatX;
-			int16_t rightHatY;
+			int16_t hatValues[4];
 
 		} values;
 
@@ -44,7 +41,7 @@ private:
 	uint16_t oldButtonState;
 	uint16_t oldTriggerState;
 	uint16_t buttonClickState;
-	uint32_t oldHatState[2];
+	uint16_t oldHatState[4];
 
 	bool L2Clicked;
 	bool R2Clicked;
@@ -60,6 +57,9 @@ public:
 
 	boolean isClicked(ButtonMaskEnum);
 	boolean isPressed(ButtonMaskEnum);
+	int16_t getHatValue(HatEnum);
+
+	boolean newDataAvailable() { return newData; }
 
 
 };
