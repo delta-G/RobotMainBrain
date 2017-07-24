@@ -8,25 +8,42 @@
 #include "ControllerFunctions.h"
 
 
-XboxHandler xbox;
+XboxHandler* xbox_ptr;   /// This is also defined in CommandFunctions.  MUST be FIXED BEFORE COMPILE
 
 Stream* outStream;
-Motor* leftMotor;
-Motor* rightMotor;
+
+Stream* servoStream;
+
+Motor* leftMotor_ptr;
+Motor* rightMotor_ptr;
 
 boolean started = false;
 
 unsigned int updateInterval = 20;
+
+int controlMode;
+
+
+void initializeControllerFunctions(Motor* aLeftMotor, Motor* aRightMotor, Stream* aOutStream, Stream* aServStream, XboxHandler* aXbox){
+
+	leftMotor_ptr = aLeftMotor;
+	rightMotor_ptr = aRightMotor;
+	outStream = aOutStream;
+	servoStream = aServStream;
+	xbox_ptr = aXbox;
+
+}
+
 
 void mainControllerLoop() {
 
 	static unsigned long previousRunTime = millis();
 	unsigned long currentRunTime = millis();
 
-	if (xbox.newDataAvailable()) {
+	if (xbox_ptr->newDataAvailable()) {
 
 		// START
-		if (xbox.isClicked(START)) {
+		if (xbox_ptr->isClicked(START)) {
 			if (!started) {
 				started = true;
 				runStartup();
@@ -34,7 +51,7 @@ void mainControllerLoop() {
 		}
 
 		//BACK
-		if (xbox.isClicked(BACK)) {
+		if (xbox_ptr->isClicked(BACK)) {
 			if (started) {
 				started = false;
 				returnControl();
@@ -46,7 +63,7 @@ void mainControllerLoop() {
 		if (currentRunTime - previousRunTime >= updateInterval) {
 			previousRunTime = currentRunTime;
 
-			if (xbox.isClicked(Y)) {
+			if (xbox_ptr->isClicked(Y)) {
 				controlMode++;
 				controlMode %= NUMBER_OF_MODES;
 
@@ -59,8 +76,15 @@ void mainControllerLoop() {
 				}
 			}
 
-			if (controlMode == DRIVE) {
+			switch (controlMode){
+
+			case DRIVE:
 				driveWithTwoSticks();
+				break;
+			case ARM:
+				driveByDpad();
+				break;
+
 			}
 
 		}
@@ -86,23 +110,60 @@ void returnControl(){
 
 void driveWithTwoSticks() {
 
-	int16_t leftVal = xbox.getHatValue(LeftHatY);
-	int16_t rightVal = xbox.getHatValue(RightHatY);
+	int16_t leftVal = xbox_ptr->getHatValue(LeftHatY);
+	int16_t rightVal = xbox_ptr->getHatValue(RightHatY);
 
 	if (leftVal > DEFAULT_DEADZONE) {
-		leftMotor->driveForward();
+		leftMotor_ptr->driveForward();
 	} else if (leftVal < -DEFAULT_DEADZONE) {
-		leftMotor->driveBackward();
+		leftMotor_ptr->driveBackward();
 	} else {
-		leftMotor->stop();
+		leftMotor_ptr->stop();
 	}
 
 	if (rightVal > DEFAULT_DEADZONE) {
-		rightMotor->driveForward();
+		rightMotor_ptr->driveForward();
 	} else if (rightVal < -DEFAULT_DEADZONE) {
-		rightMotor->driveBackward();
+		rightMotor_ptr->driveBackward();
 	} else {
-		rightMotor->stop();
+		rightMotor_ptr->stop();
+	}
+
+}
+
+void driveByDpad() {
+
+	if (xbox_ptr->isPressed(UP)) {
+		if (xbox_ptr->isPressed(RIGHT)) {
+			leftMotor_ptr->driveForward();
+			rightMotor_ptr->stop();
+		} else if (xbox_ptr->isPressed(LEFT)) {
+			leftMotor_ptr->stop();
+			rightMotor_ptr->driveForward();
+		} else {
+			leftMotor_ptr->driveForward();
+			rightMotor_ptr->driveForward();
+		}
+	} else if (xbox_ptr->isPressed(DOWN)) {
+		if (xbox_ptr->isPressed(RIGHT)) {
+			rightMotor_ptr->driveBackward();
+			leftMotor_ptr->stop();
+		} else if (xbox_ptr->isPressed(LEFT)) {
+			rightMotor_ptr->stop();
+			leftMotor_ptr->driveBackward();
+		} else {
+			leftMotor_ptr->driveBackward();
+			rightMotor_ptr->driveBackward();
+		}
+	} else if (xbox_ptr->isPressed(LEFT)) {
+		leftMotor_ptr->driveBackward();
+		rightMotor_ptr->driveForward();
+	} else if (xbox_ptr->isPressed(RIGHT)) {
+		rightMotor_ptr->driveBackward();
+		leftMotor_ptr->driveForward();
+	} else {
+		rightMotor_ptr->stop();
+		leftMotor_ptr->stop();
 	}
 
 }

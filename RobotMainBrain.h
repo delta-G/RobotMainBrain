@@ -7,6 +7,8 @@
 #include "CommandParser.h"
 #include "CommandFunctions.h"
 
+#include "ControllerFunctions.h"
+
 #include "Motor.h"
 
 

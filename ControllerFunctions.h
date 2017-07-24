@@ -9,6 +9,9 @@
 #define CONTROLLERFUNCTIONS_H_
 
 #include "Arduino.h"
+#include "Defines.h"
+
+#include "Motor.h"
 
 #include "XboxHandler.h"
 
@@ -19,12 +22,15 @@ enum ModeEnum {
 	ARM,
 	MINE,
 	NUMBER_OF_MODES
-} controlMode;
+};
+
+void initializeControllerFunctions(Motor*, Motor*, Stream*, Stream*, XboxHandler*);
 
 void mainControllerLoop();
 void runStartup();
 void returnControl();
 void driveWithTwoSticks();
+void driveByDpad();
 
 
 #endif /* CONTROLLERFUNCTIONS_H_ */

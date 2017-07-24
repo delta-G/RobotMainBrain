@@ -4,6 +4,8 @@ extern CommandParser cp;
 
 unsigned int heartbeatInterval = 500;
 
+XboxHandler xbox;
+
 Motor leftMotor(LEFT_MOTOR_DIRECTION_PIN, LEFT_MOTOR_ENABLE_PIN, true );
 Motor rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false );
 
@@ -11,6 +13,9 @@ void setup() {
 
 	leftMotor.init();
 	rightMotor.init();
+
+
+	initializeControllerFunctions(&leftMotor, &rightMotor, &Serial, &Serial1, &xbox);
 
 
 	pinMode(HEARTBEAT_PIN, OUTPUT);
@@ -39,15 +44,17 @@ void setup() {
 
 	Serial1.begin(115200);
 	delay(250);
-	// See CommandFunctions.cpp
-	// If we get a response to this we'll enable the arm
-//	Serial1.print("<C,CHECK>");
+
+	heartbeatInterval = 2000;
 
 }
 
 void loop() {
 	heartBeat();
 	cp.run();
+
+	mainControllerLoop();
+
 }
 
 void heartBeat() {
@@ -61,13 +68,13 @@ void heartBeat() {
 		preMil = curMil;
 		heartState = !heartState;
 		digitalWrite(HEARTBEAT_PIN, heartState);
-//		counter++;
-//		// Send HB to controller every 5 seconds or so
-//		// It doesn't get scared until it loses it for at least 10
-//		if(counter == (5000 / heartbeatInterval)){
-//			Serial.print("<RMB HB>");
-//			counter = 0;
-//		}
+		counter++;
+		// Send HB to controller every 5 seconds or so
+		// It doesn't get scared until it loses it for at least 10
+		if(counter == (6000 / heartbeatInterval)){
+			Serial.print("<RMB HB>");
+			counter = 0;
+		}
 
 	}
 

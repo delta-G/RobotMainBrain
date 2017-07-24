@@ -10,7 +10,7 @@
 
 #include <Arduino.h>
 
-#define MAX_COMMAND_LENGTH 20
+#define MAX_COMMAND_LENGTH 50
 #define START_OP '<'
 #define END_OP '>'
 

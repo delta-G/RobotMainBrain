@@ -11,6 +11,7 @@
 #include <Arduino.h>
 #include "Defines.h"
 #include "CommandParser.h"
+#include "XboxHandler.h"
 //#include "Joint.h"
 
 #ifndef NUM_ELEMENTS
@@ -18,7 +19,7 @@
 #endif
 
 void enableArm(char*);
-
+void xboxCommand(char*);
 void requestFromBot(char*);
 void motorControl(char*);
 void armControl(char*);

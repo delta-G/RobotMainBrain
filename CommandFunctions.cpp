@@ -6,7 +6,10 @@
  */
 #include "CommandFunctions.h"
 
+extern XboxHandler xbox;
+
 Command commands[] = {
+		{ 'X', xboxCommand },
 		{ 'R', requestFromBot },
 		{ 'M', motorControl },
 		{ 'B', requestFromBot },
@@ -14,12 +17,12 @@ Command commands[] = {
 		{ '#', armControl }
 };
 
-Command armCommands[] = {
-		{ 'C', enableArm }
-};
+//Command armCommands[] = {
+//		{ 'C', enableArm }
+//};
 
 CommandParser cp(&Serial, &commands[0], NUM_ELEMENTS(commands));
-CommandParser cpArm(&Serial1, &armCommands[0], NUM_ELEMENTS(armCommands));
+//CommandParser cpArm(&Serial1, &armCommands[0], NUM_ELEMENTS(armCommands));
 
 /*
  *
@@ -30,6 +33,10 @@ CommandParser cpArm(&Serial1, &armCommands[0], NUM_ELEMENTS(armCommands));
  */
 
 bool armEnabled = true;
+
+void xboxCommand(char* p) {
+	xbox.handleIncomingASCII(p);
+}
 
 void enableArm(char* p) {
 	if (p[3] == '0'){
@@ -43,7 +50,7 @@ void requestFromBot(char* p) {
 
 	case 'H':
 		if(p[4] == 'B'){
-//			Serial.print("<RMB HBoR>");
+			Serial.print("<RMB HBoR>");
 		}
 		break;
 

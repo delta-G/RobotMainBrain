@@ -54,12 +54,13 @@ private:
 public:
 
 	void handleIncoming(char*);
+	void handleIncomingASCII(char*);
 
 	boolean isClicked(ButtonMaskEnum);
 	boolean isPressed(ButtonMaskEnum);
 	int16_t getHatValue(HatEnum);
 
-	boolean newDataAvailable() { return newData; }
+	boolean newDataAvailable();
 
 
 };
