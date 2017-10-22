@@ -53,6 +53,8 @@ private:
 
 public:
 
+	XboxHandler();
+
 	void handleIncoming(char*);
 	void handleIncomingASCII(char*);
 

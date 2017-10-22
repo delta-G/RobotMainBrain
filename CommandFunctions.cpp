@@ -49,19 +49,29 @@ void requestFromBot(char* p) {
 	switch(p[3]){
 
 	case 'H':
+	{
 		if(p[4] == 'B'){
 			Serial.print("<RMB HBoR>");
 		}
 		break;
+	}
 
 	case 'B':
+	{
+		int r = analogRead(BATTERY_PIN);
+		float v = (r * 94.3396) / 1024;
 		Serial.print("<BAT,");
-		Serial.print(analogRead(BATTERY_PIN));
+		Serial.print(r);
+		Serial.print(",");
+		Serial.print(v, 1);
 		Serial.print(">");
 		break;
+	}
 
 	default:
+	{
 		break;
+	}
 
 	}
 

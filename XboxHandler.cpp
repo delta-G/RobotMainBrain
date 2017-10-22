@@ -7,6 +7,16 @@
 
 #include "XboxHandler.h"
 
+XboxHandler::XboxHandler(){
+	memset(readUnion.rawBuffer, 0, 14);
+	oldButtonState = 0;
+	oldTriggerState=0;
+	buttonClickState=0;
+	memset((uint8_t*)oldHatState, 0, 8);
+	L2Clicked= false;
+	R2Clicked= false;
+	newData = false;
+}
 
 boolean XboxHandler::newDataAvailable(){
 	boolean retval = newData;
