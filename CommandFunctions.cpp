@@ -59,7 +59,7 @@ void requestFromBot(char* p) {
 	case 'B':
 	{
 		int r = analogRead(BATTERY_PIN);
-		float v = (r * 94.3396) / 1024;
+		float v = (r * 20.75) / 1024;
 		Serial.print("<BAT,");
 		Serial.print(r);
 		Serial.print(",");

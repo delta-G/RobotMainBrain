@@ -26,6 +26,8 @@ void setup() {
 		delay(100);
 	}
 
+	analogReference(INTERNAL1V1);
+
 	heartbeatInterval = 200;
 	unsigned long delayStart = millis();
 	while(millis() - delayStart <= 5000){
