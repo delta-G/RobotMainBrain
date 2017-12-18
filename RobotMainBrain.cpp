@@ -11,12 +11,20 @@ Motor rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false );
 
 void setup() {
 
+
+	// Start with everything off
+
+	pinMode(COM_POWER_ENABLE, OUTPUT);
+	digitalWrite(COM_POWER_ENABLE, HIGH);
+
+	pinMode(ARM_ENABLE, OUTPUT);
+	digitalWrite(ARM_ENABLE, LOW);
+
+	pinMode(CAM_ENABLE, OUTPUT);
+	digitalWrite(CAM_ENABLE, LOW);
+
 	leftMotor.init();
 	rightMotor.init();
-
-
-	initializeControllerFunctions(&leftMotor, &rightMotor, &Serial, &Serial1, &xbox);
-
 
 	pinMode(HEARTBEAT_PIN, OUTPUT);
 	for (int i = 0; i < 3; i++) {
@@ -26,17 +34,43 @@ void setup() {
 		delay(100);
 	}
 
-	analogReference(INTERNAL1V1);
+	// give a second for power to stabilize
 
 	heartbeatInterval = 200;
 	unsigned long delayStart = millis();
-	while(millis() - delayStart <= 5000){
+	while (millis() - delayStart <= 5000) {
 		heartBeat();
 	}
 
+	// Turn on the Arm and give it time to do it's thing
+
+	digitalWrite(ARM_ENABLE, HIGH);
+	heartbeatInterval = 500;
+	delayStart = millis();
+	while (millis() - delayStart <= 10000) {
+		heartBeat();
+	}
+
+	// Turn on the COM board
+
+	digitalWrite(COM_POWER_ENABLE, HIGH);
+
+	delay(500);
+
+	initializeControllerFunctions(&leftMotor, &rightMotor, &Serial, &Serial1,
+			&xbox);
+
+
+
+
+
+	analogReference(INTERNAL1V1);
+
+
+
 	Serial.begin(115200);
 
-	heartbeatInterval = 500;
+	heartbeatInterval = 1000;
 
 	delay(1000);
 
