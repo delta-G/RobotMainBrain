@@ -43,6 +43,9 @@ void setup() {
 	pinMode(CAM_ENABLE, OUTPUT);
 	digitalWrite(CAM_ENABLE, LOW);
 
+	pinMode(HEADLIGHT_PIN, OUTPUT);
+	digitalWrite(HEADLIGHT_PIN, LOW);
+
 	leftMotor.init();
 	rightMotor.init();
 

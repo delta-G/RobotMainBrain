@@ -23,11 +23,15 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 extern XboxHandler xbox;
 
+
+//  'E' reserved for ESP board
 Command commands[] = {
 		{ 'X', xboxCommand },
 		{ 'R', requestFromBot },
 		{ 'M', motorControl },
 		{ 'B', requestFromBot },
+		{ 'H', headlightControl },
+		{ 'V', videoControl },
 		{ 'S', armControl },
 		{ '#', armControl }
 };
@@ -58,6 +62,40 @@ void enableArm(char* p) {
 		Serial.print("<Arm Responding>");
 		armEnabled = true;
 	}
+}
+
+void videoControl(char* p) {
+
+	switch(p[2]){
+
+	case '0':
+		digitalWrite(CAM_ENABLE, LOW);
+		break;
+	case '1':
+		digitalWrite(CAM_ENABLE, HIGH);
+		break;
+	default:
+		break;
+
+	}
+
+}
+
+void headlightControl(char* p) {
+
+	switch (p[2]) {
+
+	case '0':
+		digitalWrite(HEADLIGHT_PIN, LOW);
+		break;
+	case '1':
+		digitalWrite(HEADLIGHT_PIN, HIGH);
+		break;
+	default:
+		break;
+
+	}
+
 }
 
 void requestFromBot(char* p) {

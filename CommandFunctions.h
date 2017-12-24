@@ -36,6 +36,8 @@ void xboxCommand(char*);
 void requestFromBot(char*);
 void motorControl(char*);
 void armControl(char*);
+void videoControl(char*);
+void headlightControl(char*);
 
 
 
