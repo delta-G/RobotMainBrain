@@ -29,6 +29,8 @@ XboxHandler xbox;
 Motor leftMotor(LEFT_MOTOR_DIRECTION_PIN, LEFT_MOTOR_ENABLE_PIN, true );
 Motor rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false );
 
+float batteryVoltage = 0.0;
+
 void setup() {
 
 
@@ -110,11 +112,57 @@ void setup() {
 
 void loop() {
 	heartBeat();
+	monitorBattery();
 	cp.run();
 
 	mainControllerLoop();
 
 }
+
+#define NUMBER_BATTERY_READINGS_TO_AVERAGE 30
+void monitorBattery() {
+
+	static uint16_t readings[NUMBER_BATTERY_READINGS_TO_AVERAGE] = { 0 };
+	static uint8_t index = 0;
+	static uint32_t total = 0;
+	static uint16_t average = 0;
+
+	//  Doesn't keep track of number of reads so it
+	//  fills up the array as fast as it can and the
+	//  first time it gets it full it slows down.
+	static uint16_t readInterval = 10;
+	static uint32_t pm = millis();
+	uint32_t cm = millis();
+
+	if (cm - pm >= readInterval) {
+		pm = cm;
+
+		total -= readings[index];
+		readings[index] = analogRead(BATTERY_PIN);
+		total += readings[index];
+		++index;
+		if(index == NUMBER_BATTERY_READINGS_TO_AVERAGE){
+			// Slow down the read interval once the array fills up.
+			readInterval = 1000;
+		}
+		index %= NUMBER_BATTERY_READINGS_TO_AVERAGE;
+
+		average = total / NUMBER_BATTERY_READINGS_TO_AVERAGE;
+
+//	float v = (r * 20.75) / 1024;
+
+		batteryVoltage = (average * 0.202636719);
+		// 207.5 / 1024
+
+		Serial.print("<BAT,");
+		Serial.print(average);
+		Serial.print(",");
+		Serial.print(batteryVoltage, 1);
+		Serial.print(">");
+
+	}
+}
+
 
 void heartBeat() {
 	static boolean heartState = false;
