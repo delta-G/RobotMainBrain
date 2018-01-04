@@ -151,7 +151,7 @@ void monitorBattery() {
 
 //	float v = (r * 20.75) / 1024;
 
-		batteryVoltage = (average * 0.202636719);
+		batteryVoltage = (average * 0.0202636719);
 		// 207.5 / 1024
 
 		Serial.print("<BAT,");
