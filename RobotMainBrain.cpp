@@ -20,7 +20,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 #include "RobotMainBrain.h"
 
-enum States { BOOTING, BOOT_ARM, CONNECT_COM, RUNNING, NUM_RMB_STATES } currentState;
+enum States { BOOTING, BOOT_ARM, CONNECT_COM, CONNECT_WAIT, RUNNING, NUM_RMB_STATES } currentState;
 
 extern CommandParser cp;
 
@@ -66,66 +66,8 @@ void setup() {
 	initializeControllerFunctions(&leftMotor, &rightMotor, &Serial, &Serial1,
 				&xbox);
 
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	/*
-
-	// give a second for power to stabilize
-
-	heartbeatInterval = 200;
-	unsigned long delayStart = millis();
-	while (millis() - delayStart <= 5000) {
-		heartBeat();
-	}
-
-	// Turn on the Arm and give it time to do it's thing
-
-
-	delayStart = millis();
-	while (millis() - delayStart <= 10000) {
-		heartBeat();
-	}
-
-	// Turn on the COM board
-
-	digitalWrite(COM_POWER_ENABLE, HIGH);
-
-	delay(500);
-
-
-
-
-
-
-
-	Serial.begin(115200);
-
-	heartbeatInterval = 1000;
-
-	delay(1000);
-
-	Serial.print("<RobotMainBrain Active>");
-
-	// Connect to Arm Controller
-
-	Serial1.begin(115200);
-	delay(250);
-
-	heartbeatInterval = 2000;
-	*/
-
 }
 
-/*
-void loop() {
-	heartBeat();
-	monitorBattery();
-	cp.run();
-
-	mainControllerLoop();
-
-}
-*/
 
 void loop() {
 
@@ -137,33 +79,95 @@ void loop() {
 	case BOOTING:
 
 		if (millis() > 3000) {
-			digitalWrite(ARM_ENABLE, HIGH);
-			heartbeatInterval = 500;
 			currentState = BOOT_ARM;
 		}
 		break;
 
-	case BOOT_ARM:
+	case BOOT_ARM: {
+		static boolean enteredState = false;
+		static unsigned long armStartTime = 0;
+		static boolean startedArmCom = false;
+		if (!enteredState) {
+			digitalWrite(ARM_ENABLE, HIGH);
+			heartbeatInterval = 500;
+			enteredState = true;
+			armStartTime = millis();
+		}
 
-		if (millis() > 10000) {
+		if (!startedArmCom && (millis() - armStartTime >= 1000)) {
 			//  Begin Serial on Arm Controller
 			Serial1.begin(115200);
+			startedArmCom = true;
+		}
 
+		if (millis() - armStartTime >= 7000) {
 			currentState = CONNECT_COM;
-			Serial.begin(115200);
 		}
 
 		break;
+	}
 
 	case CONNECT_COM:
+	{
+		static boolean enteredState = false;
+		static unsigned long comStartedTime = 0;
+		if(!enteredState){
+			Serial.begin(115200);
+			enteredState = true;
+			comStartedTime = millis();
+		}
 
-		if (millis() > 11000) {
-			Serial.print("<RobotMainBrain Active>");
-			currentState = RUNNING;
+		if ((millis() - comStartedTime > 250)) {
+			Serial.print("<E-RMB-Active>");
+			currentState = CONNECT_WAIT;
 			heartbeatInterval = 2000;
 		}
 
+		cp.run();
+
 		break;
+	}
+
+	case CONNECT_WAIT:
+	{
+		static boolean enteredState = false;
+		static boolean started = false;
+		static unsigned long enteredTime = 0;
+
+		static char waitBuf[15] = { 0 };
+		static boolean waitRec = false;
+		static uint8_t windx = 0;
+		if (Serial.available()) {
+			char c = Serial.read();
+			if (c == '<') {
+				waitRec = true;
+				waitBuf[0] = 0;
+				windx = 0;
+			}
+			if (waitRec) {
+				waitBuf[windx] = c;
+				waitBuf[++windx] = 0;
+				if (c == '>') {
+					if (started) {
+						if (strcmp(waitBuf, "<ECONNECT>")) {
+							currentState = RUNNING;
+						}
+					}
+					else {
+						if (strcmp(waitBuf, "<ESTART>")) {
+							windx = 0;
+							waitBuf[windx] = 0;
+							started = true;   // next packet should be connection
+							waitRec = false;  // wait for another SOP
+						}
+					}
+				}
+			}
+
+		}
+
+		break;
+	}
 
 	case RUNNING:
 		monitorBattery();
@@ -175,7 +179,7 @@ void loop() {
 
 	default:
 		//  Freak out we shouldn't be here
-		heartbeatInterval = 100;
+		heartbeatInterval = 50;
 
 		break;
 	}
