@@ -20,9 +20,11 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 #include "RobotMainBrain.h"
 
+enum States { BOOTING, BOOT_ARM, CONNECT_COM, RUNNING, NUM_RMB_STATES } currentState;
+
 extern CommandParser cp;
 
-unsigned int heartbeatInterval = 500;
+unsigned int heartbeatInterval = 200;
 
 XboxHandler xbox;
 
@@ -59,6 +61,15 @@ void setup() {
 		delay(100);
 	}
 
+	analogReference(INTERNAL1V1);
+
+	initializeControllerFunctions(&leftMotor, &rightMotor, &Serial, &Serial1,
+				&xbox);
+
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/*
+
 	// give a second for power to stabilize
 
 	heartbeatInterval = 200;
@@ -69,8 +80,7 @@ void setup() {
 
 	// Turn on the Arm and give it time to do it's thing
 
-	digitalWrite(ARM_ENABLE, HIGH);
-	heartbeatInterval = 500;
+
 	delayStart = millis();
 	while (millis() - delayStart <= 10000) {
 		heartBeat();
@@ -82,14 +92,9 @@ void setup() {
 
 	delay(500);
 
-	initializeControllerFunctions(&leftMotor, &rightMotor, &Serial, &Serial1,
-			&xbox);
 
 
 
-
-
-	analogReference(INTERNAL1V1);
 
 
 
@@ -107,9 +112,11 @@ void setup() {
 	delay(250);
 
 	heartbeatInterval = 2000;
+	*/
 
 }
 
+/*
 void loop() {
 	heartBeat();
 	monitorBattery();
@@ -118,6 +125,63 @@ void loop() {
 	mainControllerLoop();
 
 }
+*/
+
+void loop() {
+
+	heartBeat();
+
+	switch (currentState) {
+
+	//   3 seconds at bootup for power to stabilize etc.
+	case BOOTING:
+
+		if (millis() > 3000) {
+			digitalWrite(ARM_ENABLE, HIGH);
+			heartbeatInterval = 500;
+			currentState = BOOT_ARM;
+		}
+		break;
+
+	case BOOT_ARM:
+
+		if (millis() > 10000) {
+			//  Begin Serial on Arm Controller
+			Serial1.begin(115200);
+
+			currentState = CONNECT_COM;
+			Serial.begin(115200);
+		}
+
+		break;
+
+	case CONNECT_COM:
+
+		if (millis() > 11000) {
+			Serial.print("<RobotMainBrain Active>");
+			currentState = RUNNING;
+			heartbeatInterval = 2000;
+		}
+
+		break;
+
+	case RUNNING:
+		monitorBattery();
+		cp.run();
+
+		mainControllerLoop();
+
+		break;
+
+	default:
+		//  Freak out we shouldn't be here
+		heartbeatInterval = 100;
+
+		break;
+	}
+}
+
+
 
 #define NUMBER_BATTERY_READINGS_TO_AVERAGE 30
 void monitorBattery() {
