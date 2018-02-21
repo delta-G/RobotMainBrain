@@ -80,7 +80,7 @@ void XboxHandler::handleIncomingASCII(char* aPacket){
 	//save old hat state
 	memcpy (oldHatState, readUnion.values.hatValues, 8);
 
-	if(aPacket[0] == '<' && aPacket[1] == 'X' && aPacket[17] == '>'){
+	if(aPacket[0] == '<' && aPacket[1] == 'X' && aPacket[31] == '>'){
 
 		uint8_t rawBuf[14];
 

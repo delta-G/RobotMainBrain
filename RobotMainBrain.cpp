@@ -119,6 +119,12 @@ void loop() {
 
 		if ((millis() - comStartedTime > 250)) {
 			Serial.print("<E-RMB-Active>");
+			char gitbuf[9];
+			strncpy(gitbuf, GIT_HASH, 8);
+			gitbuf[9] = 0;
+			Serial.print("<RMBGIT-");
+			Serial.print(gitbuf);
+			Serial.print(">");
 			currentState = CONNECT_WAIT;
 			heartbeatInterval = 2000;
 		}
@@ -130,9 +136,9 @@ void loop() {
 
 	case CONNECT_WAIT:
 	{
-		static boolean enteredState = false;
+//		static boolean enteredState = false;
 		static boolean started = false;
-		static unsigned long enteredTime = 0;
+//		static unsigned long enteredTime = 0;
 
 		static char waitBuf[15] = { 0 };
 		static boolean waitRec = false;
@@ -219,7 +225,8 @@ void monitorBattery() {
 
 //	float v = (r * 20.75) / 1024;
 
-		batteryVoltage = (average * 0.0202636719);
+//		batteryVoltage = (average * 0.0202636719);
+		batteryVoltage = (average * 0.020105) + 0.796904;  //Calibrated
 		// 207.5 / 1024
 
 		Serial.print("<BAT,");

@@ -32,6 +32,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 #include "Motor.h"
 
+#include "githash.h"
 
 void setup();
 void loop();
