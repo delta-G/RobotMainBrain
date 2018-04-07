@@ -84,13 +84,13 @@ void loop() {
 		break;
 
 	case BOOT_ARM: {
-		static boolean enteredState = false;
+		static boolean enteredArmState = false;
 		static unsigned long armStartTime = 0;
 		static boolean startedArmCom = false;
-		if (!enteredState) {
+		if (!enteredArmState) {
 			digitalWrite(ARM_ENABLE, HIGH);
 			heartbeatInterval = 500;
-			enteredState = true;
+			enteredArmState = true;
 			armStartTime = millis();
 		}
 
@@ -109,11 +109,11 @@ void loop() {
 
 	case CONNECT_COM:
 	{
-		static boolean enteredState = false;
+		static boolean enteredComState = false;
 		static unsigned long comStartedTime = 0;
-		if(!enteredState){
+		if(!enteredComState){
 			Serial.begin(115200);
-			enteredState = true;
+			enteredComState = true;
 			comStartedTime = millis();
 		}
 
