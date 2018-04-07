@@ -121,7 +121,7 @@ void loop() {
 			Serial.print("<E-RMB-Active>");
 			char gitbuf[9];
 			strncpy(gitbuf, GIT_HASH, 8);
-			gitbuf[9] = 0;
+			gitbuf[8] = 0;
 			Serial.print("<RMBGIT-");
 			Serial.print(gitbuf);
 			Serial.print(">");
