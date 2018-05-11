@@ -22,6 +22,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #define XBOXHANDLER_H_
 
 #include "Arduino.h"
+#include "Defines.h"
 
 #include "ControllerEnums.h"
 
@@ -35,21 +36,7 @@ class XboxHandler {
 
 private:
 
-	union {
-
-		uint8_t rawBuffer[14];
-		struct {
-
-			uint16_t checkBytes;
-			uint16_t buttonState;
-			uint8_t leftTrigger;
-			uint8_t rightTrigger;
-			int16_t hatValues[4];
-
-		} values;
-
-
-	} readUnion;
+	ControllerUnion readUnion;  // ControllerUnion is in RobotSharedDefines
 
 	uint16_t oldButtonState;
 	uint16_t oldTriggerState;

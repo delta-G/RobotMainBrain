@@ -27,9 +27,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "XboxHandler.h"
 //#include "Joint.h"
 
-#ifndef NUM_ELEMENTS
-#define NUM_ELEMENTS(x) ((sizeof(x)) / (sizeof(x[0])))
-#endif
+
 
 void enableArm(char*);
 void xboxCommand(char*);

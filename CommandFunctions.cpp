@@ -105,7 +105,7 @@ void requestFromBot(char* p) {
 	case 'H':
 	{
 		if(p[4] == 'B'){
-			Serial.print("<RMB HBoR>");
+			Serial.print(HBOR_STRING);
 		}
 		break;
 	}

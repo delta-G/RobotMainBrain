@@ -96,7 +96,7 @@ void loop() {
 
 		if (!startedArmCom && (millis() - armStartTime >= 1000)) {
 			//  Begin Serial on Arm Controller
-			Serial1.begin(115200);
+			Serial1.begin(ARM_BOARD_BAUD);
 			startedArmCom = true;
 		}
 
@@ -112,13 +112,13 @@ void loop() {
 		static boolean enteredComState = false;
 		static unsigned long comStartedTime = 0;
 		if(!enteredComState){
-			Serial.begin(115200);
+			Serial.begin(ROBOT_COM_BAUD);
 			enteredComState = true;
 			comStartedTime = millis();
 		}
 
 		if ((millis() - comStartedTime > 250)) {
-			Serial.print("<E-RMB-Active>");
+			Serial.print(RMB_STARTUP_STRING);
 			char gitbuf[9];
 			strncpy(gitbuf, GIT_HASH, 8);
 			gitbuf[8] = 0;
@@ -129,10 +129,15 @@ void loop() {
 			heartbeatInterval = 2000;
 		}
 
+		//  TODO:  Why does cp need to run here?  And why not in the next case while waiting for ESP?
 		cp.run();
 
 		break;
 	}
+
+	//**TODO:  This case is broken!!!
+
+	//  This needs some bounds checking on the array or you're asking for trouble.
 
 	case CONNECT_WAIT:
 	{
@@ -155,12 +160,12 @@ void loop() {
 				waitBuf[++windx] = 0;
 				if (c == '>') {
 					if (started) {
-						if (strcmp(waitBuf, "<ECONNECT>")) {
+						if (strcmp(waitBuf, COM_CONNECT_STRING)) {
 							currentState = RUNNING;
 						}
 					}
 					else {
-						if (strcmp(waitBuf, "<ESTART>")) {
+						if (strcmp(waitBuf, COM_START_STRING)) {
 							windx = 0;
 							waitBuf[windx] = 0;
 							started = true;   // next packet should be connection
@@ -229,6 +234,10 @@ void monitorBattery() {
 		batteryVoltage = (average * 0.020105) + 0.796904;  //Calibrated
 		// 207.5 / 1024
 
+
+		// TODO:  This should be stored somewhere and printed out in an orderly fashion.
+		//  This should probably only happen once when the battery has changed and kept
+		//  it's value for some time.
 		Serial.print("<BAT,");
 		Serial.print(average);
 		Serial.print(",");
@@ -254,7 +263,7 @@ void heartBeat() {
 		// Send HB to controller every 5 seconds or so
 		// It doesn't get scared until it loses it for at least 10
 		if(counter == (6000 / heartbeatInterval)){
-			Serial.print("<RMB HB>");
+			Serial.print(HEARTBEAT_STRING);
 			counter = 0;
 		}
 

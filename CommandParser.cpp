@@ -25,7 +25,7 @@ void CommandParser::run() {
 	if (stream->available()) {
 		char c = stream->read();
 
-		if (c == START_OP) {
+		if (c == START_OF_PACKET) {
 			index = 0;
 			inputBuffer[index] = 0;
 			receiving = true;
@@ -37,7 +37,7 @@ void CommandParser::run() {
 				index--;
 			}
 
-			if (c == END_OP) {
+			if (c == END_OF_PACKET) {
 				receiving = false;
 				parseCommandString();
 			}
@@ -49,7 +49,7 @@ void CommandParser::run() {
 }
 
 void CommandParser::parseCommandString() {
-	if (inputBuffer[0] == START_OP) {
+	if (inputBuffer[0] == START_OF_PACKET) {
 		for(int i = 0; i < numCommands; i++) {
 			if (commands[i].match(inputBuffer + 1)) {
 				commands[i].run(inputBuffer);

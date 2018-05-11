@@ -21,6 +21,8 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
+#include <RobotSharedDefines.h>
+
 
 /*
  *
