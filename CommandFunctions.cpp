@@ -22,7 +22,8 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "CommandFunctions.h"
 
 extern XboxHandler xbox;
-
+extern Motor leftMotor;
+extern Motor rightMotor;
 
 
 //  'E' reserved for ESP board
@@ -30,6 +31,7 @@ Command commands[] = {
 		{ 'X', xboxCommand },
 		{ 'R', requestFromBot },
 		{ 'M', motorControl },
+		{ 'm', motorControl },
 		{ 'B', requestFromBot },
 		{ 'H', headlightControl },
 		{ 'V', videoControl },
@@ -138,33 +140,41 @@ void motorControl(char* p) {
 	if (p[1] == 'M') {
 		if (p[2] == 'R') {
 			if (p[4] == '1') {
-				digitalWrite(RIGHT_MOTOR_DIRECTION_PIN, LOW);
-				digitalWrite(RIGHT_MOTOR_ENABLE_PIN, HIGH);
+				rightMotor.driveForward();
 //				Serial.println("<Right-DIR LOW>");
 			} else if (p[4] == '-' && p[5] == '1') {
-				digitalWrite(RIGHT_MOTOR_DIRECTION_PIN, HIGH);
-				digitalWrite(RIGHT_MOTOR_ENABLE_PIN, HIGH);
+				rightMotor.driveBackward();
 //				Serial.println("<Right-DIR HIGH>");
 			} else {
-				digitalWrite(RIGHT_MOTOR_ENABLE_PIN, LOW);
+				rightMotor.stop();
 //				Serial.println("<Right Enable LOW>");
 			}
 		}
 		else if (p[2] == 'L') {
 			if (p[4] == '1') {
-				digitalWrite(LEFT_MOTOR_DIRECTION_PIN, HIGH);
-				digitalWrite(LEFT_MOTOR_ENABLE_PIN, HIGH);
+				leftMotor.driveForward();
 //				Serial.println("<Left-DIR LOW>");
 			} else if (p[4] == '-' && p[5] == '1') {
-				digitalWrite(LEFT_MOTOR_DIRECTION_PIN, LOW);
-				digitalWrite(LEFT_MOTOR_ENABLE_PIN, HIGH);
+				leftMotor.driveBackward();
 //				Serial.println("<Left-DIR HIGH>");
 			} else {
-				digitalWrite(LEFT_MOTOR_ENABLE_PIN, LOW);
+				leftMotor.stop();
 //				Serial.println("<Left Enable LOW>");
 			}
 		}
 	}
+	else if (p[1] == 'm') {
+		int amt = atoi(p + 4);
+
+		if (p[2] == 'R') {
+			rightMotor.drive(amt);
+		}
+		else if (p[2] == 'L') {
+			leftMotor.drive(amt);
+		}
+	}
+
+
 
 }
 

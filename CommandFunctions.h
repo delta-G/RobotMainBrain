@@ -25,6 +25,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "Defines.h"
 #include "CommandParser.h"
 #include "XboxHandler.h"
+#include "Motor.h"
 //#include "Joint.h"
 
 
