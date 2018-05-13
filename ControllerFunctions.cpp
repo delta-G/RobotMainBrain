@@ -188,7 +188,6 @@ void driveWithOneStick() {
 	//  rotation matrix
 	float xRot = (xVal * s) - (yVal * s);
 	float yRot = (xVal * s) + (yVal * s);
-
 	//  Now left motor lies along y axis and right motor along x axis.
 
 	int16_t leftOut = (yRot / 32768) * 255;
@@ -197,6 +196,8 @@ void driveWithOneStick() {
 	}
 	if (leftOut > 255) leftOut = 255;
 	if (leftOut < -255) leftOut = -255;
+
+
 	int16_t rightOut = (xRot / 32768) * -255;
 	if (abs(rightOut) < 127) {
 		rightOut = 0;
