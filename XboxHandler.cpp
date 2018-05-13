@@ -75,7 +75,7 @@ void XboxHandler::handleIncoming(char* aPacket){
 
 void XboxHandler::handleIncomingASCII(char* aPacket){
 
-	Serial.print("<ASCIIPACK>");
+//	Serial.print("<ASCIIPACK>");
 
 	//save old hat state
 	memcpy (oldHatState, readUnion.values.hatValues, 8);
@@ -89,11 +89,11 @@ void XboxHandler::handleIncomingASCII(char* aPacket){
 			rawBuf[i] = strtoul(temp, NULL, 16);
 		}
 
-		char temp[2][25];
-		sprintf(temp[0], "<X,%04X%08lX>", *((uint16_t*)rawBuf), *((uint32_t*)(rawBuf+2)));
-		sprintf(temp[1], "<x,%08lX%08lX>", *((uint32_t*)(rawBuf+6)), *((uint32_t*)(rawBuf+10)));
-		Serial.print(temp[0]);
-		Serial.print(temp[1]);
+//		char temp[2][25];
+//		sprintf(temp[0], "<X,%04X%08lX>", *((uint16_t*)rawBuf), *((uint32_t*)(rawBuf+2)));
+//		sprintf(temp[1], "<x,%08lX%08lX>", *((uint32_t*)(rawBuf+6)), *((uint32_t*)(rawBuf+10)));
+//		Serial.print(temp[0]);
+//		Serial.print(temp[1]);
 
 
 		memcpy(readUnion.rawBuffer, rawBuf, 14);

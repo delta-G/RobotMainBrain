@@ -186,19 +186,23 @@ void driveWithOneStick() {
 	float s = 0.707107;  // at pi/4 sin == cos =~= 0.707107
 
 	//  rotation matrix
-	int16_t xRot = (xVal * s) - (yVal * s);
-	int16_t yRot = (xVal * s) + (yVal * s);
+	float xRot = (xVal * s) - (yVal * s);
+	float yRot = (xVal * s) + (yVal * s);
 
 	//  Now left motor lies along y axis and right motor along x axis.
 
-	int16_t leftOut = map(yRot, -32768, 32767, -255, 255);
+	int16_t leftOut = (yRot / 32768) * 255;
 	if (abs(leftOut) < 127) {
 		leftOut = 0;
 	}
-	int16_t rightOut = map(xRot, -32768, 32767, 255, -255);
+	if (leftOut > 255) leftOut = 255;
+	if (leftOut < -255) leftOut = -255;
+	int16_t rightOut = (xRot / 32768) * -255;
 	if (abs(rightOut) < 127) {
 		rightOut = 0;
 	}
+	if (rightOut > 255) rightOut = 255;
+		if (rightOut < -255) rightOut = -255;
 
 	leftMotor_ptr->drive(leftOut);
 	rightMotor_ptr->drive(rightOut);
