@@ -61,6 +61,7 @@ public:
 	boolean isClicked(ButtonMaskEnum);
 	boolean isPressed(ButtonMaskEnum);
 	int16_t getHatValue(HatEnum);
+	uint8_t getTriggerValue(ButtonMaskEnum);
 
 	boolean newDataAvailable();
 

@@ -58,7 +58,7 @@ void mainControllerLoop() {
 		// START
 		if (xbox_ptr->isClicked(START)) {
 			if (!started) {
-				started = true;
+
 				runStartup();
 			}
 		}
@@ -66,7 +66,7 @@ void mainControllerLoop() {
 		//BACK
 		if (xbox_ptr->isClicked(BACK)) {
 			if (started) {
-				started = false;
+
 				returnControl();
 			}
 		}
@@ -81,11 +81,11 @@ void mainControllerLoop() {
 				controlMode %= NUMBER_OF_MODES;
 
 				if (controlMode == DRIVE) {
-					outStream->println("Drive Mode");
+					outStream->println("<Drive Mode>");
 				} else if (controlMode == ARM) {
-					outStream->println("Arm Mode");
+					outStream->println("<Arm Mode>");
 				} else if (controlMode == MINE) {
-					outStream->println("Mine Mode");
+					outStream->println("<Mine Mode>");
 				}
 			}
 
@@ -99,26 +99,21 @@ void mainControllerLoop() {
 				break;
 
 			}
-
 		}
 	}
 }
 
 
 void runStartup(){
-
 	// Need to let Main Brain know we have control this way
-
-	outStream->println("RMB Starting Interface");
-
+	started = true;
+	outStream->println("<RMB Start Iface>");
 }
 
 void returnControl(){
-
 	// Need to let Main Brain know he is back in control
-
-	outStream->println("RMB Xbox Releasing");
-
+	started = false;
+	outStream->println("<RMB Iface End>");
 }
 
 void driveWithTwoSticks() {
@@ -180,6 +175,33 @@ void driveByDpad() {
 		rightMotor_ptr->stop();
 		leftMotor_ptr->stop();
 	}
+
+}
+
+void driveWithOneStick() {
+
+	int16_t xVal = xbox_ptr->getHatValue(RightHatX);
+	int16_t yVal = xbox_ptr->getHatValue(RightHatY);
+
+	float s = 0.707107;  // at pi/4 sin == cos =~= 0.707107
+
+	//  rotation matrix
+	int16_t xRot = (xVal * s) - (yVal * s);
+	int16_t yRot = (xVal * s) + (yVal * s);
+
+	//  Now left motor lies along y axis and right motor along x axis.
+
+	int16_t leftOut = map(yRot, -32768, 32767, -255, 255);
+	if (leftOut < 127) {
+		leftOut = 0;
+	}
+	int16_t rightOut = map(xRot, -32768, 32767, -255, 255);
+	if (rightOut < 127) {
+		rightOut = 0;
+	}
+
+	leftMotor_ptr->drive(leftOut);
+	rightMotor_ptr->drive(-rightOut);
 
 }
 

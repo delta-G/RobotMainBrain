@@ -58,8 +58,8 @@ enum ButtonMaskEnum {
 		START = 0x1000,
 		L3 = 0x4000,
 		R3 = 0x8000,
-		L2 = 0,
-		R2 = 0,
+		L2 = 0xFF00,
+		R2 = 0x00FF,
 		L1 = 0x0001,
 		R1 = 0x0002,
 
