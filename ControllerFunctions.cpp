@@ -92,7 +92,7 @@ void mainControllerLoop() {
 			switch (controlMode){
 
 			case DRIVE:
-				driveWithTwoSticks();
+				driveWithOneStick();
 				break;
 			case ARM:
 				driveByDpad();
