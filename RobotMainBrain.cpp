@@ -24,6 +24,8 @@ enum States { BOOTING, BOOT_ARM, CONNECT_COM, CONNECT_WAIT, RUNNING, NUM_RMB_STA
 
 extern CommandParser cp;
 
+
+
 unsigned int heartbeatInterval = 200;
 
 XboxHandler xbox;
@@ -65,6 +67,8 @@ void setup() {
 
 	initializeControllerFunctions(&leftMotor, &rightMotor, &Serial, &Serial1,
 				&xbox);
+
+	setupPCint();
 
 }
 

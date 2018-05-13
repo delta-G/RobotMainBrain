@@ -25,6 +25,9 @@ extern XboxHandler xbox;
 extern Motor leftMotor;
 extern Motor rightMotor;
 
+extern int32_t leftCounter;
+extern int32_t rightCounter;
+
 
 //  'E' reserved for ESP board
 Command commands[] = {
@@ -109,6 +112,16 @@ void requestFromBot(char* p) {
 		if(p[4] == 'B'){
 			Serial.print(HBOR_STRING);
 		}
+		break;
+	}
+
+	case 'M': {
+		Serial.print("<Cnts,");
+		Serial.print(leftCounter);
+		Serial.print(",");
+		Serial.print(rightCounter);
+		Serial.print(">");
+
 		break;
 	}
 

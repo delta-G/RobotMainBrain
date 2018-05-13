@@ -1,6 +1,6 @@
 /*
 
-Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
+Encoder.h  --  runs on 1284P and handles motor encoders of my robot
      Copyright (C) 2017  David C.
 
      This program is free software: you can redistribute it and/or modify
@@ -18,32 +18,18 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
      */
 
+#ifndef ENCODER_H_
+#define ENCODER_H_
 
-#ifndef _RobotMainBrain_H_
-#define _RobotMainBrain_H_
 #include "Arduino.h"
 
 #include "Defines.h"
+#include "RobotMainBrain.h"
 
-#include "CommandParser.h"
-#include "CommandFunctions.h"
-
-#include "ControllerFunctions.h"
-
-#include "Motor.h"
-
-#include "githash.h"
-
-#include "Encoder.h"
-
-void setup();
-void loop();
-void heartBeat();
-void monitorBattery();
+void setupPCint();
 
 
 
 
 
-
-#endif /* _RobotMainBrain_H_ */
+#endif /* ENCODER_H_ */

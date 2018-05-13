@@ -116,7 +116,7 @@ void XboxHandler::handleIncomingASCII(char* aPacket){
 	}
 }
 
-
+///  Breaks for R2 since L2 and R2 both equal 0.
 boolean XboxHandler::isClicked(ButtonMaskEnum aButton) {
 
 	uint16_t retval = (buttonClickState & aButton);
@@ -141,6 +141,7 @@ boolean XboxHandler::isClicked(ButtonMaskEnum aButton) {
 }
 
 
+///  This will break on R2 since L2 and R2 both equal 0.
 boolean XboxHandler::isPressed(ButtonMaskEnum aButton) {
 
 	if (!(aButton == L2 || aButton == R2)) {
@@ -162,4 +163,17 @@ int16_t XboxHandler::getHatValue(HatEnum aHat) {
 	}
 	return retval;
 
+}
+
+
+uint8_t XboxHandler::getTriggerValue(SideEnum aBut){
+
+	if(aBut == LEFT){
+		return readUnion.values.leftTrigger;
+	}
+	else if(aBut == RIGHT){
+		return readUnion.values.rightTrigger;
+	}
+
+	return 0;
 }

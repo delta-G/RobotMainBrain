@@ -47,6 +47,8 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 //        0x0008, // SYNC
 //};
 
+enum SideEnum {LEFT, RIGHT};
+
 enum ButtonMaskEnum {
 		UP = 0x0100,
 		RIGHT = 0x0800,

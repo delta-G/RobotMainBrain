@@ -38,10 +38,10 @@ lt enWM/SS (D 4) PB4 5|        |36 PA4 (AI 4 / D28)    cam enable
                  RST 9|        |32 AREF
                 VCC 10|        |31 GND
                 GND 11|        |30 AVCC
-              XTAL2 12|        |29 PC7 (D 23)
-              XTAL1 13|        |28 PC6 (D 22)
-      RX0 (D 8) PD0 14|        |27 PC5 (D 21) TDI
-      TX0 (D 9) PD1 15|        |26 PC4 (D 20) TDO
+              XTAL2 12|        |29 PC7 (D 23)          Motor Encoder
+              XTAL1 13|        |28 PC6 (D 22)          Motor Encoder
+      RX0 (D 8) PD0 14|        |27 PC5 (D 21) TDI      Motor Encoder
+      TX0 (D 9) PD1 15|        |26 PC4 (D 20) TDO      Motor Encoder
 RX1/INT0 (D 10) PD2 16|        |25 PC3 (D 19) TMS
 TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 gimbPWM (D 12) PD4 18|        |23 PC1 (D 17) SDA

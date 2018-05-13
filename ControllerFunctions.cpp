@@ -126,22 +126,24 @@ void driveWithTwoSticks() {
 	int16_t leftVal = xbox_ptr->getHatValue(LeftHatY);
 	int16_t rightVal = xbox_ptr->getHatValue(RightHatY);
 
-	if (leftVal > DEFAULT_DEADZONE) {
-		leftMotor_ptr->driveForward();
-	} else if (leftVal < -DEFAULT_DEADZONE) {
-		leftMotor_ptr->driveBackward();
-	} else {
-		leftMotor_ptr->stop();
+	int16_t leftOutput = 0;
+	int16_t rightOutput = 0;
+
+	if (abs(leftVal) > DEFAULT_DEADZONE) {
+		leftOutput = map(leftVal, -32768, 32767, -255, 255);
+		if (abs(leftOutput) < 127) {
+			leftOutput = 0;
+		}
+	}
+	if (abs(rightVal) > DEFAULT_DEADZONE) {
+		rightOutput = map(rightVal, -32768, 32767, -255, 255);
+		if (abs(rightOutput) < 127) {
+			rightOutput = 0;
+		}
 	}
 
-	if (rightVal > DEFAULT_DEADZONE) {
-		rightMotor_ptr->driveForward();
-	} else if (rightVal < -DEFAULT_DEADZONE) {
-		rightMotor_ptr->driveBackward();
-	} else {
-		rightMotor_ptr->stop();
-	}
-
+	leftMotor_ptr->drive(leftOutput);
+	rightMotor_ptr->drive(rightOutput);
 }
 
 void driveByDpad() {
