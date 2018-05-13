@@ -192,16 +192,16 @@ void driveWithOneStick() {
 	//  Now left motor lies along y axis and right motor along x axis.
 
 	int16_t leftOut = map(yRot, -32768, 32767, -255, 255);
-	if (leftOut < 127) {
+	if (abs(leftOut) < 127) {
 		leftOut = 0;
 	}
-	int16_t rightOut = map(xRot, -32768, 32767, -255, 255);
-	if (rightOut < 127) {
+	int16_t rightOut = map(xRot, -32768, 32767, 255, -255);
+	if (abs(rightOut) < 127) {
 		rightOut = 0;
 	}
 
 	leftMotor_ptr->drive(leftOut);
-	rightMotor_ptr->drive(-rightOut);
+	rightMotor_ptr->drive(rightOut);
 
 }
 
