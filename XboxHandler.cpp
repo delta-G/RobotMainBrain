@@ -164,16 +164,3 @@ int16_t XboxHandler::getHatValue(HatEnum aHat) {
 	return retval;
 
 }
-
-
-uint8_t XboxHandler::getTriggerValue(SideEnum aBut){
-
-	if(aBut == LEFT){
-		return readUnion.values.leftTrigger;
-	}
-	else if(aBut == RIGHT){
-		return readUnion.values.rightTrigger;
-	}
-
-	return 0;
-}
