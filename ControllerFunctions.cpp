@@ -211,3 +211,53 @@ void driveWithOneStick() {
 }
 
 
+
+void driveWithOneStickAlg2() {
+
+	int16_t xVal = xbox_ptr->getHatValue(RightHatX);
+	int16_t yVal = xbox_ptr->getHatValue(RightHatY);
+
+	float s = 0.707107;  // at pi/4 sin == cos =~= 0.707107
+
+	//  rotation matrix
+	float xRot = (xVal * s) - (yVal * s);
+	float yRot = (xVal * s) + (yVal * s);
+	//  Now left motor lies along y axis and right motor along x axis.
+
+	int16_t leftOut = (yRot / 32768) * 255;
+	int16_t rightOut = (xRot / 32768) * -255;
+
+	if (abs(rightOut) > abs(leftOut)) {
+		leftOut = 255 * (float(leftOut) / rightOut);
+		rightOut = (rightOut < 0) ? -255 : 255;
+	} else if (abs(leftOut) > abs(rightOut)) {
+		rightOut = 255 * (float(rightOut) / leftOut);
+		leftOut = (leftOut < 0) ? -255 : 255;
+	}
+
+	///  Some bounds Checking
+	if (abs(leftOut) < 127) {
+		leftOut = 0;
+	}
+	if (leftOut > 255) {
+		leftOut = 255;
+	}
+	if (leftOut < -255) {
+		leftOut = -255;
+	}
+
+	if (abs(rightOut) < 127) {
+		rightOut = 0;
+	}
+	if (rightOut > 255) {
+		rightOut = 255;
+	}
+	if (rightOut < -255) {
+		rightOut = -255;
+	}
+
+	///  Write to the motors.
+	leftMotor_ptr->drive(leftOut);
+	rightMotor_ptr->drive(rightOut);
+
+}
