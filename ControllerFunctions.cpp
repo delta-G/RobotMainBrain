@@ -92,7 +92,7 @@ void mainControllerLoop() {
 			switch (controlMode){
 
 			case DRIVE:
-				driveWithOneStick();
+				driveWithOneStickAlg2();
 				break;
 			case ARM:
 				driveByDpad();
@@ -175,7 +175,6 @@ void driveByDpad() {
 		rightMotor_ptr->stop();
 		leftMotor_ptr->stop();
 	}
-
 }
 
 void driveWithOneStick() {
@@ -224,14 +223,14 @@ void driveWithOneStickAlg2() {
 	float yRot = (xVal * s) + (yVal * s);
 	//  Now left motor lies along y axis and right motor along x axis.
 
-	int16_t leftOut = (yRot / 32768) * 255;
-	int16_t rightOut = (xRot / 32768) * -255;
+	float leftOut = (yRot / 32768.0) * 255.0;
+	float rightOut = (xRot / 32768.0) * -255.0;
 
 	if (abs(rightOut) > abs(leftOut)) {
-		leftOut = 255 * (float(leftOut) / rightOut);
+		leftOut = 255 * (leftOut / rightOut);
 		rightOut = (rightOut < 0) ? -255 : 255;
 	} else if (abs(leftOut) > abs(rightOut)) {
-		rightOut = 255 * (float(rightOut) / leftOut);
+		rightOut = 255 * (rightOut / leftOut);
 		leftOut = (leftOut < 0) ? -255 : 255;
 	}
 
@@ -257,7 +256,7 @@ void driveWithOneStickAlg2() {
 	}
 
 	///  Write to the motors.
-	leftMotor_ptr->drive(leftOut);
-	rightMotor_ptr->drive(rightOut);
+	leftMotor_ptr->drive((int16_t)leftOut);
+	rightMotor_ptr->drive((int16_t)rightOut);
 
 }

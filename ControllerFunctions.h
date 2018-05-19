@@ -45,6 +45,7 @@ void returnControl();
 void driveWithTwoSticks();
 void driveByDpad();
 void driveWithOneStick();
+void driveWithOneStickAlg2();
 
 
 #endif /* CONTROLLERFUNCTIONS_H_ */
