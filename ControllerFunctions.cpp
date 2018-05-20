@@ -237,8 +237,8 @@ void driveWithOneStickAlg2() {
 		rightOut = 255 * (rightOut / leftOut);
 		leftOut = (leftOut < 0) ? -255 : 255;
 	} else {
-		rightOut = (rightOut < 0) ? -255 : 255;
-		leftOut = (leftOut < 0) ? -255 : 255;
+		rightOut = (rightOut < 0) ? -255 : (rightOut > 0) ? 255 : 0;
+		leftOut = (leftOut < 0) ? -255 : (leftOut > 0) ? 255 : 0;
 	}
 
 	///  Some bounds Checking
