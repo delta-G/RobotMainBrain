@@ -44,15 +44,24 @@ void Motor::driveBackward() {
 
 //  Speed must be constrained to between -255 and +255
 void Motor::drive(int16_t aSpeed){
-
 	if (aSpeed > 0){
 		digitalWrite(directionPin, invertForward);
 	} else if (aSpeed < 0){
 		digitalWrite(directionPin, !invertForward);
 	}
-
 	// if aSpeed is 0 then direction is untouched but motor turns off just like stop()
+	// otherwise the absolute value goes out there.
 	analogWrite(enablePin, abs(aSpeed));
-
 }
+
+
+float Motor::getAverageSpeed(){
+	return encoder.getAverageSpeed();
+}
+
+float Motor::getSpeed(){
+	return encoder.getSpeed();
+}
+
+
 

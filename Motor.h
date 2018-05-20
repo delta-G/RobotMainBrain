@@ -23,6 +23,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 
 #include "Arduino.h"
+#include "EncoderInterface.h"
 
 
 
@@ -33,11 +34,13 @@ class Motor {
 
 	uint8_t invertForward;  //HIGH / true for left LOW / false for right
 
+	EncoderInterface encoder;
+
 public:
 
-	Motor(uint8_t aDirpin, uint8_t aEnabpin, boolean aInvert) : directionPin(aDirpin), enablePin(aEnabpin), invertForward(aInvert){}
+//	Motor(uint8_t aDirpin, uint8_t aEnabpin, boolean aInvert) : directionPin(aDirpin), enablePin(aEnabpin), invertForward(aInvert), encoder(NULL){};
 
-	Motor(uint8_t aDirpin, uint8_t aEnabpin) : directionPin(aDirpin), enablePin(aEnabpin), invertForward(false){}
+	Motor(uint8_t aDirpin, uint8_t aEnabpin, boolean aInvert, int32_t(*aGet)()) : directionPin(aDirpin), enablePin(aEnabpin), invertForward(false), invertForward(aInvert), encoder(aGet){}
 
 	void init();
 
@@ -46,8 +49,8 @@ public:
 	void drive(int16_t);
 	void stop();
 
-
-
+	float getSpeed();
+	float getAverageSpeed();
 };
 
 

@@ -123,17 +123,23 @@ void requestFromBot(char* p) {
 		Serial.print(",");
 		Serial.print(rightCounter);
 		Serial.print(">");
-
 		break;
 	}
 
 	case 'S':
 		Serial.print("<Spd,");
+		Serial.print(leftMotor.getSpeed());
+		Serial.print(",");
+		Serial.print(rightMotor.getSpeed());
+		Serial.print(">");
+		break;
+
+	case 's':
+		Serial.print("<Out,");
 		Serial.print(leftOut);
 		Serial.print(",");
 		Serial.print(rightOut);
 		Serial.print(">");
-
 		break;
 
 	case 'B':

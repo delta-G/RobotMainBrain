@@ -1,6 +1,6 @@
 /*
 
-Encoder.h  --  runs on 1284P and handles motor encoders of my robot
+Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
      Copyright (C) 2017  David C.
 
      This program is free software: you can redistribute it and/or modify
@@ -18,19 +18,59 @@ Encoder.h  --  runs on 1284P and handles motor encoders of my robot
 
      */
 
-#ifndef ENCODER_H_
-#define ENCODER_H_
+#ifndef ENCODERINTERFACE_H_
+#define ENCODERINTERFACE_H_
 
 #include "Arduino.h"
 
-#include "Defines.h"
-#include "RobotMainBrain.h"
 
-void setupPCint();
+//////*  TODO  **
+
+/*
+ *
+ * Use scope to figure this timing out.  It shouldn't be arbitrary
+ *
+ *
+ */
 
 
-int32_t getLeftMotorCount();
-int32_t getRightMotorCount();
+
+#define NUMBER_OF_SPEEDS 16
+#define MINIMUM_RUN_TIME 20000  // microseconds
 
 
-#endif /* ENCODER_H_ */
+class EncoderInterface {
+
+
+	int32_t (*getCount)();
+	float speeds[NUMBER_OF_SPEEDS];
+	uint8_t index;
+	int32_t lastCount;
+
+	uint32_t lastRunTime = 0;
+
+
+
+	float averageSpeed;
+
+
+
+
+public:
+
+	EncoderInterface(int32_t(*aGet)()) : getCount(aGet), lastCount(0), index(0), averageSpeed(0){clearSpeeds();}
+
+	void run();
+	void clearSpeeds();
+
+	float getAverageSpeed();
+	float getSpeed();
+
+
+
+};
+
+
+
+
+#endif /* ENCODERINTERFACE_H_ */

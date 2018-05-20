@@ -70,6 +70,23 @@ void setupPCint(){
 }
 
 
+int32_t getLeftMotorCount(){
+	int32_t retval = 0;
+	// Disable interrupt
+	cli();
+	retval = leftCounter;
+	sei();
+	return retval;
+}
+
+int32_t getRightMotorCount(){
+	int32_t retval = 0;
+	// Disable interrupt
+	cli();
+	retval = rightCounter;
+	sei();
+	return retval;
+}
 
 
 

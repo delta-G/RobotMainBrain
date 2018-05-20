@@ -30,8 +30,8 @@ unsigned int heartbeatInterval = 200;
 
 XboxHandler xbox;
 
-Motor leftMotor(LEFT_MOTOR_DIRECTION_PIN, LEFT_MOTOR_ENABLE_PIN, true );
-Motor rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false );
+Motor leftMotor(LEFT_MOTOR_DIRECTION_PIN, LEFT_MOTOR_ENABLE_PIN, true, getLeftMotorCount);
+Motor rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false, getRightMotorCount);
 
 float batteryVoltage = 0.0;
 
