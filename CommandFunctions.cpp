@@ -28,6 +28,8 @@ extern Motor rightMotor;
 extern int32_t leftCounter;
 extern int32_t rightCounter;
 
+extern float leftOut;
+extern float rightOut;
 
 //  'E' reserved for ESP board
 Command commands[] = {
@@ -124,6 +126,15 @@ void requestFromBot(char* p) {
 
 		break;
 	}
+
+	case 'S':
+		Serial.print("<Spd,");
+		Serial.print(leftOut);
+		Serial.print(",");
+		Serial.print(rightOut);
+		Serial.print(">");
+
+		break;
 
 	case 'B':
 	{

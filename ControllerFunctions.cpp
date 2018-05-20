@@ -37,6 +37,10 @@ unsigned int updateInterval = 20;
 int controlMode;
 
 
+float leftOut = 0.0;
+float rightOut = 0.0;
+
+
 void initializeControllerFunctions(Motor* aLeftMotor, Motor* aRightMotor, Stream* aOutStream, Stream* aServStream, XboxHandler* aXbox){
 
 	leftMotor_ptr = aLeftMotor;
@@ -189,7 +193,7 @@ void driveWithOneStick() {
 	float yRot = (xVal * s) + (yVal * s);
 	//  Now left motor lies along y axis and right motor along x axis.
 
-	int16_t leftOut = (yRot / 32768) * 255;
+	leftOut = (yRot / 32768) * 255;
 	if (abs(leftOut) < 127) {
 		leftOut = 0;
 	}
@@ -197,7 +201,7 @@ void driveWithOneStick() {
 	if (leftOut < -255) leftOut = -255;
 
 
-	int16_t rightOut = (xRot / 32768) * -255;
+	rightOut = (xRot / 32768) * -255;
 	if (abs(rightOut) < 127) {
 		rightOut = 0;
 	}
@@ -223,8 +227,8 @@ void driveWithOneStickAlg2() {
 	float yRot = (xVal * s) + (yVal * s);
 	//  Now left motor lies along y axis and right motor along x axis.
 
-	float leftOut = (yRot / 32768.0) * 255.0;
-	float rightOut = (xRot / 32768.0) * -255.0;
+	leftOut = (yRot / 32768.0) * 255.0;
+	rightOut = (xRot / 32768.0) * -255.0;
 
 	if (abs(rightOut) > abs(leftOut)) {
 		leftOut = 255 * (leftOut / rightOut);
