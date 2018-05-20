@@ -236,6 +236,9 @@ void driveWithOneStickAlg2() {
 	} else if (abs(leftOut) > abs(rightOut)) {
 		rightOut = 255 * (rightOut / leftOut);
 		leftOut = (leftOut < 0) ? -255 : 255;
+	} else {
+		rightOut = (rightOut < 0) ? -255 : 255;
+		leftOut = (leftOut < 0) ? -255 : 255;
 	}
 
 	///  Some bounds Checking
