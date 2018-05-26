@@ -55,11 +55,7 @@ void Motor::drive(int16_t aSpeed){
 }
 
 
-float Motor::getAverageSpeed(){
-	return encoder.getAverageSpeed();
-}
-
-float Motor::getSpeed(){
+int32_t Motor::getSpeed(){
 	return encoder.getSpeed();
 }
 

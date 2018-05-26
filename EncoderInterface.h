@@ -34,38 +34,24 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
  */
 
 
-
-#define NUMBER_OF_SPEEDS 16
-#define MINIMUM_RUN_TIME 20000  // microseconds
-
-
 class EncoderInterface {
 
+private:
 
-	int32_t (*getCount)();
-	float speeds[NUMBER_OF_SPEEDS];
-	uint8_t index;
-	int32_t lastCount;
-
-	uint32_t lastRunTime = 0;
-
-
-
-	float averageSpeed;
+	volatile uint32_t lastTickMicros;
+	volatile int32_t speed;    //  Ticks per second
+	volatile int32_t ticks;
 
 
 
 
 public:
 
-	EncoderInterface(int32_t(*aGet)()) : getCount(aGet), lastCount(0), index(0), averageSpeed(0){clearSpeeds();}
+	EncoderInterface():lastTickMicros(0), speed(0), ticks(0){}
 
-	void run();
-	void clearSpeeds();
-
-	float getAverageSpeed();
-	float getSpeed();
-
+	void tick(boolean);
+	int32_t getSpeed();
+	int32_t getTicks();
 
 
 };

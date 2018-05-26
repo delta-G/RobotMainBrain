@@ -21,57 +21,42 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "EncoderInterface.h"
 
 
-void EncoderInterface::run() {
 
-	// only run if we've got a good getCount pointer
-	if (getCount) {
 
-		uint32_t curTime = micros();
-		int32_t curCount = getCount();
+void EncoderInterface::tick(boolean aForward){
 
-		//  so we get the same number on quick consecutive calls
-		if (curTime - lastRunTime >= MINIMUM_RUN_TIME) {
-			// speed in counts per microsecond
-			float speed = (curCount - lastCount) / (curTime - lastRunTime);
+	uint32_t tickTime = micros();
+	uint32_t delta = tickTime - lastTickMicros;
+	lastTickMicros = tickTime;
 
-			speeds[index] = speed;
+	speed = 1000000ul / delta;   // ticks per 1,000,000 micros (1 second)
 
-			float sum;
-
-			for (uint8_t i = 0; i < NUMBER_OF_SPEEDS; i++) {
-				sum += speeds[i];
-			}
-
-			averageSpeed = sum / NUMBER_OF_SPEEDS;
-
-			index++;
-			lastCount = curCount;
-			lastRunTime = curTime;
-		}
+	if(!aForward){
+		speed = 0 - speed;
+		ticks--;
+	}
+	else {
+		ticks++;
 	}
 }
 
 
-void EncoderInterface::clearSpeeds(){
-	for(int i = 0; i < NUMBER_OF_SPEEDS; i++){
-		speeds[i] = 0;
-	}
+
+int32_t EncoderInterface::getSpeed(){
+	int32_t retval = 0;
+	cli();
+	retval = speed;
+	sei();
+	return retval;
 }
 
-float EncoderInterface::getAverageSpeed(){
-	run();
-	return averageSpeed;
+int32_t EncoderInterface::getTicks(){
+	int32_t retval = 0;
+	cli();
+	retval = ticks;
+	sei();
+	return retval;
 }
-
-float EncoderInterface::getSpeed(){
-	run();
-	// get the last speed in the circular buffer.
-	return speeds[(index == 0)? NUMBER_OF_SPEEDS : index - 1];
-}
-
-
-
-
 
 
 

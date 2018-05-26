@@ -26,12 +26,13 @@ Encoder.cpp  --  runs on 1284P and handles motor encoders of my robot
 #define RIGHT_INT_MASK 0x20
 #define RIGHT_B_MASK 0x10
 
+extern Motor leftMotor;
+extern Motor rightMotor;
+
 volatile uint8_t lastPortRead = 0;
 
 volatile int32_t leftCounter = 0;
 volatile int32_t rightCounter = 0;
-
-
 
 
 ISR(PCINT2_vect){
@@ -42,22 +43,31 @@ ISR(PCINT2_vect){
 	uint8_t pinsDiff = portRead ^ (portRead << 1); // Will have bits 5 or 7 set if pins on right motor or left motor are diff.  Cleared if same.
 
 	if (whoFired & LEFT_INT_MASK) {
+		boolean forw = false;
 		if (pinsDiff & LEFT_INT_MASK) {
 			leftCounter++;
+			forw = true;
 		} else {
 			leftCounter--;
 		}
+		if (portRead & LEFT_INT_MASK) {  // If it is a HIGH
+			leftMotor.encoder.tick(forw);
+		}
 	}
 	if (whoFired & RIGHT_INT_MASK) {
+		boolean forw = false;
 		if (pinsDiff & RIGHT_INT_MASK) {
 			rightCounter++;
+			forw = true;
 		} else {
 			rightCounter--;
+		}
+		if (portRead & LEFT_INT_MASK) {  // If it is a HIGH
+			rightMotor.encoder.tick(forw);
 		}
 	}
 
 	lastPortRead = portRead;
-
 }
 
 
@@ -87,7 +97,3 @@ int32_t getRightMotorCount(){
 	sei();
 	return retval;
 }
-
-
-
-
