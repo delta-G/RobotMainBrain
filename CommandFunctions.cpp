@@ -37,12 +37,27 @@ Command commands[] = {
 		{ 'R', requestFromBot },
 		{ 'M', motorControl },
 		{ 'm', motorControl },
+		{ 't', testFunc },
 		{ 'B', requestFromBot },
 		{ 'H', headlightControl },
 		{ 'V', videoControl },
 		{ 'S', armControl },
 		{ '#', armControl }
 };
+
+
+void testFunc(char* p) {
+
+	int32_t speed = atol(p + 4);
+	if (p[2] == 'L') {
+		leftMotor.setSpeed(speed);
+	}
+	if (p[2] == 'R') {
+		rightMotor.setSpeed(speed);
+	}
+
+}
+
 
 //Command armCommands[] = {
 //		{ 'C', enableArm }
@@ -117,14 +132,17 @@ void requestFromBot(char* p) {
 		break;
 	}
 
-	case 'M': {
+
+
+
+	case 'C':
 		Serial.print("<Cnts,");
 		Serial.print(leftCounter);
 		Serial.print(",");
 		Serial.print(rightCounter);
 		Serial.print(">");
 		break;
-	}
+
 
 	case 'S':
 		Serial.print("<Spd,");
@@ -136,11 +154,33 @@ void requestFromBot(char* p) {
 
 	case 's':
 		Serial.print("<Out,");
-		Serial.print(leftOut);
+		Serial.print(leftMotor.getPwmSpeed());
 		Serial.print(",");
-		Serial.print(rightOut);
+		Serial.print(rightMotor.getPwmSpeed());
 		Serial.print(">");
 		break;
+
+	case 'M':
+		Serial.print("<Cnts,");
+		Serial.print(leftCounter);
+		Serial.print(",");
+		Serial.print(rightCounter);
+		Serial.print(">");
+
+		Serial.print("<Spd,");
+		Serial.print(leftMotor.getSpeed());
+		Serial.print(",");
+		Serial.print(rightMotor.getSpeed());
+		Serial.print(">");
+
+		Serial.print("<Out,");
+		Serial.print(leftMotor.getPwmSpeed());
+		Serial.print(",");
+		Serial.print(rightMotor.getPwmSpeed());
+		Serial.print(">");
+
+		break;
+
 
 	case 'B':
 	{

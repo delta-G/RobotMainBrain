@@ -39,6 +39,8 @@ void armControl(char*);
 void videoControl(char*);
 void headlightControl(char*);
 
+void testFunc(char*);
+
 
 
 

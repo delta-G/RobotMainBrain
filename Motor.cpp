@@ -41,9 +41,55 @@ void Motor::driveBackward() {
 	digitalWrite(enablePin, HIGH);
 }
 
+void Motor::loop() {
 
-//  Speed must be constrained to between -255 and +255
+	static uint32_t lastLoop = millis();
+	uint32_t thisLoop = millis();
+
+	if (thisLoop - lastLoop >= 10) {   // only every 10 ms.  One tick at full speed is like 8.5ms
+
+		if (targetSpeed == 0){
+			stop();
+			return;
+		}
+
+		int32_t curSpeed = getSpeed();
+
+		if (targetSpeed > 0){
+			if(curSpeed < targetSpeed){
+				drive(pwmSpeed +1);
+			} else if(curSpeed > targetSpeed){
+				if(pwmSpeed > 0){
+					drive(pwmSpeed -1);
+				}
+			}
+		}
+		if (targetSpeed < 0){
+			if(curSpeed > targetSpeed){
+				drive(pwmSpeed -1);
+			} else if (curSpeed < targetSpeed){
+				if(pwmSpeed < 0){
+					drive(pwmSpeed +1);
+				}
+			}
+		}
+
+	}
+}
+
+
+//  aSpeed is the PWM speed for the motor + for forward and - for reverse on the direction pin.
 void Motor::drive(int16_t aSpeed){
+	if(aSpeed > 255){
+		aSpeed = 255;
+	} else if(aSpeed < -255){
+		aSpeed = -255;
+	} else if((aSpeed > 0) && (aSpeed < 127)){
+		aSpeed = 127;
+	} else if((aSpeed < 0) && (aSpeed > -127)){
+		aSpeed = -127;
+	}
+	pwmSpeed = aSpeed;
 	if (aSpeed > 0){
 		digitalWrite(directionPin, invertForward);
 	} else if (aSpeed < 0){
@@ -60,4 +106,10 @@ int32_t Motor::getSpeed(){
 }
 
 
+void Motor::setSpeed(int32_t aTarget){
+	targetSpeed = aTarget;
+}
 
+int16_t Motor::getPwmSpeed(){
+	return pwmSpeed;
+}

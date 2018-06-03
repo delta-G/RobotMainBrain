@@ -43,6 +43,7 @@ void mainControllerLoop();
 void runStartup();
 void returnControl();
 void driveWithTwoSticks();
+void driveWithTwoSticksAlg2();
 void driveByDpad();
 void driveWithOneStick();
 void driveWithOneStickAlg2();

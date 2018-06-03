@@ -134,7 +134,7 @@ void loop() {
 		}
 
 		//  TODO:  Why does cp need to run here?  And why not in the next case while waiting for ESP?
-		cp.run();
+//		cp.run();   /// Let's comment it out and see what happens.
 
 		break;
 	}
@@ -164,16 +164,20 @@ void loop() {
 				waitBuf[++windx] = 0;
 				if (c == '>') {
 					if (started) {
-						if (strcmp(waitBuf, COM_CONNECT_STRING)) {
+						if (strcmp(waitBuf, COM_CONNECT_STRING) == 0) {
 							currentState = RUNNING;
 						}
 					}
 					else {
-						if (strcmp(waitBuf, COM_START_STRING)) {
+						if (strcmp(waitBuf, COM_START_STRING) == 0) {
 							windx = 0;
 							waitBuf[windx] = 0;
 							started = true;   // next packet should be connection
 							waitRec = false;  // wait for another SOP
+						}
+						//  BackDoor for testing
+						else if(strcmp(waitBuf, "<GO>") == 0) {
+							currentState = RUNNING;
 						}
 					}
 				}
@@ -234,7 +238,7 @@ void monitorBattery() {
 
 //	float v = (r * 20.75) / 1024;
 
-//		batteryVoltage = (average * 0.0202636719);
+//		batteryVoltage = (average * 0.0202636719);   //  Theoretical
 		batteryVoltage = (average * 0.020105) + 0.796904;  //Calibrated
 		// 207.5 / 1024
 

@@ -34,6 +34,10 @@ class Motor {
 
 	uint8_t invertForward;  //HIGH / true for left LOW / false for right
 
+	int32_t targetSpeed;
+
+	int16_t pwmSpeed;
+
 
 
 public:
@@ -42,7 +46,7 @@ public:
 
 //	Motor(uint8_t aDirpin, uint8_t aEnabpin, boolean aInvert) : directionPin(aDirpin), enablePin(aEnabpin), invertForward(aInvert), encoder(NULL){};
 
-	Motor(uint8_t aDirpin, uint8_t aEnabpin, boolean aInvert) : directionPin(aDirpin), enablePin(aEnabpin), invertForward(aInvert){}
+	Motor(uint8_t aDirpin, uint8_t aEnabpin, boolean aInvert) : directionPin(aDirpin), enablePin(aEnabpin), invertForward(aInvert), targetSpeed(0), pwmSpeed(0){};
 
 	void init();
 
@@ -52,6 +56,11 @@ public:
 	void stop();
 
 	int32_t getSpeed();
+	int16_t getPwmSpeed();
+
+	void setSpeed(int32_t);
+
+	void loop();
 
 };
 

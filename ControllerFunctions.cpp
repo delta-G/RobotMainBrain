@@ -96,7 +96,9 @@ void mainControllerLoop() {
 			switch (controlMode){
 
 			case DRIVE:
-				driveWithOneStickAlg2();
+				driveWithTwoSticksAlg2();
+				leftMotor_ptr->loop();
+				rightMotor_ptr->loop();
 				break;
 			case ARM:
 				driveByDpad();
@@ -144,6 +146,34 @@ void driveWithTwoSticks() {
 	leftMotor_ptr->drive(leftOutput);
 	rightMotor_ptr->drive(rightOutput);
 }
+
+
+void driveWithTwoSticksAlg2() {
+
+	int16_t leftVal = xbox_ptr->getHatValue(LeftHatY);
+	int16_t rightVal = xbox_ptr->getHatValue(RightHatY);
+
+	int16_t leftOutput = 0;
+	int16_t rightOutput = 0;
+
+	if (abs(leftVal) > DEFAULT_DEADZONE) {
+		leftOutput = map(leftVal, -32768, 32767, -100, 100);
+		if (abs(leftOutput) < 30) {
+			leftOutput = 0;
+		}
+	}
+	if (abs(rightVal) > DEFAULT_DEADZONE) {
+		rightOutput = map(rightVal, -32768, 32767, -100, 100);
+		if (abs(rightOutput) < 30) {
+			rightOutput = 0;
+		}
+	}
+
+	leftMotor_ptr->setSpeed(leftOutput);
+	rightMotor_ptr->setSpeed(rightOutput);
+}
+
+
 
 void driveByDpad() {
 

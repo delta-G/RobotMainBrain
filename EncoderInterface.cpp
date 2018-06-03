@@ -22,33 +22,49 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 
 
-
+//*****   ONLY CALL FROM ISR   NOT SAFE OTHERWISE
 void EncoderInterface::tick(boolean aForward){
 
 	uint32_t tickTime = micros();
-	uint32_t delta = tickTime - lastTickMicros;
+	lastDeltaMicros = tickTime - lastTickMicros;
 	lastTickMicros = tickTime;
 
-	speed = 1000000ul / delta;   // ticks per 1,000,000 micros (1 second)
-
 	if(!aForward){
-		speed = 0 - speed;
 		ticks--;
 	}
 	else {
 		ticks++;
 	}
+	forward = aForward;
 }
 
 
 
 int32_t EncoderInterface::getSpeed(){
 	int32_t retval = 0;
+	uint32_t ct = micros();
 	cli();
-	retval = speed;
+	uint32_t lsDel = lastDeltaMicros;
+	uint32_t lsTic = lastTickMicros;
+	boolean forw = forward;
 	sei();
+
+	if(ct - lsTic >= lsDel){
+		//  been too long, calculate based on time since last tick
+		retval = (1000000ul / (ct - lsTic));  // gets 0 after 1 second
+	}
+	// last tick was very recent, speed numbers are good.
+	else {
+		retval = 1000000ul / lsDel;
+	}
+
+	if (!forw){
+		retval = 0 - retval;
+	}
+
 	return retval;
 }
+
 
 int32_t EncoderInterface::getTicks(){
 	int32_t retval = 0;
