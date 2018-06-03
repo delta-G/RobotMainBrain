@@ -29,6 +29,7 @@ void Motor::init(){
 
 void Motor::stop(){
 	digitalWrite(enablePin, LOW);
+	pwmSpeed = 0;
 }
 
 void Motor::driveForward(){

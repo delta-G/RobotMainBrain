@@ -62,7 +62,7 @@ ISR(PCINT2_vect){
 		} else {
 			rightCounter--;
 		}
-		if (portRead & LEFT_INT_MASK) {  // If it is a HIGH
+		if (portRead & RIGHT_INT_MASK) {  // If it is a HIGH
 			rightMotor.encoder.tick(forw);
 		}
 	}
