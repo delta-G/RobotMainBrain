@@ -26,8 +26,7 @@ Encoder.cpp  --  runs on 1284P and handles motor encoders of my robot
 #define RIGHT_INT_MASK 0x20
 #define RIGHT_B_MASK 0x10
 
-extern Motor leftMotor;
-extern Motor rightMotor;
+extern Robot robot;
 
 volatile uint8_t lastPortRead = 0;
 
@@ -51,7 +50,7 @@ ISR(PCINT2_vect){
 			leftCounter--;
 		}
 		if (portRead & LEFT_INT_MASK) {  // If it is a HIGH
-			leftMotor.encoder.tick(forw);
+			robot.leftMotor.encoder.tick(forw);
 		}
 	}
 	if (whoFired & RIGHT_INT_MASK) {
@@ -63,7 +62,7 @@ ISR(PCINT2_vect){
 			rightCounter--;
 		}
 		if (portRead & RIGHT_INT_MASK) {  // If it is a HIGH
-			rightMotor.encoder.tick(forw);
+			robot.rightMotor.encoder.tick(forw);
 		}
 	}
 

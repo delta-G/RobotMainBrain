@@ -22,8 +22,8 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "CommandFunctions.h"
 
 extern XboxHandler xbox;
-extern Motor leftMotor;
-extern Motor rightMotor;
+
+extern Robot robot;
 
 extern int32_t leftCounter;
 extern int32_t rightCounter;
@@ -47,10 +47,10 @@ void testFunc(char* p) {
 
 	int32_t speed = atol(p + 4);
 	if (p[2] == 'L') {
-		leftMotor.setSpeed(speed);
+		robot.leftMotor.setSpeed(speed);
 	}
 	if (p[2] == 'R') {
-		rightMotor.setSpeed(speed);
+		robot.rightMotor.setSpeed(speed);
 	}
 
 }
@@ -119,18 +119,14 @@ void headlightControl(char* p) {
 }
 
 void requestFromBot(char* p) {
-	switch(p[3]){
+	switch (p[3]) {
 
 	case 'H':
-	{
-		if(p[4] == 'B'){
+
+		if (p[4] == 'B') {
 			Serial.print(HBOR_STRING);
 		}
 		break;
-	}
-
-
-
 
 	case 'C':
 		Serial.print("<Cnts,");
@@ -143,17 +139,17 @@ void requestFromBot(char* p) {
 
 	case 'S':
 		Serial.print("<Spd,");
-		Serial.print(leftMotor.getSpeed());
+		Serial.print(robot.leftMotor.getSpeed());
 		Serial.print(",");
-		Serial.print(rightMotor.getSpeed());
+		Serial.print(robot.rightMotor.getSpeed());
 		Serial.print(">");
 		break;
 
 	case 's':
 		Serial.print("<Out,");
-		Serial.print(leftMotor.getPwmSpeed());
+		Serial.print(robot.leftMotor.getPwmSpeed());
 		Serial.print(",");
-		Serial.print(rightMotor.getPwmSpeed());
+		Serial.print(robot.rightMotor.getPwmSpeed());
 		Serial.print(">");
 		break;
 
@@ -165,15 +161,15 @@ void requestFromBot(char* p) {
 		Serial.print(">");
 
 		Serial.print("<Spd,");
-		Serial.print(leftMotor.getSpeed());
+		Serial.print(robot.leftMotor.getSpeed());
 		Serial.print(",");
-		Serial.print(rightMotor.getSpeed());
+		Serial.print(robot.rightMotor.getSpeed());
 		Serial.print(">");
 
 		Serial.print("<Out,");
-		Serial.print(leftMotor.getPwmSpeed());
+		Serial.print(robot.leftMotor.getPwmSpeed());
 		Serial.print(",");
-		Serial.print(rightMotor.getPwmSpeed());
+		Serial.print(robot.rightMotor.getPwmSpeed());
 		Serial.print(">");
 
 		break;
@@ -181,10 +177,12 @@ void requestFromBot(char* p) {
 
 	case 'B':
 	{
-		int r = analogRead(BATTERY_PIN);
+//		int r = analogRead(BATTERY_PIN);
 //		float v = (r * 20.75) / 1024;
 		// Calibrated
-		float v = (r * 0.020104) + 0.79690;
+		float v = robot.getBatteryVoltage();
+		int r = (v - 0.79690) / 0.020104;
+
 		Serial.print("<BAT,");
 		Serial.print(r);
 		Serial.print(",");
@@ -207,20 +205,20 @@ void motorControl(char* p) {
 	if (p[1] == 'M') {
 		if (p[2] == 'R') {
 			if (p[4] == '1') {
-				rightMotor.driveForward();
+				robot.rightMotor.driveForward();
 			} else if (p[4] == '-' && p[5] == '1') {
-				rightMotor.driveBackward();
+				robot.rightMotor.driveBackward();
 			} else {
-				rightMotor.stop();
+				robot.rightMotor.stop();
 			}
 		}
 		else if (p[2] == 'L') {
 			if (p[4] == '1') {
-				leftMotor.driveForward();
+				robot.leftMotor.driveForward();
 			} else if (p[4] == '-' && p[5] == '1') {
-				leftMotor.driveBackward();
+				robot.leftMotor.driveBackward();
 			} else {
-				leftMotor.stop();
+				robot.leftMotor.stop();
 			}
 		}
 	}
@@ -228,10 +226,10 @@ void motorControl(char* p) {
 		int amt = atoi(p + 4);
 
 		if (p[2] == 'R') {
-			rightMotor.drive(amt);
+			robot.rightMotor.drive(amt);
 		}
 		else if (p[2] == 'L') {
-			leftMotor.drive(amt);
+			robot.leftMotor.drive(amt);
 		}
 	}
 

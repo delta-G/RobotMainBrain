@@ -41,10 +41,10 @@ float leftOut = 0.0;
 float rightOut = 0.0;
 
 
-void initializeControllerFunctions(Motor* aLeftMotor, Motor* aRightMotor, Stream* aOutStream, Stream* aServStream, XboxHandler* aXbox){
+void initializeControllerFunctions(Robot* aRobot, Stream* aOutStream, Stream* aServStream, XboxHandler* aXbox){
 
-	leftMotor_ptr = aLeftMotor;
-	rightMotor_ptr = aRightMotor;
+	leftMotor_ptr = &(aRobot->leftMotor);
+	rightMotor_ptr = &(aRobot->rightMotor);
 	outStream = aOutStream;
 	servoStream = aServStream;
 	xbox_ptr = aXbox;

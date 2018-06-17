@@ -24,16 +24,16 @@ enum States { BOOTING, BOOT_ARM, CONNECT_COM, CONNECT_WAIT, RUNNING, NUM_RMB_STA
 
 extern CommandParser cp;
 
-
-
 unsigned int heartbeatInterval = 200;
 
 XboxHandler xbox;
 
-Motor leftMotor(LEFT_MOTOR_DIRECTION_PIN, LEFT_MOTOR_ENABLE_PIN, true);
-Motor rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false);
+Robot robot;
 
-float batteryVoltage = 0.0;
+//Motor leftMotor(LEFT_MOTOR_DIRECTION_PIN, LEFT_MOTOR_ENABLE_PIN, true);
+//Motor rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false);
+
+//float batteryVoltage = 0.0;
 
 void setup() {
 
@@ -41,7 +41,7 @@ void setup() {
 	// Start with everything off
 
 	pinMode(COM_POWER_ENABLE, OUTPUT);
-	digitalWrite(COM_POWER_ENABLE, HIGH);
+	digitalWrite(COM_POWER_ENABLE, HIGH);  //except this, this is on
 
 	pinMode(ARM_ENABLE, OUTPUT);
 	digitalWrite(ARM_ENABLE, LOW);
@@ -52,8 +52,8 @@ void setup() {
 	pinMode(HEADLIGHT_PIN, OUTPUT);
 	digitalWrite(HEADLIGHT_PIN, LOW);
 
-	leftMotor.init();
-	rightMotor.init();
+	robot.leftMotor.init();
+	robot.rightMotor.init();
 
 	pinMode(HEARTBEAT_PIN, OUTPUT);
 	for (int i = 0; i < 3; i++) {
@@ -65,7 +65,7 @@ void setup() {
 
 	analogReference(INTERNAL1V1);
 
-	initializeControllerFunctions(&leftMotor, &rightMotor, &Serial, &Serial1,
+	initializeControllerFunctions(&robot, &Serial, &Serial1,
 				&xbox);
 
 	setupPCint();
@@ -186,7 +186,7 @@ void loop() {
 	}
 
 	case RUNNING:
-		monitorBattery();
+		robot.monitorBattery();
 		cp.run();
 
 		mainControllerLoop();
@@ -204,53 +204,53 @@ void loop() {
 
 
 
-void monitorBattery() {
-
-	static uint16_t readings[NUMBER_BATTERY_READINGS_TO_AVERAGE] = { 0 };
-	static uint8_t index = 0;
-	static uint32_t total = 0;
-	static uint16_t average = 0;
-
-	//  Doesn't keep track of number of reads so it
-	//  fills up the array as fast as it can and the
-	//  first time it gets it full it slows down.
-	static uint16_t readInterval = 10;
-	static uint32_t pm = millis();
-	uint32_t cm = millis();
-
-	if (cm - pm >= readInterval) {
-		pm = cm;
-
-		total -= readings[index];
-		readings[index] = analogRead(BATTERY_PIN);
-		total += readings[index];
-		++index;
-		if(index == NUMBER_BATTERY_READINGS_TO_AVERAGE){
-			// Slow down the read interval once the array fills up.
-			readInterval = 1000;
-		}
-		index %= NUMBER_BATTERY_READINGS_TO_AVERAGE;
-
-		average = total / NUMBER_BATTERY_READINGS_TO_AVERAGE;
-
-//	float v = (r * 20.75) / 1024;
-
-//		batteryVoltage = (average * 0.0202636719);   //  Theoretical
-		batteryVoltage = (average * 0.020105) + 0.796904;  //Calibrated
-		// 207.5 / 1024
-
-
-		// TODO:  This should be stored somewhere and printed out in an orderly fashion.
-		//  This should probably only happen once when the battery has changed and kept
-		//  it's value for some time.
-		Serial.print("<BAT,");
-		Serial.print(average);
-		Serial.print(",");
-		Serial.print(batteryVoltage, 1);
-		Serial.print(">");
-
-	}
-}
+//void monitorBattery() {
+//
+//	static uint16_t readings[NUMBER_BATTERY_READINGS_TO_AVERAGE] = { 0 };
+//	static uint8_t index = 0;
+//	static uint32_t total = 0;
+//	static uint16_t average = 0;
+//
+//	//  Doesn't keep track of number of reads so it
+//	//  fills up the array as fast as it can and the
+//	//  first time it gets it full it slows down.
+//	static uint16_t readInterval = 10;
+//	static uint32_t pm = millis();
+//	uint32_t cm = millis();
+//
+//	if (cm - pm >= readInterval) {
+//		pm = cm;
+//
+//		total -= readings[index];
+//		readings[index] = analogRead(BATTERY_PIN);
+//		total += readings[index];
+//		++index;
+//		if(index == NUMBER_BATTERY_READINGS_TO_AVERAGE){
+//			// Slow down the read interval once the array fills up.
+//			readInterval = 1000;
+//		}
+//		index %= NUMBER_BATTERY_READINGS_TO_AVERAGE;
+//
+//		average = total / NUMBER_BATTERY_READINGS_TO_AVERAGE;
+//
+////	float v = (r * 20.75) / 1024;
+//
+////		batteryVoltage = (average * 0.0202636719);   //  Theoretical
+//		batteryVoltage = (average * 0.020105) + 0.796904;  //Calibrated
+//		// 207.5 / 1024
+//
+//
+//		// TODO:  This should be stored somewhere and printed out in an orderly fashion.
+//		//  This should probably only happen once when the battery has changed and kept
+//		//  it's value for some time.
+//		Serial.print("<BAT,");
+//		Serial.print(average);
+//		Serial.print(",");
+//		Serial.print(batteryVoltage, 1);
+//		Serial.print(">");
+//
+//	}
+//}
 
 
 void heartBeat() {

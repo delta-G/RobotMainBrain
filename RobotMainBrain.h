@@ -25,6 +25,8 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 #include "Defines.h"
 
+#include "Robot.h"
+
 #include "CommandParser.h"
 #include "CommandFunctions.h"
 
@@ -39,7 +41,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 void setup();
 void loop();
 void heartBeat();
-void monitorBattery();
+//void monitorBattery();
 
 
 

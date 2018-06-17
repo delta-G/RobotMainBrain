@@ -23,6 +23,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 #include "Arduino.h"
 #include "Defines.h"
+#include "Robot.h"
 
 #include "Motor.h"
 
@@ -37,7 +38,7 @@ enum ModeEnum {
 	NUMBER_OF_MODES
 };
 
-void initializeControllerFunctions(Motor*, Motor*, Stream*, Stream*, XboxHandler*);
+void initializeControllerFunctions(Robot*, Stream*, Stream*, XboxHandler*);
 
 void mainControllerLoop();
 void runStartup();
