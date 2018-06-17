@@ -77,4 +77,11 @@ ping PWM (D 14) PD6 20|        |21 PD7 (D 15) PWM   headlight
 #define BATTERY_PIN A0
 
 
+
+
+#define NUMBER_BATTERY_READINGS_TO_AVERAGE 30
+
+
+
+
 #endif /* DEFINES_H_ */

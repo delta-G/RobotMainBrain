@@ -133,9 +133,6 @@ void loop() {
 			heartbeatInterval = 2000;
 		}
 
-		//  TODO:  Why does cp need to run here?  And why not in the next case while waiting for ESP?
-//		cp.run();   /// Let's comment it out and see what happens.
-
 		break;
 	}
 
@@ -206,7 +203,7 @@ void loop() {
 
 
 
-#define NUMBER_BATTERY_READINGS_TO_AVERAGE 30
+
 void monitorBattery() {
 
 	static uint16_t readings[NUMBER_BATTERY_READINGS_TO_AVERAGE] = { 0 };

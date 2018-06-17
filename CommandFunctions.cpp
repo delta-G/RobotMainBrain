@@ -28,9 +28,6 @@ extern Motor rightMotor;
 extern int32_t leftCounter;
 extern int32_t rightCounter;
 
-extern float leftOut;
-extern float rightOut;
-
 //  'E' reserved for ESP board
 Command commands[] = {
 		{ 'X', xboxCommand },
@@ -211,25 +208,19 @@ void motorControl(char* p) {
 		if (p[2] == 'R') {
 			if (p[4] == '1') {
 				rightMotor.driveForward();
-//				Serial.println("<Right-DIR LOW>");
 			} else if (p[4] == '-' && p[5] == '1') {
 				rightMotor.driveBackward();
-//				Serial.println("<Right-DIR HIGH>");
 			} else {
 				rightMotor.stop();
-//				Serial.println("<Right Enable LOW>");
 			}
 		}
 		else if (p[2] == 'L') {
 			if (p[4] == '1') {
 				leftMotor.driveForward();
-//				Serial.println("<Left-DIR LOW>");
 			} else if (p[4] == '-' && p[5] == '1') {
 				leftMotor.driveBackward();
-//				Serial.println("<Left-DIR HIGH>");
 			} else {
 				leftMotor.stop();
-//				Serial.println("<Left Enable LOW>");
 			}
 		}
 	}
