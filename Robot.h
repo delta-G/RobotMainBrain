@@ -24,6 +24,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "Arduino.h"
 #include "Defines.h"
 #include "Motor.h"
+#include "Battery.h"
 
 
 class Switchable {
@@ -40,7 +41,8 @@ public:
 	Switchable(uint8_t aPin, boolean aInv):enabled(false), inverted(aInv), pin(aPin){};
 
 	boolean isEnabled();
-	void enable(boolean);
+	void enable();
+	void disable();
 
 };
 
@@ -48,12 +50,6 @@ public:
 
 
 class Robot {
-
-private:
-
-	float batteryVoltage;
-
-
 
 public:
 
@@ -65,19 +61,17 @@ public:
 	Motor leftMotor;
 	Motor rightMotor;
 
-	Robot():batteryVoltage(0.0),
-			camera(CAM_ENABLE),
+	Battery battery;
+
+	Robot():camera(CAM_ENABLE),
 			arm(ARM_ENABLE),
 			headlight(HEADLIGHT_PIN),
 			comPower(COM_POWER_ENABLE),
 			leftMotor(LEFT_MOTOR_DIRECTION_PIN, LEFT_MOTOR_ENABLE_PIN, true),
-			rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false){};
+			rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false),
+	        battery(BATTERY_PIN, 1000){};
 
-	void monitorBattery();
-	float getBatteryVoltage();
-
-
-
+	void mainLoop();
 };
 
 

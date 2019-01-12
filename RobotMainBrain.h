@@ -39,6 +39,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "Encoder.h"
 
 void setup();
+void bootup();
 void loop();
 void heartBeat();
 //void monitorBattery();

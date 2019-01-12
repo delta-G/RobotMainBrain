@@ -1,26 +1,36 @@
 /*
 
-Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
-     Copyright (C) 2017  David C.
+ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
+ Copyright (C) 2017  David C.
 
-     This program is free software: you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation, either version 3 of the License, or
-     (at your option) any later version.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-     This program is distributed in the hope that it will be useful,
-     but WITHOUT ANY WARRANTY; without even the implied warranty of
-     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-     GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-     You should have received a copy of the GNU General Public License
-     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-     */
+ */
 
 #include "RobotMainBrain.h"
 
-enum States { BOOTING, BOOT_ARM, CONNECT_COM, CONNECT_WAIT, RUNNING, NUM_RMB_STATES } currentState;
+enum BootStates {
+	BOOTING,
+	BOOT_ARM,
+	BOOTING_ARM,
+	STARTING_ARM_COM,
+	CONNECT_COM,
+	CONNECTING_COM,
+	CONNECT_WAIT,
+	RUNNING,
+	NUM_RMB_STATES
+} bootState;
 
 extern CommandParser cp;
 
@@ -30,13 +40,7 @@ XboxHandler xbox;
 
 Robot robot;
 
-//Motor leftMotor(LEFT_MOTOR_DIRECTION_PIN, LEFT_MOTOR_ENABLE_PIN, true);
-//Motor rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false);
-
-//float batteryVoltage = 0.0;
-
 void setup() {
-
 
 	// Start with everything off
 
@@ -65,62 +69,68 @@ void setup() {
 
 	analogReference(INTERNAL1V1);
 
-	initializeControllerFunctions(&robot, &Serial, &Serial1,
-				&xbox);
+	initializeControllerFunctions(&robot, &Serial, &Serial1, &xbox);
 
-	setupPCint();
+	setupPCint();  // for the encoders
+
+	//  loop here while everything boots up.
+	while (bootState < RUNNING) {
+		heartBeat();
+		bootup();
+	}
 
 }
 
+void bootup() {
 
-void loop() {
+	static unsigned long armStartTime = 0;
+	static unsigned long comStartedTime = 0;
 
-	heartBeat();
-
-	switch (currentState) {
+	switch (bootState) {
 
 	//   3 seconds at bootup for power to stabilize etc.
 	case BOOTING:
 
 		if (millis() > 3000) {
-			currentState = BOOT_ARM;
+			bootState = BOOT_ARM;
 		}
 		break;
 
 	case BOOT_ARM: {
-		static boolean enteredArmState = false;
-		static unsigned long armStartTime = 0;
-		static boolean startedArmCom = false;
-		if (!enteredArmState) {
-			digitalWrite(ARM_ENABLE, HIGH);
-			heartbeatInterval = 500;
-			enteredArmState = true;
-			armStartTime = millis();
-		}
+//		digitalWrite(ARM_ENABLE, HIGH);
+		robot.arm.enable();
+		heartbeatInterval = 500;
+		armStartTime = millis();
+		bootState = STARTING_ARM_COM;
+		break;
+	}
 
-		if (!startedArmCom && (millis() - armStartTime >= 1000)) {
-			//  Begin Serial on Arm Controller
+	case STARTING_ARM_COM: {
+		if (millis() - armStartTime >= 1000) {
 			Serial1.begin(ARM_BOARD_BAUD);
-			startedArmCom = true;
-		}
-
-		if (millis() - armStartTime >= 7000) {
-			currentState = CONNECT_COM;
+			bootState = BOOTING_ARM;
 		}
 
 		break;
 	}
 
-	case CONNECT_COM:
-	{
-		static boolean enteredComState = false;
-		static unsigned long comStartedTime = 0;
-		if(!enteredComState){
-			Serial.begin(ROBOT_COM_BAUD);
-			enteredComState = true;
-			comStartedTime = millis();
+	case BOOTING_ARM: {
+
+		if (millis() - armStartTime >= 7000) {
+			bootState = CONNECT_COM;
 		}
 
+		break;
+	}
+
+	case CONNECT_COM: {
+		Serial.begin(ROBOT_COM_BAUD);
+		comStartedTime = millis();
+		bootState = CONNECTING_COM;
+		break;
+	}
+
+	case CONNECTING_COM: {
 		if ((millis() - comStartedTime > 250)) {
 			Serial.print(RMB_STARTUP_STRING);
 			char gitbuf[9];
@@ -129,22 +139,15 @@ void loop() {
 			Serial.print("<RMBGIT-");
 			Serial.print(gitbuf);
 			Serial.print(">");
-			currentState = CONNECT_WAIT;
+			bootState = CONNECT_WAIT;
 			heartbeatInterval = 2000;
 		}
 
 		break;
 	}
 
-	//**TODO:  This case is broken!!!
-
-	//  This needs some bounds checking on the array or you're asking for trouble.
-
-	case CONNECT_WAIT:
-	{
-//		static boolean enteredState = false;
+	case CONNECT_WAIT: {
 		static boolean started = false;
-//		static unsigned long enteredTime = 0;
 
 		static char waitBuf[15] = { 0 };
 		static boolean waitRec = false;
@@ -157,24 +160,25 @@ void loop() {
 				windx = 0;
 			}
 			if (waitRec) {
-				waitBuf[windx] = c;
-				waitBuf[++windx] = 0;
+				if (windx < 14) {
+					waitBuf[windx] = c;
+					waitBuf[++windx] = 0;
+				}
 				if (c == '>') {
 					if (started) {
 						if (strcmp(waitBuf, COM_CONNECT_STRING) == 0) {
-							currentState = RUNNING;
+							bootState = RUNNING;
 						}
-					}
-					else {
+					} else {
 						if (strcmp(waitBuf, COM_START_STRING) == 0) {
 							windx = 0;
 							waitBuf[windx] = 0;
-							started = true;   // next packet should be connection
+							started = true;  // next packet should be connection
 							waitRec = false;  // wait for another SOP
 						}
 						//  BackDoor for testing
-						else if(strcmp(waitBuf, "<GO>") == 0) {
-							currentState = RUNNING;
+						else if (strcmp(waitBuf, "<GO>") == 0) {
+							bootState = RUNNING;  // this will break the while loop calling us
 						}
 					}
 				}
@@ -185,73 +189,24 @@ void loop() {
 		break;
 	}
 
-	case RUNNING:
-		robot.monitorBattery();
-		cp.run();
-
-		mainControllerLoop();
-
-		break;
-
 	default:
 		//  Freak out we shouldn't be here
 		heartbeatInterval = 50;
-
 		break;
 	}
+
 }
 
+void loop() {
+
+	heartBeat();
 
 
+	robot.mainLoop();
+	cp.run();
+	mainControllerLoop();
 
-//void monitorBattery() {
-//
-//	static uint16_t readings[NUMBER_BATTERY_READINGS_TO_AVERAGE] = { 0 };
-//	static uint8_t index = 0;
-//	static uint32_t total = 0;
-//	static uint16_t average = 0;
-//
-//	//  Doesn't keep track of number of reads so it
-//	//  fills up the array as fast as it can and the
-//	//  first time it gets it full it slows down.
-//	static uint16_t readInterval = 10;
-//	static uint32_t pm = millis();
-//	uint32_t cm = millis();
-//
-//	if (cm - pm >= readInterval) {
-//		pm = cm;
-//
-//		total -= readings[index];
-//		readings[index] = analogRead(BATTERY_PIN);
-//		total += readings[index];
-//		++index;
-//		if(index == NUMBER_BATTERY_READINGS_TO_AVERAGE){
-//			// Slow down the read interval once the array fills up.
-//			readInterval = 1000;
-//		}
-//		index %= NUMBER_BATTERY_READINGS_TO_AVERAGE;
-//
-//		average = total / NUMBER_BATTERY_READINGS_TO_AVERAGE;
-//
-////	float v = (r * 20.75) / 1024;
-//
-////		batteryVoltage = (average * 0.0202636719);   //  Theoretical
-//		batteryVoltage = (average * 0.020105) + 0.796904;  //Calibrated
-//		// 207.5 / 1024
-//
-//
-//		// TODO:  This should be stored somewhere and printed out in an orderly fashion.
-//		//  This should probably only happen once when the battery has changed and kept
-//		//  it's value for some time.
-//		Serial.print("<BAT,");
-//		Serial.print(average);
-//		Serial.print(",");
-//		Serial.print(batteryVoltage, 1);
-//		Serial.print(">");
-//
-//	}
-//}
-
+}
 
 void heartBeat() {
 	static boolean heartState = false;
@@ -267,7 +222,7 @@ void heartBeat() {
 		counter++;
 		// Send HB to controller every 5 seconds or so
 		// It doesn't get scared until it loses it for at least 10
-		if(counter == (6000 / heartbeatInterval)){
+		if (counter == (6000 / heartbeatInterval)) {
 			Serial.print(HEARTBEAT_STRING);
 			counter = 0;
 		}

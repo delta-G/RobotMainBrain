@@ -77,6 +77,11 @@ void mainControllerLoop() {
 
 		//  Timed Section
 
+		//TODO::
+		//  Does this section really need to be timed if the controller data is coming to it at some given rate already?
+		//  IF anything it should be if newData, but why can't it run all the time.  Maybe some of these functions
+		//  need to constant update someday.
+
 		if (currentRunTime - previousRunTime >= updateInterval) {
 			previousRunTime = currentRunTime;
 
@@ -103,8 +108,11 @@ void mainControllerLoop() {
 			case ARM:
 				driveByDpad();
 				break;
-
+			case MINE:
+				driveWithOneStickAlg2();
+				break;
 			}
+
 		}
 	}
 }

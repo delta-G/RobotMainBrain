@@ -89,10 +89,12 @@ void videoControl(char* p) {
 	switch(p[2]){
 
 	case '0':
-		digitalWrite(CAM_ENABLE, LOW);
+//		digitalWrite(CAM_ENABLE, LOW);
+		robot.camera.disable();
 		break;
 	case '1':
-		digitalWrite(CAM_ENABLE, HIGH);
+//		digitalWrite(CAM_ENABLE, HIGH);
+		robot.camera.enable();
 		break;
 	default:
 		break;
@@ -106,10 +108,12 @@ void headlightControl(char* p) {
 	switch (p[2]) {
 
 	case '0':
-		digitalWrite(HEADLIGHT_PIN, LOW);
+//		digitalWrite(HEADLIGHT_PIN, LOW);
+		robot.headlight.disable();
 		break;
 	case '1':
-		digitalWrite(HEADLIGHT_PIN, HIGH);
+//		digitalWrite(HEADLIGHT_PIN, HIGH);
+		robot.headlight.enable();
 		break;
 	default:
 		break;
@@ -180,7 +184,7 @@ void requestFromBot(char* p) {
 //		int r = analogRead(BATTERY_PIN);
 //		float v = (r * 20.75) / 1024;
 		// Calibrated
-		float v = robot.getBatteryVoltage();
+		float v = robot.battery.getVoltage();
 		int r = (v - 0.79690) / 0.020104;
 
 		Serial.print("<BAT,");

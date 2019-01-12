@@ -26,52 +26,19 @@ boolean Switchable::isEnabled(){
 	return enabled;
 }
 
-void Switchable::enable(boolean aState){
-	digitalWrite(pin, inverted? !aState : aState);
+void Switchable::enable() {
+	digitalWrite(pin, inverted ? LOW : HIGH);
+	enabled = true;
+}
+
+void Switchable::disable() {
+	digitalWrite(pin, inverted ? HIGH : LOW);
+	enabled = false;
 }
 
 
+void Robot::mainLoop(){
 
-void Robot::monitorBattery() {
+	battery.monitor();
 
-	static uint16_t readings[NUMBER_BATTERY_READINGS_TO_AVERAGE] = { 0 };
-	static uint8_t index = 0;
-	static uint32_t total = 0;
-	static uint16_t average = 0;
-
-	//  Doesn't keep track of number of reads so it
-	//  fills up the array as fast as it can and the
-	//  first time it gets it full it slows down.
-	static uint16_t readInterval = 10;
-	static uint32_t pm = millis();
-	uint32_t cm = millis();
-
-	if (cm - pm >= readInterval) {
-		pm = cm;
-
-		total -= readings[index];
-		readings[index] = analogRead(BATTERY_PIN);
-		total += readings[index];
-		++index;
-		if (index == NUMBER_BATTERY_READINGS_TO_AVERAGE) {
-			// Slow down the read interval once the array fills up.
-			readInterval = 1000;
-		}
-		index %= NUMBER_BATTERY_READINGS_TO_AVERAGE;
-
-		average = total / NUMBER_BATTERY_READINGS_TO_AVERAGE;
-
-		//	float v = (r * 20.75) / 1024;
-
-		//		batteryVoltage = (average * 0.0202636719);   //  Theoretical
-		batteryVoltage = (average * 0.020105) + 0.796904;  //Calibrated
-		// 207.5 / 1024
-
-	}
-
-}
-
-
-float Robot::getBatteryVoltage(){
-	return batteryVoltage;
 }

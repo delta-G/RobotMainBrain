@@ -25,21 +25,25 @@ void Motor::init(){
 	pinMode(enablePin, OUTPUT);
 	digitalWrite(directionPin, invertForward);
 	pinMode(directionPin, OUTPUT);
+	targetSpeed = 0;
 }
 
 void Motor::stop(){
 	digitalWrite(enablePin, LOW);
 	pwmSpeed = 0;
+	targetSpeed = 0;
 }
 
 void Motor::driveForward(){
 	digitalWrite(directionPin, invertForward);
 	digitalWrite(enablePin, HIGH);
+	targetSpeed = 0x7FFFFFFF;
 }
 
 void Motor::driveBackward() {
 	digitalWrite(directionPin, !invertForward);
 	digitalWrite(enablePin, HIGH);
+	targetSpeed = 0xFFFFFFFF;
 }
 
 void Motor::loop() {
@@ -51,6 +55,14 @@ void Motor::loop() {
 
 		if (targetSpeed == 0){
 			stop();
+			return;
+		}
+		else if (targetSpeed == 0x7FFFFFFF){
+			driveForward();
+			return;
+		}
+		else if (targetSpeed == 0xFFFFFFFF){
+			driveBackward();
 			return;
 		}
 
