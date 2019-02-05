@@ -53,7 +53,6 @@ void XboxHandler::handleIncoming(char* aPacket){
 		}
 		Serial.print('>');
 		memcpy(readUnion.rawBuffer, aPacket + 3, 14);
-		newData = true;
 
 		//  Use OR Equal to preserve clicks that haven been read yet
 		buttonClickState |= readUnion.values.buttonState & ~oldButtonState;
@@ -86,7 +85,7 @@ void XboxHandler::handleIncomingASCII(char* aPacket){
 
 		for ( uint8_t i = 0; i < 14; i++){
 			char temp[2] = {aPacket[3+(2*i)], aPacket[4+(2*i)]};
-			rawBuf[i] = strtoul(temp, NULL, 16);
+			rawBuf[i] = strtoul(temp, NULL, HEX);
 		}
 
 		memcpy(readUnion.rawBuffer, rawBuf, 14);

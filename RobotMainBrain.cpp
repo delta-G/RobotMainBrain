@@ -176,14 +176,16 @@ void bootup() {
 							started = true;  // next packet should be connection
 							waitRec = false;  // wait for another SOP
 						}
+
 						//  BackDoor for testing
 						else if (strcmp(waitBuf, "<GO>") == 0) {
-							bootState = RUNNING;  // this will break the while loop calling us
+							bootState = RUNNING; // this will break the while loop calling us
 						}
+
 					}
 				}
-			}
 
+			}
 		}
 
 		break;
