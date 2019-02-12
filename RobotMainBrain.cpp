@@ -147,6 +147,7 @@ void bootup() {
 	}
 
 	case CONNECT_WAIT: {
+		/*I suppose I could hijack cp for this if I ever need to save a few bytes*/
 		static boolean started = false;
 
 		static char waitBuf[15] = { 0 };
@@ -204,9 +205,9 @@ void loop() {
 	heartBeat();
 
 
-	robot.mainLoop();
-	cp.run();
-	mainControllerLoop();
+	robot.mainLoop();  //Things the robot does on his own...
+	cp.run();          // Reads in commands from Serial
+	mainControllerLoop();  // Interacts with Xbox controller.
 
 }
 

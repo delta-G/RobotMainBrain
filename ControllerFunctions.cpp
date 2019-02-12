@@ -21,12 +21,13 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "ControllerFunctions.h"
 
 
-XboxHandler* xbox_ptr;   /// This is also defined in CommandFunctions.  MUST be FIXED BEFORE COMPILE
+XboxHandler* xbox_ptr;
 
 Stream* outStream;
 
 Stream* servoStream;
 
+//  This should be a pointer to a Robot so I can control everything.
 Motor* leftMotor_ptr;
 Motor* rightMotor_ptr;
 
