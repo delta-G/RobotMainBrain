@@ -38,7 +38,7 @@ void Switchable::disable() {
 
 
 void Robot::mainLoop(){
-
 	battery.monitor();
-
+	leftMotor.loop();
+	rightMotor.loop();
 }
