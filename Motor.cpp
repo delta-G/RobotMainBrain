@@ -65,6 +65,11 @@ void Motor::loop() {
 			driveBackward();
 			return;
 		}
+		else if (targetSpeed == 0x7FFFFFFE) {
+			drive(pwmSpeed);
+			return;
+		}
+
 
 		int32_t curSpeed = getSpeed();
 
@@ -111,6 +116,7 @@ void Motor::drive(int16_t aSpeed){
 	// if aSpeed is 0 then direction is untouched but motor turns off just like stop()
 	// otherwise the absolute value goes out there.
 	analogWrite(enablePin, abs(aSpeed));
+	targetSpeed = 0x7FFFFFFE;
 }
 
 
