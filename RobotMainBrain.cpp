@@ -211,6 +211,10 @@ void loop() {
 
 }
 
+
+//  TODO :
+//  heartbeat needs to move to robot.h
+
 void heartBeat() {
 	static boolean heartState = false;
 	static uint8_t counter = 0;
@@ -229,7 +233,5 @@ void heartBeat() {
 			Serial.print(HEARTBEAT_STRING);
 			counter = 0;
 		}
-
 	}
-
 }
