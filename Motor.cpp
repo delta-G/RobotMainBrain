@@ -91,7 +91,7 @@ void Motor::loop() {
 				}
 			}
 		}
-
+		lastLoop = thisLoop;
 	}
 }
 
