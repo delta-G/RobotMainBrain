@@ -38,6 +38,8 @@ unsigned int heartbeatInterval = 200;
 
 XboxHandler xbox;
 
+StreamParser parser(&Serial, START_OF_PACKET, END_OF_PACKET, cp.parseCommandString);
+
 Robot robot;
 
 void setup() {
@@ -205,7 +207,7 @@ void loop() {
 
 
 	robot.mainLoop();  //Things the robot does on his own...
-	cp.run();          // Reads in commands from Serial
+	parser.run();          // Reads in commands from Serial
 	mainControllerLoop();  // Interacts with Xbox controller.
 
 }

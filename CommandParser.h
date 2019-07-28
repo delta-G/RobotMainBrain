@@ -48,17 +48,16 @@ private:
 	uint8_t index = 0;
 	boolean receiving = false;
 
-	Stream* stream;
 	Command* commands;
 	uint8_t numCommands;
 
 
 public:
 
-	void run();
-	void parseCommandString();
+//	void run();
+	void parseCommandString(char* aCommand);
 
-	CommandParser(Stream* s, Command* c, uint8_t n):stream(s), commands(c), numCommands(n){};
+	CommandParser(Command* c, uint8_t n):commands(c), numCommands(n){};
 
 
 

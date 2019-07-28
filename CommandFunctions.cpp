@@ -60,7 +60,7 @@ void testFunc(char* p) {
 //		{ 'C', enableArm }
 //};
 
-CommandParser cp(&Serial, &commands[0], NUM_ELEMENTS(commands));
+CommandParser cp(&commands[0], NUM_ELEMENTS(commands));
 //CommandParser cpArm(&Serial1, &armCommands[0], NUM_ELEMENTS(armCommands));
 
 /*
