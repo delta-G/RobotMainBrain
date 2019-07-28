@@ -34,13 +34,15 @@ enum BootStates {
 
 extern CommandParser cp;
 
+void parseCommand(char* aCommand){
+	cp.parseCommandString(aCommand);
+}
+
 unsigned int heartbeatInterval = 200;
 
 XboxHandler xbox;
 
-void parseCommand(char* aCommand){
-	cp.parseCommandString(aCommand);
-}
+
 
 StreamParser parser(&Serial, START_OF_PACKET, END_OF_PACKET, parseCommand);
 StreamParser armParser(&Serial1, START_OF_PACKET, END_OF_PACKET, armBootParser);
