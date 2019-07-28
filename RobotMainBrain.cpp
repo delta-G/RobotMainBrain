@@ -91,30 +91,29 @@ void bootup() {
 	//   3 seconds at bootup for power to stabilize etc.
 	case BOOTING:
 
-		if (millis() > 3000) {
+		if (millis() > RMB_BOOT_INIT_WAIT) {
 			bootState = BOOT_ARM;
 		}
 		break;
 
 	case BOOT_ARM: {
-//		digitalWrite(ARM_ENABLE, HIGH);
-		robot.arm.enable();
-		heartbeatInterval = 500;
-		armStartTime = millis();
-		bootState = STARTING_ARM_COM;
-		break;
-	}
-
-	case STARTING_ARM_COM: {
-		if (millis() - armStartTime >= 1000) {
-			Serial1.begin(ARM_BOARD_BAUD);
-			bootState = BOOTING_ARM;
+		if (armStartTime == 0) {
+//		    digitalWrite(ARM_ENABLE, HIGH);
+			robot.arm.enable();
+			heartbeatInterval = 500;
+			armStartTime = millis();
+		} else {
+			if (millis() - armStartTime >= ARM_BOOT_INIT_WAIT) {
+				Serial1.begin(ARM_BOARD_BAUD);
+				bootState = BOOTING_ARM;
+			}
 		}
-
 		break;
 	}
 
 	case BOOTING_ARM: {
+
+
 
 		if (millis() - armStartTime >= 7000) {
 			bootState = CONNECT_COM;
