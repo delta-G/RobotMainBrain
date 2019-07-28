@@ -22,11 +22,8 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #define COMMANDPARSER_H_
 
 #include <Arduino.h>
-#include "Defines.h"
 
 #define MAX_COMMAND_LENGTH 50
-//#define START_OP START_OF_PACKET
-//#define END_OP END_OF_PACKET
 
 typedef void (*commandFunc)(char*);
 
@@ -51,17 +48,15 @@ private:
 	Command* commands;
 	uint8_t numCommands;
 
+	boolean hasStartMarker;
+
 
 public:
 
-//	void run();
 	void parseCommandString(char* aCommand);
 
-	CommandParser(Command* c, uint8_t n):commands(c), numCommands(n){};
-
-
-
-
+	CommandParser(Command* c, uint8_t n):commands(c), numCommands(n), hasStartMarker(false){};
+	CommandParser(Command* c, uint8_t n, boolean m):commands(c), numCommands(n), hasStartMarker(m){};
 };
 
 

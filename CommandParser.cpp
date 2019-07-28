@@ -20,44 +20,18 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 #include "CommandParser.h"
 
-//void CommandParser::run() {
-//
-//	if (stream->available()) {
-//		char c = stream->read();
-//
-//		if (c == START_OF_PACKET) {
-//			index = 0;
-//			inputBuffer[index] = 0;
-//			receiving = true;
-//		}
-//		if (receiving) {
-//			inputBuffer[index] = c;
-//			inputBuffer[++index] = 0;
-//			if(index >= MAX_COMMAND_LENGTH){
-//				index--;
-//			}
-//
-//			if (c == END_OF_PACKET) {
-//				receiving = false;
-//				parseCommandString();
-//			}
-//
-//		}
-//
-//	}
-//
-//}
-
-void CommandParser::parseCommandString(char* aCommand) {
-	if (aCommand[0] == START_OF_PACKET) {
-		for(int i = 0; i < numCommands; i++) {
-			if (commands[i].match(aCommand + 1)) {
-				commands[i].run(aCommand);
-				return;
-			}
-		}
-
+void CommandParser::parseCommandString(char *aCommand) {
+	char *c = aCommand;
+	if(hasStartMarker){
+		c++;
 	}
+	for (int i = 0; i < numCommands; i++) {
+		if (commands[i].match(c)) {
+			commands[i].run(aCommand);
+			return;
+		}
+	}
+
 }
 
 
