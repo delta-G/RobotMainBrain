@@ -38,9 +38,18 @@ unsigned int heartbeatInterval = 200;
 
 XboxHandler xbox;
 
-StreamParser parser(&Serial, START_OF_PACKET, END_OF_PACKET, cp.parseCommandString);
+void parseCommand(char* aCommand){
+	cp.parseCommandString(aCommand);
+}
+
+StreamParser parser(&Serial, START_OF_PACKET, END_OF_PACKET, parseCommand);
+StreamParser armParser(&Serial1, START_OF_PACKET, END_OF_PACKET, armBootParser);
+
 
 Robot robot;
+
+boolean armPresent;
+boolean armResponding;
 
 void setup() {
 
@@ -115,9 +124,13 @@ void bootup() {
 
 	case BOOTING_ARM: {
 
+		armParser.run();
 
-
-		if (millis() - armStartTime >= 7000) {
+		if(armPresent && armResponding){
+			bootState = CONNECT_COM;
+		}
+		// Timeout in case arm is not there
+		if (millis() - armStartTime >= ARM_BOOT_TIMEOUT) {
 			bootState = CONNECT_COM;
 		}
 
@@ -236,3 +249,21 @@ void heartBeat() {
 		}
 	}
 }
+
+
+
+
+
+void armBootParser(char* aCommand){
+	if(strcmp(aCommand, ARM_INIT_COMPLETE) == 0){
+		armPresent = true;
+		Serial1.print(RMB_ARM_TEST_STRING);
+	}
+	if(strcmp(aCommand, ARM_CONNECT_RESPONSE) == 0){
+		armResponding = true;
+	}
+}
+
+
+
+
