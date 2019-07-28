@@ -23,7 +23,9 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 #include <Arduino.h>
 
-#define MAX_COMMAND_LENGTH 50
+#ifndef COM_PARSER_MAX_COMMAND_LENGTH
+#define COM_PARSER_MAX_COMMAND_LENGTH 50
+#endif
 
 typedef void (*commandFunc)(char*);
 
@@ -41,7 +43,7 @@ struct Command {
 class CommandParser {
 
 private:
-	char inputBuffer[MAX_COMMAND_LENGTH + 1];
+	char inputBuffer[COM_PARSER_MAX_COMMAND_LENGTH + 1];
 	uint8_t index = 0;
 	boolean receiving = false;
 
