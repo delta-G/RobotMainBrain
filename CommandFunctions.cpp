@@ -39,6 +39,7 @@ Command commands[] = {
 		{ 'H', headlightControl },
 		{ 'V', videoControl },
 		{ 'S', armControl },
+		{ 'A', armControl },
 		{ '#', armControl }
 };
 
