@@ -31,12 +31,12 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 #define DEFAULT_DEADZONE 1025
 
-enum ModeEnum {
-	DRIVE,
-	ARM,
-	MINE,
-	NUMBER_OF_MODES
-};
+//enum ModeEnum {
+//	DRIVE,
+//	ARM,
+//	MINE,
+//	NUMBER_OF_MODES
+//};
 
 void initializeControllerFunctions(Robot*, Stream*, Stream*, XboxHandler*);
 

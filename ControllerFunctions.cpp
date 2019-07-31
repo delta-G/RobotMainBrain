@@ -92,10 +92,13 @@ void mainControllerLoop() {
 
 				if (controlMode == DRIVE) {
 					outStream->println("<Drive Mode>");
+					Serial1.print("<A,CMD>");
 				} else if (controlMode == ARM) {
 					outStream->println("<Arm Mode>");
+					Serial1.print("<A,CMA>");
 				} else if (controlMode == MINE) {
 					outStream->println("<Mine Mode>");
+					Serial1.print("<A,CMM>");
 				}
 			}
 
