@@ -45,7 +45,7 @@ XboxHandler xbox;
 
 
 StreamParser parser(&Serial, START_OF_PACKET, END_OF_PACKET, parseCommand);
-StreamParser armParser(&Serial1, START_OF_PACKET, END_OF_PACKET, armBootParser);
+StreamParser armParser(&Serial1, START_OF_PACKET, END_OF_PACKET, armParserCallback);
 
 
 Robot robot;
@@ -256,13 +256,18 @@ void heartBeat() {
 
 
 
-void armBootParser(char* aCommand){
+void armParserCallback(char* aCommand){
 	if(strcmp(aCommand, ARM_INIT_COMPLETE) == 0){
 		armPresent = true;
 		Serial1.print(RMB_ARM_TEST_STRING);
 	}
-	if(strcmp(aCommand, ARM_CONNECT_RESPONSE) == 0){
+	else if(strcmp(aCommand, ARM_CONNECT_RESPONSE) == 0){
 		armResponding = true;
+	}
+	else {
+		if(bootState == RUNNING){
+			Serial.print(aCommand);
+		}
 	}
 }
 

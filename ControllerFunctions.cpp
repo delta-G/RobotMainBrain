@@ -103,8 +103,6 @@ void mainControllerLoop() {
 
 			case DRIVE:
 				driveWithTwoSticksAlg2();
-				leftMotor_ptr->loop();
-				rightMotor_ptr->loop();
 				break;
 			case ARM:
 				driveByDpad();
@@ -117,7 +115,6 @@ void mainControllerLoop() {
 		}
 	}
 }
-
 
 void runStartup(){
 	// Need to let Main Brain know we have control this way
@@ -156,7 +153,6 @@ void driveWithTwoSticks() {
 	rightMotor_ptr->drive(rightOutput);
 }
 
-
 void driveWithTwoSticksAlg2() {
 
 	int16_t leftVal = xbox_ptr->getHatValue(LeftHatY);
@@ -181,8 +177,6 @@ void driveWithTwoSticksAlg2() {
 	leftMotor_ptr->setSpeed(leftOutput);
 	rightMotor_ptr->setSpeed(rightOutput);
 }
-
-
 
 void driveByDpad() {
 
@@ -251,8 +245,6 @@ void driveWithOneStick() {
 	rightMotor_ptr->drive(rightOut);
 
 }
-
-
 
 void driveWithOneStickAlg2() {
 

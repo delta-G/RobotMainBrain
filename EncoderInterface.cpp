@@ -50,10 +50,11 @@ int32_t EncoderInterface::getSpeed(){
 	sei();
 
 	if(ct - lsTic >= lsDel){
-		//  been too long, calculate based on time since last tick
+		//  been too long, calculate based on time since last tick (slowing down)
 		retval = (1000000ul / (ct - lsTic));  // gets 0 after 1 second
 	}
 	// last tick was very recent, speed numbers are good.
+	// calculate based on the delta of last two ticks
 	else {
 		retval = 1000000ul / lsDel;
 	}
