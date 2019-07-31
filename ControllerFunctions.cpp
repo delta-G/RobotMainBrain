@@ -90,6 +90,11 @@ void mainControllerLoop() {
 				controlMode++;
 				controlMode %= NUMBER_OF_MODES;
 
+				//TODO::
+				//  the mode needs to be in the Robot class
+				//  with getters and setters that can handle
+				//  who all needs to be notified in case of a change
+
 				if (controlMode == DRIVE) {
 					outStream->println("<Drive Mode>");
 					Serial1.print("<A,CMD>");
