@@ -22,7 +22,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #define XBOXHANDLER_H_
 
 #include "Arduino.h"
-#include "Defines.h"
+#include <RobotSharedDefines.h>
 
 #include "ControllerEnums.h"
 
