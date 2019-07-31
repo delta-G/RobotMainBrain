@@ -40,18 +40,18 @@ boolean XboxHandler::newDataAvailable(){
 
 void XboxHandler::handleIncoming(char* aPacket){
 
-	Serial.print("<PACKET>");
+//	Serial.print("<PACKET>");
 
 	//save old hat state
 	memcpy (oldHatState, readUnion.values.hatValues, 8);
 
 	if(aPacket[0] == '<' && aPacket[1] == 'C' && aPacket[17] == '>'){
-		Serial.print("<C");
-		for(int i = 3; i < 17; i++){
-			Serial.print(',');
-			Serial.print(aPacket[i], HEX);
-		}
-		Serial.print('>');
+//		Serial.print("<C");
+//		for(int i = 3; i < 17; i++){
+//			Serial.print(',');
+//			Serial.print(aPacket[i], HEX);
+//		}
+//		Serial.print('>');
 		memcpy(readUnion.rawBuffer, aPacket + 3, 14);
 
 		//  Use OR Equal to preserve clicks that haven been read yet
