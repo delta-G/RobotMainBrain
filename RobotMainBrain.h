@@ -22,7 +22,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #ifndef _RobotMainBrain_H_
 #define _RobotMainBrain_H_
 #include "Arduino.h"
-
+#include <RobotSharedDefines.h>
 #include "Defines.h"
 
 #include "Robot.h"
