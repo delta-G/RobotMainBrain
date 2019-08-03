@@ -51,6 +51,10 @@ public:
 
 class Robot {
 
+private:
+
+	DriveModeEnum driveMode = DRIVE;
+
 public:
 
 	Switchable camera;
@@ -63,6 +67,8 @@ public:
 
 	Battery battery;
 
+
+
 	Robot():camera(CAM_ENABLE),
 			arm(ARM_ENABLE),
 			headlight(HEADLIGHT_PIN),
@@ -72,6 +78,9 @@ public:
 	        battery(BATTERY_PIN, 1000){};
 
 	void mainLoop();
+	void setDriveMode(DriveModeEnum);
+	DriveModeEnum getDriveMode();
+	DriveModeEnum advanceDriveMode();
 };
 
 

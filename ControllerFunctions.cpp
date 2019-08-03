@@ -28,14 +28,11 @@ Stream* outStream;
 Stream* servoStream;
 
 //  This should be a pointer to a Robot so I can control everything.
-Motor* leftMotor_ptr;
-Motor* rightMotor_ptr;
+Robot* robot;
 
 boolean started = false;
 
 unsigned int updateInterval = 20;
-
-int controlMode;
 
 
 float leftOut = 0.0;
@@ -44,8 +41,7 @@ float rightOut = 0.0;
 
 void initializeControllerFunctions(Robot* aRobot, Stream* aOutStream, Stream* aServStream, XboxHandler* aXbox){
 
-	leftMotor_ptr = &(aRobot->leftMotor);
-	rightMotor_ptr = &(aRobot->rightMotor);
+	robot = aRobot;
 	outStream = aOutStream;
 	servoStream = aServStream;
 	xbox_ptr = aXbox;
@@ -87,27 +83,10 @@ void mainControllerLoop() {
 			previousRunTime = currentRunTime;
 
 			if (xbox_ptr->isClicked(Y)) {
-				controlMode++;
-				controlMode %= NUMBER_OF_MODES;
-
-				//TODO::
-				//  the mode needs to be in the Robot class
-				//  with getters and setters that can handle
-				//  who all needs to be notified in case of a change
-
-				if (controlMode == DRIVE) {
-					outStream->println("<Drive Mode>");
-					Serial1.print("<A,CMD>");
-				} else if (controlMode == ARM) {
-					outStream->println("<Arm Mode>");
-					Serial1.print("<A,CMA>");
-				} else if (controlMode == MINE) {
-					outStream->println("<Mine Mode>");
-					Serial1.print("<A,CMM>");
-				}
+				robot->advanceDriveMode();
 			}
 
-			switch (controlMode){
+			switch (robot->getDriveMode()){
 
 			case DRIVE:
 				driveWithTwoSticksAlg2();
@@ -157,8 +136,8 @@ void driveWithTwoSticks() {
 		}
 	}
 
-	leftMotor_ptr->drive(leftOutput);
-	rightMotor_ptr->drive(rightOutput);
+	robot->leftMotor.drive(leftOutput);
+	robot->rightMotor.drive(rightOutput);
 }
 
 void driveWithTwoSticksAlg2() {
@@ -182,43 +161,43 @@ void driveWithTwoSticksAlg2() {
 		}
 	}
 
-	leftMotor_ptr->setSpeed(leftOutput);
-	rightMotor_ptr->setSpeed(rightOutput);
+	robot->leftMotor.setSpeed(leftOutput);
+	robot->rightMotor.setSpeed(rightOutput);
 }
 
 void driveByDpad() {
 
 	if (xbox_ptr->isPressed(UP)) {
 		if (xbox_ptr->isPressed(RIGHT)) {
-			leftMotor_ptr->driveForward();
-			rightMotor_ptr->stop();
+			robot->leftMotor.driveForward();
+			robot->rightMotor.stop();
 		} else if (xbox_ptr->isPressed(LEFT)) {
-			leftMotor_ptr->stop();
-			rightMotor_ptr->driveForward();
+			robot->leftMotor.stop();
+			robot->rightMotor.driveForward();
 		} else {
-			leftMotor_ptr->driveForward();
-			rightMotor_ptr->driveForward();
+			robot->leftMotor.driveForward();
+			robot->rightMotor.driveForward();
 		}
 	} else if (xbox_ptr->isPressed(DOWN)) {
 		if (xbox_ptr->isPressed(RIGHT)) {
-			rightMotor_ptr->driveBackward();
-			leftMotor_ptr->stop();
+			robot->rightMotor.driveBackward();
+			robot->leftMotor.stop();
 		} else if (xbox_ptr->isPressed(LEFT)) {
-			rightMotor_ptr->stop();
-			leftMotor_ptr->driveBackward();
+			robot->rightMotor.stop();
+			robot->leftMotor.driveBackward();
 		} else {
-			leftMotor_ptr->driveBackward();
-			rightMotor_ptr->driveBackward();
+			robot->leftMotor.driveBackward();
+			robot->rightMotor.driveBackward();
 		}
 	} else if (xbox_ptr->isPressed(LEFT)) {
-		leftMotor_ptr->driveBackward();
-		rightMotor_ptr->driveForward();
+		robot->leftMotor.driveBackward();
+		robot->rightMotor.driveForward();
 	} else if (xbox_ptr->isPressed(RIGHT)) {
-		rightMotor_ptr->driveBackward();
-		leftMotor_ptr->driveForward();
+		robot->rightMotor.driveBackward();
+		robot->leftMotor.driveForward();
 	} else {
-		rightMotor_ptr->stop();
-		leftMotor_ptr->stop();
+		robot->rightMotor.stop();
+		robot->leftMotor.stop();
 	}
 }
 
@@ -249,8 +228,8 @@ void driveWithOneStick() {
 	if (rightOut > 255) rightOut = 255;
 		if (rightOut < -255) rightOut = -255;
 
-	leftMotor_ptr->drive(leftOut);
-	rightMotor_ptr->drive(rightOut);
+	robot->leftMotor.drive(leftOut);
+	robot->rightMotor.drive(rightOut);
 
 }
 
@@ -302,7 +281,7 @@ void driveWithOneStickAlg2() {
 	}
 
 	///  Write to the motors.
-	leftMotor_ptr->drive((int16_t)leftOut);
-	rightMotor_ptr->drive((int16_t)rightOut);
+	robot->leftMotor.drive((int16_t)leftOut);
+	robot->rightMotor.drive((int16_t)rightOut);
 
 }

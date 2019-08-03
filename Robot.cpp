@@ -42,3 +42,32 @@ void Robot::mainLoop(){
 	leftMotor.loop();
 	rightMotor.loop();
 }
+
+
+void Robot::setDriveMode(DriveModeEnum aDriveMode){
+	driveMode = aDriveMode;
+	driveMode %= NUMBER_OF_MODES; // bounds check...
+	switch (driveMode){
+	case DRIVE:
+		Serial1.print("<A,CMD>");
+		break;
+	case ARM:
+		Serial1.print("<A,CMA>");
+		break;
+	case MINE:
+		Serial1.print("<A,CMM>");
+		break;
+	}
+}
+
+DriveModeEnum Robot::getDriveMode(){
+	return driveMode;
+}
+
+DriveModeEnum Robot::advanceDriveMode(){
+	DriveModeEnum dm = driveMode;
+	dm++;  // bounds check in setter
+	setDriveMode(dm);
+	return driveMode;
+}
+
