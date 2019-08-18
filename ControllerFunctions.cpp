@@ -28,7 +28,7 @@ Stream* outStream;
 Stream* servoStream;
 
 //  This should be a pointer to a Robot so I can control everything.
-Robot* robot;
+Robot* robot_ptr;
 
 boolean started = false;
 
@@ -41,7 +41,7 @@ float rightOut = 0.0;
 
 void initializeControllerFunctions(Robot* aRobot, Stream* aOutStream, Stream* aServStream, XboxHandler* aXbox){
 
-	robot = aRobot;
+	robot_ptr = aRobot;
 	outStream = aOutStream;
 	servoStream = aServStream;
 	xbox_ptr = aXbox;
@@ -83,10 +83,10 @@ void mainControllerLoop() {
 			previousRunTime = currentRunTime;
 
 			if (xbox_ptr->isClicked(Y)) {
-				robot->advanceDriveMode();
+				robot_ptr->advanceDriveMode();
 			}
 
-			switch (robot->getDriveMode()){
+			switch (robot_ptr->getDriveMode()){
 
 			case DRIVE:
 				driveWithTwoSticksAlg2();
@@ -136,8 +136,8 @@ void driveWithTwoSticks() {
 		}
 	}
 
-	robot->leftMotor.drive(leftOutput);
-	robot->rightMotor.drive(rightOutput);
+	robot_ptr->leftMotor.drive(leftOutput);
+	robot_ptr->rightMotor.drive(rightOutput);
 }
 
 void driveWithTwoSticksAlg2() {
@@ -161,43 +161,43 @@ void driveWithTwoSticksAlg2() {
 		}
 	}
 
-	robot->leftMotor.setSpeed(leftOutput);
-	robot->rightMotor.setSpeed(rightOutput);
+	robot_ptr->leftMotor.setSpeed(leftOutput);
+	robot_ptr->rightMotor.setSpeed(rightOutput);
 }
 
 void driveByDpad() {
 
 	if (xbox_ptr->isPressed(UP)) {
 		if (xbox_ptr->isPressed(RIGHT)) {
-			robot->leftMotor.driveForward();
-			robot->rightMotor.stop();
+			robot_ptr->leftMotor.driveForward();
+			robot_ptr->rightMotor.stop();
 		} else if (xbox_ptr->isPressed(LEFT)) {
-			robot->leftMotor.stop();
-			robot->rightMotor.driveForward();
+			robot_ptr->leftMotor.stop();
+			robot_ptr->rightMotor.driveForward();
 		} else {
-			robot->leftMotor.driveForward();
-			robot->rightMotor.driveForward();
+			robot_ptr->leftMotor.driveForward();
+			robot_ptr->rightMotor.driveForward();
 		}
 	} else if (xbox_ptr->isPressed(DOWN)) {
 		if (xbox_ptr->isPressed(RIGHT)) {
-			robot->rightMotor.driveBackward();
-			robot->leftMotor.stop();
+			robot_ptr->rightMotor.driveBackward();
+			robot_ptr->leftMotor.stop();
 		} else if (xbox_ptr->isPressed(LEFT)) {
-			robot->rightMotor.stop();
-			robot->leftMotor.driveBackward();
+			robot_ptr->rightMotor.stop();
+			robot_ptr->leftMotor.driveBackward();
 		} else {
-			robot->leftMotor.driveBackward();
-			robot->rightMotor.driveBackward();
+			robot_ptr->leftMotor.driveBackward();
+			robot_ptr->rightMotor.driveBackward();
 		}
 	} else if (xbox_ptr->isPressed(LEFT)) {
-		robot->leftMotor.driveBackward();
-		robot->rightMotor.driveForward();
+		robot_ptr->leftMotor.driveBackward();
+		robot_ptr->rightMotor.driveForward();
 	} else if (xbox_ptr->isPressed(RIGHT)) {
-		robot->rightMotor.driveBackward();
-		robot->leftMotor.driveForward();
+		robot_ptr->rightMotor.driveBackward();
+		robot_ptr->leftMotor.driveForward();
 	} else {
-		robot->rightMotor.stop();
-		robot->leftMotor.stop();
+		robot_ptr->rightMotor.stop();
+		robot_ptr->leftMotor.stop();
 	}
 }
 
@@ -228,8 +228,8 @@ void driveWithOneStick() {
 	if (rightOut > 255) rightOut = 255;
 		if (rightOut < -255) rightOut = -255;
 
-	robot->leftMotor.drive(leftOut);
-	robot->rightMotor.drive(rightOut);
+	robot_ptr->leftMotor.drive(leftOut);
+	robot_ptr->rightMotor.drive(rightOut);
 
 }
 
@@ -281,7 +281,7 @@ void driveWithOneStickAlg2() {
 	}
 
 	///  Write to the motors.
-	robot->leftMotor.drive((int16_t)leftOut);
-	robot->rightMotor.drive((int16_t)rightOut);
+	robot_ptr->leftMotor.drive((int16_t)leftOut);
+	robot_ptr->rightMotor.drive((int16_t)rightOut);
 
 }

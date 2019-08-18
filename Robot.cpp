@@ -46,7 +46,9 @@ void Robot::mainLoop(){
 
 void Robot::setDriveMode(DriveModeEnum aDriveMode){
 	driveMode = aDriveMode;
-	driveMode %= NUMBER_OF_MODES; // bounds check...
+	if(driveMode >= NUMBER_OF_MODES){
+		driveMode = (DriveModeEnum)((int)driveMode % NUMBER_OF_MODES);
+	}
 	switch (driveMode){
 	case DRIVE:
 		Serial1.print("<A,CMD>");
@@ -66,7 +68,7 @@ DriveModeEnum Robot::getDriveMode(){
 
 DriveModeEnum Robot::advanceDriveMode(){
 	DriveModeEnum dm = driveMode;
-	dm++;  // bounds check in setter
+	dm = (DriveModeEnum)((int)dm + 1);
 	setDriveMode(dm);
 	return driveMode;
 }
