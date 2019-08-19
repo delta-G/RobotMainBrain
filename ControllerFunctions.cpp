@@ -89,7 +89,7 @@ void mainControllerLoop() {
 			switch (robot_ptr->getDriveMode()){
 
 			case DRIVE:
-				driveWithTwoSticksAlg2();
+				driveWithTwoSticks();
 				break;
 			case ARM:
 				driveByDpad();

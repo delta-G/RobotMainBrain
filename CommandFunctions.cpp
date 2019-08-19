@@ -75,14 +75,11 @@ CommandParser cp(&commands[0], NUM_ELEMENTS(commands), true);
 bool armEnabled = true;
 
 void xboxCommand(char* p) {
-
-//	Serial.print(p);
-
 	xbox.handleIncomingASCII(p + 2);
-//	char ret[35] = {0};
-//	ret[0] = '<';
-//	xbox.rebuildPacket(ret + 1);
-//	Serial.print(ret);
+
+	if(robot.getDriveMode() == ARM){
+		Serial1.print(p);
+	}
 }
 
 void enableArm(char* p) {
