@@ -78,6 +78,8 @@ public:
 	        battery(BATTERY_PIN, 1000){};
 
 	void mainLoop();
+	char* dataDump();
+
 	void setDriveMode(DriveModeEnum);
 	DriveModeEnum getDriveMode();
 	DriveModeEnum advanceDriveMode();

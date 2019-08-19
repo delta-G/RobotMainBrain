@@ -43,6 +43,16 @@ void Robot::mainLoop(){
 	rightMotor.loop();
 }
 
+char* Robot::dataDump(){
+
+	static char retBuf[50];
+
+	float batVolt = battery.getVoltage();
+
+	sprintf(retBuf, "<Dat,B%d.%d>", (int)batVolt, (batVolt *10)%10);
+
+	return retBuf;
+}
 
 void Robot::setDriveMode(DriveModeEnum aDriveMode){
 	driveMode = aDriveMode;

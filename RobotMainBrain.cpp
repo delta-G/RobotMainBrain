@@ -111,7 +111,6 @@ void bootup() {
 
 	case BOOT_ARM: {
 		if (armStartTime == 0) {
-//		    digitalWrite(ARM_ENABLE, HIGH);
 			robot.arm.enable();
 			heartbeatInterval = 500;
 			armStartTime = millis();
