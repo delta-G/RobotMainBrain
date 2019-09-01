@@ -43,15 +43,31 @@ void Robot::mainLoop(){
 	rightMotor.loop();
 }
 
-char* Robot::dataDump(){
+uint8_t* Robot::dataDump() {
 
-	static char retBuf[50];
+	static uint8_t data[14];
 
-	float batVolt = battery.getVoltage();
+	data[0] = '<';
+	data[1] = 0x13;
+	data[2] = (byte) (battery.getVoltage() * 10);
+	data[3] = (byte) ((leftMotor.encoder.getTicks() >> 8) & 0xFF);
+	data[4] = (byte) (leftMotor.encoder.getTicks() & 0xFF);
+	data[5] = (byte) ((leftMotor.getSpeed() >> 8) & 0xFF);
+	data[6] = (byte) (leftMotor.getSpeed() & 0xFF);
+	data[7] = (byte) (leftMotor.getPwmSpeed() & 0xFF);
+	data[8] = (byte) ((rightMotor.encoder.getTicks() >> 8) & 0xFF);
+	data[9] = (byte) (rightMotor.encoder.getTicks() & 0xFF);
+	data[10] = (byte) ((rightMotor.getSpeed() >> 8) & 0xFF);
+	data[11] = (byte) (rightMotor.getSpeed() & 0xFF);
+	data[12] = (byte) (rightMotor.getPwmSpeed() & 0xFF);
+	data[13] = '>';
 
-	sprintf(retBuf, "<Dat,B%d.%d>", (int)batVolt, (batVolt *10)%10);
+	for(int i=0; i<14; i++){
+		Serial.write(data[i]);
+	}
 
-	return retBuf;
+	return data;
+
 }
 
 void Robot::setDriveMode(DriveModeEnum aDriveMode){

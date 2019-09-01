@@ -34,9 +34,7 @@ enum BootStates {
 
 extern CommandParser cp;
 
-void parseCommand(char* aCommand){
-	cp.parseCommandString(aCommand);
-}
+
 
 unsigned int heartbeatInterval = 200;
 
@@ -52,6 +50,10 @@ Robot robot;
 
 boolean armPresent;
 boolean armResponding;
+
+void parseCommand(char* aCommand){
+	cp.parseCommandString(aCommand);
+}
 
 void setup() {
 
