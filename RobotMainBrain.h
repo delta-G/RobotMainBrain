@@ -46,6 +46,7 @@ void loop();
 void heartBeat();
 void parseCommand(char*);
 void armParserCallback(char*);
+void armParserRawCallback(char*);
 //void monitorBattery();
 
 

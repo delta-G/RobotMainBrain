@@ -94,6 +94,8 @@ void setup() {
 		bootup();
 	}
 
+	armParser.setRawCallback(armParserRawCallback);
+
 }
 
 void bootup() {
@@ -273,5 +275,12 @@ void armParserCallback(char* aCommand){
 }
 
 
+void armParserRawCallback(char* p) {
+	// Raw data needs to write out to byte at a time
+	int numBytes = p[2]; //  Always < then control code then number of bytes
+	for (int i=0; i<numBytes; i++){
+		Serial.write(p[i]);
+	}
+}
 
 
