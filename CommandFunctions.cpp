@@ -138,6 +138,15 @@ void requestFromBot(char* p) {
 			Serial.print(HBOR_STRING);
 		}
 		break;
+	case 'G': {
+		char gitbuf[9];
+		strncpy(gitbuf, GIT_HASH, 8);
+		gitbuf[8] = 0;
+		Serial.print("<RMBGIT-");
+		Serial.print(gitbuf);
+		Serial.print(">");
+		break;
+	}
 
 	case 'C':
 		Serial.print("<Cnts,");
