@@ -45,6 +45,8 @@ void Robot::mainLoop(){
 
 uint8_t* Robot::dataDump() {
 
+	Serial.print(HBOR_STRING);
+
 	static uint8_t data[14];
 
 	data[0] = '<';
@@ -69,6 +71,8 @@ uint8_t* Robot::dataDump() {
 	return data;
 
 }
+
+
 
 void Robot::setDriveMode(DriveModeEnum aDriveMode){
 	driveMode = aDriveMode;

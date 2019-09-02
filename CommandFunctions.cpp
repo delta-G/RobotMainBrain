@@ -81,6 +81,7 @@ void xboxCommand(char* p) {
 		Serial1.print(p);
 	}
 	robot.dataDump();
+
 }
 
 void enableArm(char* p) {
