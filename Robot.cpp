@@ -74,6 +74,30 @@ uint8_t* Robot::dataDump() {
 }
 
 
+void Robot::regularResponse(){
+
+	static uint8_t counter = 0;
+
+	switch (counter++) {
+	case 0:
+		dataDump();
+		break;
+	case 1:
+		Serial1.print("<A,Rp>");
+		break;
+	case 2:
+		Serial1.print("<A,Rt>");
+		break;
+	case 3:
+		Serial1.print("<A,Rs>");
+		break;
+	}
+
+	if (counter >= 4){
+		counter = 0;
+	}
+}
+
 
 void Robot::setDriveMode(DriveModeEnum aDriveMode){
 	driveMode = aDriveMode;

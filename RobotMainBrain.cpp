@@ -252,7 +252,7 @@ void heartBeat() {
 //		if (counter == (6000 / heartbeatInterval)) {
 //			Serial.print(HEARTBEAT_STRING);
 //			counter = 0;
-		}
+//		}
 	}
 }
 

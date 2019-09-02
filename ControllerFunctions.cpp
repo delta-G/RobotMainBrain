@@ -96,6 +96,15 @@ void mainControllerLoop() {
 				break;
 			case MINE:
 				driveWithOneStickAlg2();
+				int panVal = xbox_ptr->getHatValue(LeftHatX);
+				int tiltVal = xbox_ptr->getHatValue(LeftHatY);
+				Serial1.print("<A,S6,J");
+				Serial1.print(panVal);
+				Serial1.print(">");
+				Serial1.print("<A,S7,J");
+				Serial1.print(tiltVal);
+				Serial1.print(">");
+
 				break;
 			}
 

@@ -80,7 +80,7 @@ void xboxCommand(char* p) {
 	if(robot.getDriveMode() == ARM){
 		Serial1.print(p);
 	}
-	robot.dataDump();
+	robot.regularResponse();
 
 }
 
