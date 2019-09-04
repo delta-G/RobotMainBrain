@@ -80,6 +80,7 @@ public:
 	void mainLoop();
 	uint8_t* dataDump();
 	void regularResponse();
+	void allStop();
 
 	void setDriveMode(DriveModeEnum);
 	DriveModeEnum getDriveMode();

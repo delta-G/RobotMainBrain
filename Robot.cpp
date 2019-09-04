@@ -43,6 +43,13 @@ void Robot::mainLoop(){
 	rightMotor.loop();
 }
 
+void Robot::allStop(){
+
+	leftMotor.stop();
+	rightMotor.stop();
+
+}
+
 uint8_t* Robot::dataDump() {
 
 	Serial.print(HBOR_STRING);

@@ -50,9 +50,13 @@ Robot robot;
 
 boolean armPresent;
 boolean armResponding;
+unsigned long lastCommandTime;
+
+unsigned long commandTimeout = 1000;
 
 void parseCommand(char* aCommand){
 	cp.parseCommandString(aCommand);
+	lastCommandTime = millis();
 }
 
 void setup() {
@@ -223,11 +227,14 @@ void loop() {
 
 	heartBeat();
 
-
 	robot.mainLoop();  //Things the robot does on his own...
 	armParser.run();
 	parser.run();          // Reads in commands from Serial
 	mainControllerLoop();  // Interacts with Xbox controller.
+
+	if(millis() - lastCommandTime >= commandTimeout){
+		robot.allStop();
+	}
 
 }
 
