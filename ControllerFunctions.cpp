@@ -144,37 +144,35 @@ void returnControl(){
 
 void dpadPanAndTilt() {
 
-	static boolean lastUpdated = false;
 	boolean updated = false;
 
 	if (xbox_ptr->isPressed(UP)) {
-		Serial1.print("<A,S6,J");
+		Serial1.print("<A,S7,J");
 		Serial1.print(-32767);
 		Serial1.print(">");
 		updated = true;
 	} else if (xbox_ptr->isPressed(DOWN)) {
-		Serial1.print("<A,S6,J");
+		Serial1.print("<A,S7,J");
 		Serial1.print(32767);
 		Serial1.print(">");
 		updated = true;
 	}
 
 	if (xbox_ptr->isPressed(RIGHT)) {
-		Serial1.print("<A,S7,J");
+		Serial1.print("<A,S6,J");
 		Serial1.print(-32767);
 		Serial1.print(">");
 		updated = true;
 	} else if (xbox_ptr->isPressed(LEFT)) {
-		Serial1.print("<A,S7,J");
+		Serial1.print("<A,S6,J");
 		Serial1.print(32767);
 		Serial1.print(">");
 		updated = true;
 	}
 
-	if (lastUpdated && !updated) {
+	if (!updated) {
 		Serial1.print("<A,S6,J0,S7,J0>");
 	}
-	lastUpdated = updated;
 }
 
 void driveWithTwoSticks() {
