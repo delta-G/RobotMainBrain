@@ -79,6 +79,7 @@ public:
 
 	void mainLoop();
 	uint8_t* dataDump();
+	uint8_t getStatusByte();
 	void regularResponse();
 	void allStop();
 
