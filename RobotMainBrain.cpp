@@ -54,9 +54,13 @@ unsigned long lastCommandTime;
 
 unsigned long commandTimeout = 1000;
 
-void parseCommand(char* aCommand){
-	cp.parseCommandString(aCommand);
-	lastCommandTime = millis();
+void parseCommand(char *aCommand) {
+	if (strcmp(aCommand, "<LOST_COM>") == 0) {
+		robot.allStop();
+	} else {
+		cp.parseCommandString(aCommand);
+		lastCommandTime = millis();
+	}
 }
 
 void setup() {

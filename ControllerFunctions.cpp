@@ -86,26 +86,44 @@ void mainControllerLoop() {
 				robot_ptr->advanceDriveMode();
 			}
 
-			switch (robot_ptr->getDriveMode()){
+			switch (robot_ptr->getDriveMode()) {
 
 			case DRIVE:
 				driveWithTwoSticks();
+				dpadPanAndTilt();
 				break;
 			case ARM:
 				driveByDpad();
 				break;
-			case MINE:
-				driveWithOneStickAlg2();
-				int panVal = xbox_ptr->getHatValue(LeftHatX);
-				int tiltVal = xbox_ptr->getHatValue(LeftHatY);
-				Serial1.print("<A,S6,J");
-				Serial1.print(-panVal);
+			case MINE: {
+				static char followOrUse = 'J';
+				int panVal = -(xbox_ptr->getHatValue(LeftHatX));
+				int tiltVal = -(xbox_ptr->getHatValue(LeftHatY));
+				driveWithOneStickAlg2(xbox_ptr->getHatValue(RightHatX),
+						xbox_ptr->getHatValue(RightHatY));
+
+				if (xbox_ptr->isClicked(L3)) {
+					if (followOrUse == 'J') {
+						followOrUse = 'F';
+					} else if (followOrUse == 'F') {
+						followOrUse = 'J';
+					}
+				}
+
+				Serial1.print("<A,S6,");
+				Serial1.print(followOrUse);
+				Serial1.print(panVal);
 				Serial1.print(">");
-				Serial1.print("<A,S7,J");
-				Serial1.print(-tiltVal);
+				Serial1.print("<A,S7,");
+				Serial1.print(followOrUse);
+				Serial1.print(tiltVal);
 				Serial1.print(">");
 
 				break;
+			}
+			default: {
+				break;
+			}
 			}
 
 		}
@@ -122,6 +140,41 @@ void returnControl(){
 	// Need to let Main Brain know he is back in control
 	started = false;
 	outStream->println("<RMB Iface End>");
+}
+
+void dpadPanAndTilt() {
+
+	static boolean lastUpdated = false;
+	boolean updated = false;
+
+	if (xbox_ptr->isPressed(UP)) {
+		Serial1.print("<A,S6,J");
+		Serial1.print(-32767);
+		Serial1.print(">");
+		updated = true;
+	} else if (xbox_ptr->isPressed(DOWN)) {
+		Serial1.print("<A,S6,J");
+		Serial1.print(32767);
+		Serial1.print(">");
+		updated = true;
+	}
+
+	if (xbox_ptr->isPressed(RIGHT)) {
+		Serial1.print("<A,S7,J");
+		Serial1.print(-32767);
+		Serial1.print(">");
+		updated = true;
+	} else if (xbox_ptr->isPressed(LEFT)) {
+		Serial1.print("<A,S7,J");
+		Serial1.print(32767);
+		Serial1.print(">");
+		updated = true;
+	}
+
+	if (lastUpdated && !updated) {
+		Serial1.print("<A,S6,J0,S7,J0>");
+	}
+	lastUpdated = updated;
 }
 
 void driveWithTwoSticks() {
@@ -242,10 +295,10 @@ void driveWithOneStick() {
 
 }
 
-void driveWithOneStickAlg2() {
+void driveWithOneStickAlg2(int aXval, int aYval) {
 
-	int16_t xVal = xbox_ptr->getHatValue(RightHatX);
-	int16_t yVal = xbox_ptr->getHatValue(RightHatY);
+	int16_t xVal = aXval;
+	int16_t yVal = aYval;
 
 	float s = 0.707107;  // at pi/4 sin == cos =~= 0.707107
 

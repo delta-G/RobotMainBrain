@@ -44,10 +44,11 @@ void mainControllerLoop();
 void runStartup();
 void returnControl();
 void driveWithTwoSticks();
+void dpadPanAndTilt();
 void driveWithTwoSticksAlg2();
 void driveByDpad();
 void driveWithOneStick();
-void driveWithOneStickAlg2();
+void driveWithOneStickAlg2(int, int);
 
 
 #endif /* CONTROLLERFUNCTIONS_H_ */
