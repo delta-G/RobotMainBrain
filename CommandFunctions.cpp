@@ -84,6 +84,22 @@ void xboxCommand(char* p) {
 
 }
 
+void xboxCommandRaw(char* p) {
+	if(p[1] == 0x14 && p[2] == 16){
+		// It's a real raw xbox command
+		uint8_t temp[14];
+		memcpy(temp, p+1, 14);
+		temp[1] = 0x0D;  // xboxHandler Expects this
+		xbox.handleIncoming(temp);
+		if(robot.getDriveMode() == ARM){
+			for(uint8_t i=0; i<16; i++){
+				Serial1.write(p[i]);
+			}
+		}
+		robot.regularResponse();
+	}
+}
+
 void enableArm(char* p) {
 	if (p[3] == '0'){
 		Serial.print("<Arm Responding>");

@@ -103,6 +103,7 @@ void setup() {
 	}
 
 	armParser.setRawCallback(armParserRawCallback);
+	parser.setRawCallback(rawDataCallback);
 
 }
 
@@ -268,7 +269,11 @@ void heartBeat() {
 }
 
 
-
+void rawDataCallback(char* p){
+	if(p[1] == 0x14 && p[2] == 16){
+		xboxCommandRaw(p);
+	}
+}
 
 
 void armParserCallback(char* aCommand){
