@@ -87,17 +87,31 @@ uint8_t Robot::getStatusByte(){
 
 	switch(driveMode){
 	case DRIVE:
-		retval |= 1;
+		retval |= 0x01;
 		break;
 	case ARM:
-		retval |= 2;
+		retval |= 0x02;
 		break;
 	case MINE:
-		retval |= 3;
+		retval |= 0x03;
 		break;
 	default:
 		break;
 	}
+
+	if(camera.isEnabled()){
+		retval |= 0x10;
+	}
+	if(headlight.isEnabled()){
+		retval |= 0x20;
+	}
+	if(arm.isEnabled()){
+		retval |= 0x40;
+	}
+	if(comPower.isEnabled()){
+		retval |= 0x80;
+	}
+
 
 	return retval;
 
