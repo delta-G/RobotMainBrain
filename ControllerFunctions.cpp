@@ -59,7 +59,6 @@ void mainControllerLoop() {
 		// START
 		if (xbox_ptr->isClicked(START)) {
 			if (!started) {
-
 				runStartup();
 			}
 		}
@@ -67,66 +66,53 @@ void mainControllerLoop() {
 		//BACK
 		if (xbox_ptr->isClicked(BACK)) {
 			if (started) {
-
 				returnControl();
 			}
 		}
 
-		//  Timed Section
-
-		//TODO::
-		//  Does this section really need to be timed if the controller data is coming to it at some given rate already?
-		//  IF anything it should be if newData, but why can't it run all the time.  Maybe some of these functions
-		//  need to constant update someday.
-
-		if (currentRunTime - previousRunTime >= updateInterval) {
-			previousRunTime = currentRunTime;
-
-			if (xbox_ptr->isClicked(Y)) {
-				robot_ptr->advanceDriveMode();
-			}
-
-			switch (robot_ptr->getDriveMode()) {
-
-			case DRIVE:
-				driveWithTwoSticks();
-				dpadPanAndTilt();
-				break;
-			case ARM:
-				driveByDpad();
-				break;
-			case MINE: {
-				static char followOrUse = 'J';
-				int panVal = -(xbox_ptr->getHatValue(LeftHatX));
-				int tiltVal = -(xbox_ptr->getHatValue(LeftHatY));
-				driveWithOneStickAlg2(xbox_ptr->getHatValue(RightHatX),
-						xbox_ptr->getHatValue(RightHatY));
-
-				if (xbox_ptr->isClicked(L3)) {
-					if (followOrUse == 'J') {
-						followOrUse = 'F';
-					} else if (followOrUse == 'F') {
-						followOrUse = 'J';
-					}
-				}
-
-				Serial1.print("<A,S6,");
-				Serial1.print(followOrUse);
-				Serial1.print(panVal);
-				Serial1.print(">");
-				Serial1.print("<A,S7,");
-				Serial1.print(followOrUse);
-				Serial1.print(tiltVal);
-				Serial1.print(">");
-
-				break;
-			}
-			default: {
-				break;
-			}
-			}
-
+		if (xbox_ptr->isClicked(Y)) {
+			robot_ptr->advanceDriveMode();
 		}
+
+		switch (robot_ptr->getDriveMode()) {
+
+		case DRIVE:
+			driveWithTwoSticks();
+			dpadPanAndTilt();
+			break;
+		case ARM:
+			driveByDpad();
+			break;
+		case MINE: {
+			static char followOrUse = 'J';
+			int panVal = -(xbox_ptr->getHatValue(LeftHatX));
+			int tiltVal = -(xbox_ptr->getHatValue(LeftHatY));
+			driveWithOneStickAlg2(xbox_ptr->getHatValue(RightHatX),
+					xbox_ptr->getHatValue(RightHatY));
+
+			if (xbox_ptr->isClicked(L3)) {
+				if (followOrUse == 'J') {
+					followOrUse = 'F';
+				} else if (followOrUse == 'F') {
+					followOrUse = 'J';
+				}
+			}
+
+			Serial1.print("<A,S6,");
+			Serial1.print(followOrUse);
+			Serial1.print(panVal);
+			Serial1.print(",S7,");
+			Serial1.print(followOrUse);
+			Serial1.print(tiltVal);
+			Serial1.print(">");
+
+			break;
+		}
+		default: {
+			break;
+		}
+		}
+
 	}
 }
 
