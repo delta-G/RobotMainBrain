@@ -28,13 +28,16 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #define PING_PIN_DIRECTION DDRD
 
 class PingTimer {
-
+private:
 	volatile int timerVal;
 	volatile boolean overflowed;
 	volatile boolean newData;
 
-	PingTimer();
 	void initTimer();
+
+public:
+	PingTimer();
+	void begin();
 
 	void sendPing();
 	void echoHandler();

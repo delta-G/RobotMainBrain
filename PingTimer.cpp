@@ -39,12 +39,14 @@ void PingTimer::initTimer(){
 
 
 PingTimer::PingTimer(){
-	initTimer();
 	newData = false;
 	overflowed = false;
 	timerVal = 0;
 }
 
+void PingTimer::begin(){
+	initTimer();
+}
 
 
 void PingTimer::sendPing(){
