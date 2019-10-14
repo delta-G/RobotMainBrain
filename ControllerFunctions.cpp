@@ -79,6 +79,9 @@ void mainControllerLoop() {
 		case DRIVE:
 			driveWithTwoSticks();
 			dpadPanAndTilt();
+			if (xbox_ptr->isPressed(A)) {
+				armButtonMode();
+			}
 			break;
 		case ARM:
 			driveByDpad();
@@ -106,6 +109,10 @@ void mainControllerLoop() {
 			Serial1.print(tiltVal);
 			Serial1.print(">");
 
+			if (xbox_ptr->isPressed(A)) {
+				armButtonMode();
+			}
+
 			break;
 		}
 		default: {
@@ -115,6 +122,29 @@ void mainControllerLoop() {
 
 	}
 }
+
+void armButtonMode() {
+
+	if (xbox_ptr->isClicked(UP)) {
+		Serial1.print("<A,CV256>"); // Standing Up Looking Forward
+	} else if (xbox_ptr->isClicked(LEFT)) {
+		Serial1.print("<A,CV352>");   // Forward and low
+	} else if (xbox_ptr->isClicked(DOWN)) {
+		Serial1.print("<A,CV320>");   ///  Forward and as low as possible
+	} else if (xbox_ptr->isClicked(RIGHT)) {
+		Serial1.print("<A,CV288>");   ///  Sitting Scorpion Pose
+	}
+	if (xbox_ptr->isPressed(L1)) {
+		Serial1.print("<A,S0,J-32767>");
+	}
+	else if (xbox_ptr->isPressed(R1)) {
+		Serial1.print("<A,S0,J32767>");
+	}
+	else {
+		Serial1.print("<A,S0,J0>");
+	}
+}
+
 
 void runStartup(){
 	// Need to let Main Brain know we have control this way

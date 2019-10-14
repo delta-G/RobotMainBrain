@@ -50,5 +50,6 @@ void driveByDpad();
 void driveWithOneStick();
 void driveWithOneStickAlg2(int, int);
 
+void armButtonMode();
 
 #endif /* CONTROLLERFUNCTIONS_H_ */
