@@ -135,10 +135,10 @@ void armButtonMode() {
 		Serial1.print("<A,CV288>");   ///  Sitting Scorpion Pose
 	}
 	if (xbox_ptr->isPressed(L1)) {
-		Serial1.print("<A,S0,J32767>");
+		Serial1.print("<A,S0,a-1>");
 	}
 	else if (xbox_ptr->isPressed(R1)) {
-		Serial1.print("<A,S0,J-32767>");
+		Serial1.print("<A,S0,a1>");
 	}
 	else {
 		Serial1.print("<A,S0,J0>");
@@ -160,34 +160,24 @@ void returnControl(){
 
 void dpadPanAndTilt() {
 
-	boolean updated = false;
-
 	if (xbox_ptr->isPressed(UP)) {
-		Serial1.print("<A,S7,J");
-		Serial1.print(-32767);
+		Serial1.print("<A,S7,a");
+		Serial1.print(-200);
 		Serial1.print(">");
-		updated = true;
 	} else if (xbox_ptr->isPressed(DOWN)) {
-		Serial1.print("<A,S7,J");
-		Serial1.print(32767);
+		Serial1.print("<A,S7,a");
+		Serial1.print(200);
 		Serial1.print(">");
-		updated = true;
 	}
 
 	if (xbox_ptr->isPressed(RIGHT)) {
-		Serial1.print("<A,S6,J");
-		Serial1.print(-32767);
+		Serial1.print("<A,S6,a");
+		Serial1.print(-200);
 		Serial1.print(">");
-		updated = true;
 	} else if (xbox_ptr->isPressed(LEFT)) {
-		Serial1.print("<A,S6,J");
-		Serial1.print(32767);
+		Serial1.print("<A,S6,a");
+		Serial1.print(200);
 		Serial1.print(">");
-		updated = true;
-	}
-
-	if (!updated) {
-		Serial1.print("<A,S6,J0,S7,J0>");
 	}
 }
 

@@ -42,11 +42,11 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
                              XTAL1 13|        |28 PC6 (D 22)          Motor Encoder
                      RX0 (D 8) PD0 14|        |27 PC5 (D 21) TDI      Motor Encoder
                      TX0 (D 9) PD1 15|        |26 PC4 (D 20) TDO      Motor Encoder
-               RX1/INT0 (D 10) PD2 16|        |25 PC3 (D 19) TMS
-               TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
-               gimb PWM (D 12) PD4 18|        |23 PC1 (D 17) SDA
-               gimb PWM (D 13) PD5 19|        |22 PC0 (D 16) SCL
-               ping PWM (D 14) PD6 20|        |21 PD7 (D 15) PWM   headlight
+               RX1/INT0 (D 10) PD2 16|        |25 PC3 (D 19) TMS      Gimbal Pan
+               TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK      Gimbal Tilt
+                    PWM (D 12) PD4 18|        |23 PC1 (D 17) SDA
+               trig PWM (D 13) PD5 19|        |22 PC0 (D 16) SCL
+          ICP1 echo PWM (D 14) PD6 20|        |21 PD7 (D 15) PWM   headlight
                                      +--------+
  *
  *
