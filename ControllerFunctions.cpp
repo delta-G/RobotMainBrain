@@ -32,6 +32,8 @@ Robot* robot_ptr;
 
 boolean started = false;
 
+boolean armButtonModeActive = false;
+
 unsigned int updateInterval = 20;
 
 
@@ -49,10 +51,13 @@ void initializeControllerFunctions(Robot* aRobot, Stream* aOutStream, Stream* aS
 }
 
 
+
 void mainControllerLoop() {
 
 	static unsigned long previousRunTime = millis();
 	unsigned long currentRunTime = millis();
+
+
 
 	if (xbox_ptr->newDataAvailable()) {
 
@@ -78,9 +83,12 @@ void mainControllerLoop() {
 
 		case DRIVE:
 			driveWithTwoSticks();
-			dpadPanAndTilt();
+
 			if (xbox_ptr->isPressed(A)) {
 				armButtonMode();
+			} else {
+				armButtonModeActive = false;
+				dpadPanAndTilt();
 			}
 			break;
 		case ARM:
@@ -111,6 +119,8 @@ void mainControllerLoop() {
 
 			if (xbox_ptr->isPressed(A)) {
 				armButtonMode();
+			} else {
+				armButtonModeActive = false;
 			}
 
 			break;
@@ -124,7 +134,10 @@ void mainControllerLoop() {
 }
 
 void armButtonMode() {
-
+	if(!armButtonModeActive){
+		xbox_ptr->clear();
+		armButtonModeActive = true;
+	}
 	if (xbox_ptr->isClicked(UP)) {
 		Serial1.print("<A,CV256>"); // Standing Up Looking Forward
 	} else if (xbox_ptr->isClicked(LEFT)) {
