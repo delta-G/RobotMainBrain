@@ -54,26 +54,27 @@ uint8_t* Robot::dataDump() {
 
 	Serial.print(HBOR_STRING);
 
-	static uint8_t data[16];
+	static uint8_t data[ROBOT_DATA_DUMP_SIZE];
 
 	data[0] = '<';
 	data[1] = 0x13;
-	data[2] =  16;
+	data[2] =  ROBOT_DATA_DUMP_SIZE;
 	data[3] = getStatusByte();
-	data[4] = (byte) (battery.getVoltage() * 10);
-	data[5] = (byte) ((leftMotor.encoder.getTicks() >> 8) & 0xFF);
-	data[6] = (byte) (leftMotor.encoder.getTicks() & 0xFF);
-	data[7] = (byte) ((leftMotor.getSpeed() >> 8) & 0xFF);
-	data[8] = (byte) (leftMotor.getSpeed() & 0xFF);
-	data[9] = (byte) (leftMotor.getPwmSpeed() & 0xFF);
-	data[10] = (byte) ((rightMotor.encoder.getTicks() >> 8) & 0xFF);
-	data[11] = (byte) (rightMotor.encoder.getTicks() & 0xFF);
-	data[12] = (byte) ((rightMotor.getSpeed() >> 8) & 0xFF);
-	data[13] = (byte) (rightMotor.getSpeed() & 0xFF);
-	data[14] = (byte) (rightMotor.getPwmSpeed() & 0xFF);
-	data[15] = '>';
+	data[4] = throttle;
+	data[5] = (byte) (battery.getVoltage() * 10);
+	data[6] = (byte) ((leftMotor.encoder.getTicks() >> 8) & 0xFF);
+	data[7] = (byte) (leftMotor.encoder.getTicks() & 0xFF);
+	data[8] = (byte) ((leftMotor.getSpeed() >> 8) & 0xFF);
+	data[9] = (byte) (leftMotor.getSpeed() & 0xFF);
+	data[10] = (byte) (leftMotor.getPwmSpeed() & 0xFF);
+	data[11] = (byte) ((rightMotor.encoder.getTicks() >> 8) & 0xFF);
+	data[12] = (byte) (rightMotor.encoder.getTicks() & 0xFF);
+	data[13] = (byte) ((rightMotor.getSpeed() >> 8) & 0xFF);
+	data[14] = (byte) (rightMotor.getSpeed() & 0xFF);
+	data[15] = (byte) (rightMotor.getPwmSpeed() & 0xFF);
+	data[16] = '>';
 
-	for(int i=0; i<16; i++){
+	for(int i=0; i<ROBOT_DATA_DUMP_SIZE; i++){
 		Serial.write(data[i]);
 	}
 
