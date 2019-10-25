@@ -36,6 +36,7 @@ void enableArm(char*);
 void xboxCommand(char*);
 void xboxCommandRaw(char*);
 void requestFromBot(char*);
+void setThrottle(char*);
 void motorControl(char*);
 void armControl(char*);
 void videoControl(char*);

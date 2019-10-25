@@ -215,8 +215,7 @@ void driveWithTwoSticks() {
 		}
 	}
 
-	robot_ptr->leftMotor.drive(leftOutput);
-	robot_ptr->rightMotor.drive(rightOutput);
+	robot_ptr->drive(leftOutput,rightOutput);
 }
 
 void driveWithTwoSticksAlg2() {
@@ -240,43 +239,33 @@ void driveWithTwoSticksAlg2() {
 		}
 	}
 
-	robot_ptr->leftMotor.setSpeed(leftOutput);
-	robot_ptr->rightMotor.setSpeed(rightOutput);
+	robot_ptr->setSpeed(leftOutput,rightOutput);
 }
 
 void driveByDpad() {
 
 	if (xbox_ptr->isPressed(UP)) {
 		if (xbox_ptr->isPressed(RIGHT)) {
-			robot_ptr->leftMotor.driveForward();
-			robot_ptr->rightMotor.stop();
+			robot_ptr->drive(255,0);
 		} else if (xbox_ptr->isPressed(LEFT)) {
-			robot_ptr->leftMotor.stop();
-			robot_ptr->rightMotor.driveForward();
+			robot_ptr->drive(0,255);
 		} else {
-			robot_ptr->leftMotor.driveForward();
-			robot_ptr->rightMotor.driveForward();
+			robot_ptr->driveForward();
 		}
 	} else if (xbox_ptr->isPressed(DOWN)) {
 		if (xbox_ptr->isPressed(RIGHT)) {
-			robot_ptr->rightMotor.driveBackward();
-			robot_ptr->leftMotor.stop();
+			robot_ptr->drive(-255,0);
 		} else if (xbox_ptr->isPressed(LEFT)) {
-			robot_ptr->rightMotor.stop();
-			robot_ptr->leftMotor.driveBackward();
+			robot_ptr->drive(0,-255);
 		} else {
-			robot_ptr->leftMotor.driveBackward();
-			robot_ptr->rightMotor.driveBackward();
+			robot_ptr->driveBackward();
 		}
 	} else if (xbox_ptr->isPressed(LEFT)) {
-		robot_ptr->leftMotor.driveBackward();
-		robot_ptr->rightMotor.driveForward();
+		robot_ptr->spinLeft();
 	} else if (xbox_ptr->isPressed(RIGHT)) {
-		robot_ptr->rightMotor.driveBackward();
-		robot_ptr->leftMotor.driveForward();
+		robot_ptr->spinRight();
 	} else {
-		robot_ptr->rightMotor.stop();
-		robot_ptr->leftMotor.stop();
+		robot_ptr->stop();
 	}
 }
 
@@ -307,8 +296,7 @@ void driveWithOneStick() {
 	if (rightOut > 255) rightOut = 255;
 		if (rightOut < -255) rightOut = -255;
 
-	robot_ptr->leftMotor.drive(leftOut);
-	robot_ptr->rightMotor.drive(rightOut);
+	robot_ptr->drive(leftOut, rightOut);
 
 }
 
@@ -360,7 +348,5 @@ void driveWithOneStickAlg2(int aXval, int aYval) {
 	}
 
 	///  Write to the motors.
-	robot_ptr->leftMotor.drive((int16_t)leftOut);
-	robot_ptr->rightMotor.drive((int16_t)rightOut);
-
+	robot_ptr->drive((int16_t)leftOut,(int16_t)rightOut);
 }

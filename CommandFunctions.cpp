@@ -32,6 +32,7 @@ extern int32_t rightCounter;
 Command commands[] = {
 		{ 'X', xboxCommand },
 		{ 'R', requestFromBot },
+		{ 'T', setThrottle },
 		{ 'M', motorControl },
 		{ 'm', motorControl },
 		{ 't', testFunc },
@@ -235,6 +236,15 @@ void requestFromBot(char* p) {
 	}
 
 }
+
+
+void setThrottle(char* p) {
+	// p[0] == '<'
+	// p[1] == 'T'
+	int setpt = atoi(p + 2);
+	robot.setThrottle(setpt);
+}
+
 
 void motorControl(char* p) {
 

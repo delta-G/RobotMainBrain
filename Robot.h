@@ -67,7 +67,7 @@ public:
 
 	Battery battery;
 
-
+	uint8_t throttle;
 
 	Robot():camera(CAM_ENABLE),
 			arm(ARM_ENABLE),
@@ -75,13 +75,25 @@ public:
 			comPower(COM_POWER_ENABLE),
 			leftMotor(LEFT_MOTOR_DIRECTION_PIN, LEFT_MOTOR_ENABLE_PIN, true),
 			rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false),
-	        battery(BATTERY_PIN, 1000){};
+	        battery(BATTERY_PIN, 1000),
+			throttle(255){};
 
 	void mainLoop();
 	uint8_t* dataDump();
 	uint8_t getStatusByte();
 	void regularResponse();
 	void allStop();
+
+	void setThrottle(uint8_t);
+	uint8_t getThrottle();
+
+	void stop();
+	void driveForward();
+	void driveBackward();
+	void spinLeft();
+	void spinRight();
+	void drive(int16_t, int16_t);
+	void setSpeed(int32_t, int32_t);
 
 	void setDriveMode(DriveModeEnum);
 	DriveModeEnum getDriveMode();

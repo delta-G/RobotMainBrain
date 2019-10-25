@@ -143,6 +143,46 @@ void Robot::regularResponse(){
 }
 
 
+void Robot::setThrottle(uint8_t aLevel){
+	throttle = aLevel;
+}
+
+uint8_t Robot::getThrottle(){
+	return throttle;
+}
+
+void Robot::stop() {
+	leftMotor.stop();
+	rightMotor.stop();
+}
+
+void Robot::driveForward() {
+	leftMotor.driveForward();
+	rightMotor.driveForward();
+}
+void Robot::driveBackward() {
+	leftMotor.driveBackward();
+	rightMotor.driveBackward();
+}
+void Robot::spinLeft() {
+	leftMotor.driveBackward();
+	rightMotor.driveForward();
+}
+void Robot::spinRight() {
+	leftMotor.driveForward();
+	rightMotor.driveBackward();
+}
+void Robot::drive(int16_t aLeft, int16_t aRight) {
+	float ratio = throttle / 255.0;
+	leftMotor.drive(aLeft * ratio);
+	rightMotor.drive(aRight * ratio);
+}
+void Robot::setSpeed(int32_t aLeft, int32_t aRight) {
+	leftMotor.setSpeed(aLeft);
+	rightMotor.setSpeed(aRight);
+}
+
+
 void Robot::setDriveMode(DriveModeEnum aDriveMode){
 	driveMode = aDriveMode;
 	if(driveMode >= NUMBER_OF_MODES){

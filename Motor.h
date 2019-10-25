@@ -38,6 +38,8 @@ class Motor {
 
 	int16_t pwmSpeed;
 
+	void drivePWM();
+
 
 
 public:

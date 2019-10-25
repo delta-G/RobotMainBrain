@@ -46,6 +46,17 @@ void Motor::driveBackward() {
 	targetSpeed = 0xFFFFFFFF;
 }
 
+void Motor::drivePWM() {
+	if (pwmSpeed > 0) {
+		digitalWrite(directionPin, invertForward);
+	} else if (pwmSpeed < 0) {
+		digitalWrite(directionPin, !invertForward);
+	}
+	// if aSpeed is 0 then direction is untouched but motor turns off just like stop()
+	// otherwise the absolute value goes out there.
+	analogWrite(enablePin, abs(pwmSpeed));
+}
+
 void Motor::loop() {
 
 	static uint32_t lastLoop = millis();
@@ -66,7 +77,7 @@ void Motor::loop() {
 			return;
 		}
 		else if (targetSpeed == 0x7FFFFFFE) {
-			drive(pwmSpeed);
+			drivePWM();
 			return;
 		}
 
@@ -74,24 +85,30 @@ void Motor::loop() {
 		int32_t curSpeed = getSpeed();
 
 		if (targetSpeed > 0){
-			if(curSpeed < targetSpeed){
-				drive(pwmSpeed +1);
-			} else if(curSpeed > targetSpeed){
-				if(pwmSpeed > 0){
-					drive(pwmSpeed -1);
+			if (curSpeed < targetSpeed) {
+				if (pwmSpeed < 255) {
+					pwmSpeed++;
+				}
+			} else if (curSpeed > targetSpeed) {
+				if (pwmSpeed > 0){
+					pwmSpeed--;
 				}
 			}
 		}
-		if (targetSpeed < 0){
-			if(curSpeed > targetSpeed){
-				drive(pwmSpeed -1);
-			} else if (curSpeed < targetSpeed){
-				if(pwmSpeed < 0){
-					drive(pwmSpeed +1);
+		if (targetSpeed < 0) {
+			if (curSpeed > targetSpeed) {
+				if (pwmSpeed > -255) {
+					pwmSpeed--;
+				}
+			} else if (curSpeed < targetSpeed) {
+				if (pwmSpeed < 0) {
+					pwmSpeed++;
 				}
 			}
 		}
+
 		lastLoop = thisLoop;
+		drivePWM();
 	}
 }
 
@@ -108,14 +125,7 @@ void Motor::drive(int16_t aSpeed){
 		aSpeed = -127;
 	}
 	pwmSpeed = aSpeed;
-	if (aSpeed > 0){
-		digitalWrite(directionPin, invertForward);
-	} else if (aSpeed < 0){
-		digitalWrite(directionPin, !invertForward);
-	}
-	// if aSpeed is 0 then direction is untouched but motor turns off just like stop()
-	// otherwise the absolute value goes out there.
-	analogWrite(enablePin, abs(aSpeed));
+	drivePWM();
 	targetSpeed = 0x7FFFFFFE;
 }
 
