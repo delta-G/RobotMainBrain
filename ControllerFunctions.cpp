@@ -83,8 +83,6 @@ void mainControllerLoop() {
 		switch (robot_ptr->getDriveMode()) {
 
 		case DRIVE:
-			driveWithTwoSticks();
-
 			if (xbox_ptr->isPressed(A)) {
 				armButtonMode();
 			} else if (xbox_ptr->isPressed(B)) {
@@ -93,34 +91,13 @@ void mainControllerLoop() {
 				armButtonModeActive = false;
 				robotButtonModeActive = false;
 				dpadPanAndTilt();
+				driveWithTwoSticks();
 			}
 			break;
 		case ARM:
 			driveByDpad();
 			break;
 		case MINE: {
-			static char followOrUse = 'J';
-			int panVal = -(xbox_ptr->getHatValue(LeftHatX));
-			int tiltVal = -(xbox_ptr->getHatValue(LeftHatY));
-			driveWithOneStickAlg2(xbox_ptr->getHatValue(RightHatX),
-					xbox_ptr->getHatValue(RightHatY));
-
-			if (xbox_ptr->isClicked(L3)) {
-				if (followOrUse == 'J') {
-					followOrUse = 'F';
-				} else if (followOrUse == 'F') {
-					followOrUse = 'J';
-				}
-			}
-
-			Serial1.print("<A,S6,");
-			Serial1.print(followOrUse);
-			Serial1.print(panVal);
-			Serial1.print(",S7,");
-			Serial1.print(followOrUse);
-			Serial1.print(tiltVal);
-			Serial1.print(">");
-
 			if (xbox_ptr->isPressed(A)) {
 				armButtonMode();
 			} else if (xbox_ptr->isPressed(B)){
@@ -129,6 +106,9 @@ void mainControllerLoop() {
 			else {
 				robotButtonModeActive = false;
 				armButtonModeActive = false;
+				driveWithOneStickAlg2(xbox_ptr->getHatValue(RightHatX),
+									xbox_ptr->getHatValue(RightHatY));
+				panTiltStick(-xbox_ptr->getHatValue(LeftHatX) , -xbox_ptr->getHatValue(LeftHatY));
 			}
 
 			break;
@@ -139,6 +119,28 @@ void mainControllerLoop() {
 		}
 
 	}
+}
+
+void panTiltStick(int aPan, int aTilt) {
+	static char followOrUse = 'J';
+	int panVal = aPan;
+	int tiltVal = aTilt;
+
+	if (xbox_ptr->isClicked(L3)) {
+		if (followOrUse == 'J') {
+			followOrUse = 'F';
+		} else if (followOrUse == 'F') {
+			followOrUse = 'J';
+		}
+	}
+
+	Serial1.print("<A,S6,");
+	Serial1.print(followOrUse);
+	Serial1.print(panVal);
+	Serial1.print(",S7,");
+	Serial1.print(followOrUse);
+	Serial1.print(tiltVal);
+	Serial1.print(">");
 }
 
 void robotButtonMode(){
