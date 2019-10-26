@@ -51,5 +51,6 @@ void driveWithOneStick();
 void driveWithOneStickAlg2(int, int);
 
 void armButtonMode();
+void robotButtonMode();
 
 #endif /* CONTROLLERFUNCTIONS_H_ */

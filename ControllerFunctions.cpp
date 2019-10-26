@@ -33,6 +33,7 @@ Robot* robot_ptr;
 boolean started = false;
 
 boolean armButtonModeActive = false;
+boolean robotButtonModeActive = false;
 
 unsigned int updateInterval = 20;
 
@@ -86,8 +87,11 @@ void mainControllerLoop() {
 
 			if (xbox_ptr->isPressed(A)) {
 				armButtonMode();
+			} else if (xbox_ptr->isPressed(B)) {
+				robotButtonMode();
 			} else {
 				armButtonModeActive = false;
+				robotButtonModeActive = false;
 				dpadPanAndTilt();
 			}
 			break;
@@ -119,7 +123,11 @@ void mainControllerLoop() {
 
 			if (xbox_ptr->isPressed(A)) {
 				armButtonMode();
-			} else {
+			} else if (xbox_ptr->isPressed(B)){
+				robotButtonMode();
+			}
+			else {
+				robotButtonModeActive = false;
 				armButtonModeActive = false;
 			}
 
@@ -131,6 +139,17 @@ void mainControllerLoop() {
 		}
 
 	}
+}
+
+void robotButtonMode(){
+	if(!robotButtonModeActive){
+		xbox_ptr->clear();
+		robotButtonModeActive = true;
+	}
+
+	int tstick = xbox_ptr->getHatValue(LeftHatY) / 3276;
+	robot_ptr->setThrottle(robot_ptr->getThrottle() + tstick);
+
 }
 
 void armButtonMode() {
