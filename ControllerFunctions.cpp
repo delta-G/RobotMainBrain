@@ -149,9 +149,14 @@ void robotButtonMode(){
 		robotButtonModeActive = true;
 	}
 
-	int tstick = xbox_ptr->getHatValue(LeftHatY) / 3276;
-	robot_ptr->setThrottle(robot_ptr->getThrottle() + tstick);
-
+	int throt = robot_ptr->getThrottle() + (xbox_ptr->getHatValue(LeftHatY) / 3276);
+	// check for rollover
+	if(throt < 0){
+		throt = 0;
+	} else if (throt > 255){
+		throt = 255;
+	}
+	robot_ptr->setThrottle(throt);
 }
 
 void armButtonMode() {
