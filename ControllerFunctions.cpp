@@ -173,10 +173,10 @@ void armButtonMode() {
 		Serial1.print("<A,CV288>");   ///  Sitting Scorpion Pose
 	}
 	if (xbox_ptr->isPressed(L1)) {
-		Serial1.print("<A,S0,a-200>");
+		Serial1.print("<A,S0,a200>");
 	}
 	else if (xbox_ptr->isPressed(R1)) {
-		Serial1.print("<A,S0,a200>");
+		Serial1.print("<A,S0,a-200>");
 	}
 	else {
 		Serial1.print("<A,S0,J0>");
