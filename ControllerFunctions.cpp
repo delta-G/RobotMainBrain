@@ -61,6 +61,12 @@ void mainControllerLoop() {
 
 
 	if (xbox_ptr->newDataAvailable()) {
+		// XBOX
+		if (xbox_ptr->isClicked(XBOX)) {
+			// This button is for DiscoBot
+			// it means python is using the controller
+			return;
+		}
 
 		// START
 		if (xbox_ptr->isClicked(START)) {
@@ -68,7 +74,6 @@ void mainControllerLoop() {
 				runStartup();
 			}
 		}
-
 		//BACK
 		if (xbox_ptr->isClicked(BACK)) {
 			if (started) {
@@ -82,17 +87,26 @@ void mainControllerLoop() {
 
 		switch (robot_ptr->getDriveMode()) {
 
-		case DRIVE:
+		case DRIVE:{
+			static boolean stickMode = true;
 			if (xbox_ptr->isPressed(A)) {
 				armButtonMode();
 			} else if (xbox_ptr->isPressed(B)) {
 				robotButtonMode();
 			} else {
+				if(xbox_ptr->isClicked(X)){
+					stickMode = !stickMode;
+				}
 				armButtonModeActive = false;
 				robotButtonModeActive = false;
 				dpadPanAndTilt();
+				if(stickMode){
 				driveWithTwoSticks();
+				} else {
+					driveWithTwoBrakes();
+				}
 			}
+		}
 			break;
 		case ARM:
 			driveByDpad();
@@ -146,6 +160,11 @@ void robotButtonMode(){
 	if(!robotButtonModeActive){
 		xbox_ptr->clear();
 		robotButtonModeActive = true;
+	}
+	if (xbox_ptr->isClicked(L1)){
+		robot_ptr->headlight.enable();
+	} else if (xbox_ptr->isClicked(R1)){
+		robot_ptr->headlight.disable();
 	}
 
 	int throt = (int)robot_ptr->getThrottle() + (xbox_ptr->getHatValue(LeftHatY) / 3276);
@@ -374,4 +393,13 @@ void driveWithOneStickAlg2(int aXval, int aYval) {
 
 	///  Write to the motors.
 	robot_ptr->drive((int16_t)leftOut,(int16_t)rightOut);
+}
+
+
+void driveWithTwoBrakes(){
+
+	int leftBrake = xbox_ptr->getTriggerValue(L2);
+	int rightBrake = xbox_ptr->getTriggerValue(R2);
+
+	robot_ptr->drive(255 - leftBrake, 255 - rightBrake);
 }
