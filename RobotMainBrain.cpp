@@ -233,7 +233,7 @@ void loop() {
 	heartBeat();
 
 	robot.mainLoop();  //Things the robot does on his own...
-	armParser.run();
+	armParser.run();       // Read serial coming from Arm
 	parser.run();          // Reads in commands from Serial
 	mainControllerLoop();  // Interacts with Xbox controller.
 
@@ -249,7 +249,6 @@ void loop() {
 
 void heartBeat() {
 	static boolean heartState = false;
-//	static uint8_t counter = 0;
 
 	static unsigned long preMil = millis();
 	unsigned long curMil = millis();
@@ -258,13 +257,6 @@ void heartBeat() {
 		preMil = curMil;
 		heartState = !heartState;
 		digitalWrite(HEARTBEAT_PIN, heartState);
-//		counter++;
-//		// Send HB to controller every 5 seconds or so
-//		// It doesn't get scared until it loses it for at least 10
-//		if (counter == (6000 / heartbeatInterval)) {
-//			Serial.print(HEARTBEAT_STRING);
-//			counter = 0;
-//		}
 	}
 }
 
@@ -272,6 +264,7 @@ void heartBeat() {
 void rawDataCallback(char* p){
 	if(p[1] == 0x14 && p[2] == 16){
 		xboxCommandRaw(p);
+		lastCommandTime = millis();
 	}
 }
 
