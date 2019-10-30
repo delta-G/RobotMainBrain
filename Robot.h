@@ -43,6 +43,7 @@ public:
 	boolean isEnabled();
 	void enable();
 	void disable();
+	void toggle();
 
 };
 

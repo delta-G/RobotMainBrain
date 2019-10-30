@@ -36,6 +36,14 @@ void Switchable::disable() {
 	enabled = false;
 }
 
+void Switchable::toggle(){
+	if(enabled){
+		disable();
+	} else {
+		enable();
+	}
+}
+
 
 void Robot::mainLoop(){
 	battery.monitor();
@@ -158,20 +166,16 @@ void Robot::stop() {
 }
 
 void Robot::driveForward() {
-	leftMotor.driveForward();
-	rightMotor.driveForward();
+	drive(255,255);
 }
 void Robot::driveBackward() {
-	leftMotor.driveBackward();
-	rightMotor.driveBackward();
+	drive(-255,-255);
 }
 void Robot::spinLeft() {
-	leftMotor.driveBackward();
-	rightMotor.driveForward();
+	drive(-255,255);
 }
 void Robot::spinRight() {
-	leftMotor.driveForward();
-	rightMotor.driveBackward();
+	drive(255,-255);
 }
 void Robot::drive(int16_t aLeft, int16_t aRight) {
 	float ratio = throttle / 255.0;

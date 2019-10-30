@@ -162,12 +162,17 @@ void robotButtonMode(){
 		robotButtonModeActive = true;
 	}
 	if (xbox_ptr->isClicked(L1)){
-		robot_ptr->headlight.enable();
-	} else if (xbox_ptr->isClicked(R1)){
-		robot_ptr->headlight.disable();
+		robot_ptr->headlight.toggle();
 	}
 
 	int throt = (int)robot_ptr->getThrottle() + (xbox_ptr->getHatValue(LeftHatY) / 3276);
+	if(xbox_ptr->isPressed(UP)){
+		throt = throt + 1;
+	}
+	if(xbox_ptr->isPressed(DOWN)){
+		throt = throt - 1;
+	}
+
 	// check for rollover
 	if(throt < 0){
 		throt = 0;
