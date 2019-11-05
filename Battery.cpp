@@ -26,17 +26,20 @@ Battery::Battery(uint8_t aPin, uint16_t aReadInterval) {
 	average = 0;
 	readInterval = 0;
 
-	// fill readings array while readInterval == 0
-	for(int i=0; i < NUMBER_BATTERY_READINGS_TO_AVERAGE; i++){
-		monitor();
-	}
-
 	readInterval = aReadInterval;
 	previousReadMillis = millis();
 
 	pin = aPin;
 
 	voltage = 0.0;
+}
+
+void Battery::initReadings() {
+	// Fill reading array with an initial value.
+	int val = analogRead(pin);
+	for (int i = 0; i < NUMBER_BATTERY_READINGS_TO_AVERAGE; i++) {
+		readings[i] = val;
+	}
 }
 
 void Battery::monitor() {

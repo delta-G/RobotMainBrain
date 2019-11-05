@@ -44,6 +44,11 @@ void Switchable::toggle(){
 	}
 }
 
+void Robot::init(){
+	leftMotor.init();
+	rightMotor.init();
+	battery.initReadings();
+}
 
 void Robot::mainLoop(){
 	battery.monitor();

@@ -44,6 +44,7 @@ public:
 
 	Battery(uint8_t aPin, uint16_t aReadInterval);
 
+	void initReadings();
 	void monitor();
 
 	float getVoltage();

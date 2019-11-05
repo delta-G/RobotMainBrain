@@ -79,8 +79,7 @@ void setup() {
 	pinMode(HEADLIGHT_PIN, OUTPUT);
 	digitalWrite(HEADLIGHT_PIN, LOW);
 
-	robot.leftMotor.init();
-	robot.rightMotor.init();
+	robot.init();
 
 	pinMode(HEARTBEAT_PIN, OUTPUT);
 	for (int i = 0; i < 3; i++) {

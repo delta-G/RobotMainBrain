@@ -79,6 +79,7 @@ public:
 	        battery(BATTERY_PIN, 1000),
 			throttle(255){};
 
+	void init();
 	void mainLoop();
 	uint8_t* dataDump();
 	uint8_t getStatusByte();
