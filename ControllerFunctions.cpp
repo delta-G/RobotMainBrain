@@ -27,7 +27,6 @@ Stream* outStream;
 
 Stream* servoStream;
 
-//  This should be a pointer to a Robot so I can control everything.
 Robot* robot_ptr;
 
 boolean started = false;
@@ -54,11 +53,6 @@ void initializeControllerFunctions(Robot* aRobot, Stream* aOutStream, Stream* aS
 
 
 void mainControllerLoop() {
-
-	static unsigned long previousRunTime = millis();
-	unsigned long currentRunTime = millis();
-
-
 
 	if (xbox_ptr->newDataAvailable()) {
 		// XBOX
