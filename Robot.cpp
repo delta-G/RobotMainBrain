@@ -47,7 +47,7 @@ void Switchable::toggle(){
 void Robot::init(){
 	leftMotor.init();
 	rightMotor.init();
-	battery.initReadings();
+//	battery.initReadings();
 }
 
 void Robot::mainLoop(){
@@ -85,7 +85,12 @@ uint8_t* Robot::dataDump() {
 	data[13] = (byte) ((rightMotor.getSpeed() >> 8) & 0xFF);
 	data[14] = (byte) (rightMotor.getSpeed() & 0xFF);
 	data[15] = (byte) (rightMotor.getPwmSpeed() & 0xFF);
-	data[16] = '>';
+	data[16] = (byte) 0;
+	data[17] = (byte) 0;
+	data[18] = (byte) 0;
+	data[19] = (byte) 0;
+
+	data[20] = '>';
 
 	for(int i=0; i<ROBOT_DATA_DUMP_SIZE; i++){
 		Serial.write(data[i]);
