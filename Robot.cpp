@@ -85,10 +85,10 @@ uint8_t* Robot::dataDump() {
 	data[13] = (byte) ((rightMotor.getSpeed() >> 8) & 0xFF);
 	data[14] = (byte) (rightMotor.getSpeed() & 0xFF);
 	data[15] = (byte) (rightMotor.getPwmSpeed() & 0xFF);
-	data[16] = (byte) 0;
-	data[17] = (byte) 0;
-	data[18] = (byte) 0;
-	data[19] = (byte) 0;
+	data[16] = (byte) 0;  // bot snr
+	data[17] = (byte) 0;  // bot rssi
+	data[18] = (byte) 0;  // base snr
+	data[19] = (byte) 0;  // base rssi
 
 	data[20] = '>';
 
@@ -121,15 +121,21 @@ uint8_t Robot::getStatusByte(){
 	if(camera.isEnabled()){
 		retval |= 0x10;
 	}
-	if(headlight.isEnabled()){
+//	if(headlight.isEnabled()){
+//		retval |= 0x20;
+//	}
+//	if(arm.isEnabled()){
+//		retval |= 0x40;
+//	}
+	if(armPresent){
 		retval |= 0x20;
 	}
-	if(arm.isEnabled()){
+	if(armResponding){
 		retval |= 0x40;
 	}
-	if(comPower.isEnabled()){
-		retval |= 0x80;
-	}
+//	if(comPower.isEnabled()){
+//		retval |= 0x80;
+//	}
 
 
 	return retval;

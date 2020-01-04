@@ -70,6 +70,9 @@ public:
 
 	uint8_t throttle;
 
+	boolean armPresent;
+	boolean armResponding;
+
 	Robot():camera(CAM_ENABLE),
 			arm(ARM_ENABLE),
 			headlight(HEADLIGHT_PIN),

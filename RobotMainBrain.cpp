@@ -48,8 +48,6 @@ StreamParser armParser(&Serial1, START_OF_PACKET, END_OF_PACKET, armParserCallba
 
 Robot robot;
 
-boolean armPresent;
-boolean armResponding;
 unsigned long lastCommandTime;
 
 unsigned long commandTimeout = 1000;
@@ -139,7 +137,7 @@ void bootup() {
 
 		armParser.run();
 
-		if(armPresent && armResponding){
+		if(robot.armPresent && robot.armResponding){
 			bootState = CONNECT_COM;
 		}
 		// Timeout in case arm is not there
@@ -270,11 +268,11 @@ void rawDataCallback(char* p){
 
 void armParserCallback(char* aCommand){
 	if(strcmp(aCommand, ARM_INIT_COMPLETE) == 0){
-		armPresent = true;
+		robot.armPresent = true;
 		Serial1.print(RMB_ARM_TEST_STRING);
 	}
 	else if(strcmp(aCommand, ARM_CONNECT_RESPONSE) == 0){
-		armResponding = true;
+		robot.armResponding = true;
 	}
 	else {
 		if(bootState == RUNNING){
