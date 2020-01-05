@@ -117,25 +117,25 @@ uint8_t Robot::getStatusByte(){
 	default:
 		break;
 	}
+	if (armPresent) {
+		retval |= 0x04;
+	}
+	if (armResponding) {
+		retval |= 0x08;
+	}
 
-	if(camera.isEnabled()){
+	if (camera.isEnabled()) {
 		retval |= 0x10;
 	}
-//	if(headlight.isEnabled()){
-//		retval |= 0x20;
-//	}
-//	if(arm.isEnabled()){
-//		retval |= 0x40;
-//	}
-	if(armPresent){
+	if (headlight.isEnabled()) {
 		retval |= 0x20;
 	}
-	if(armResponding){
+	if (arm.isEnabled()) {
 		retval |= 0x40;
 	}
-//	if(comPower.isEnabled()){
-//		retval |= 0x80;
-//	}
+	if (comPower.isEnabled()) {
+		retval |= 0x80;
+	}
 
 
 	return retval;
