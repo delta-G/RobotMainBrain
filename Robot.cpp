@@ -79,12 +79,12 @@ uint8_t* Robot::dataDump() {
 	data[7] = (byte) (leftMotor.encoder.getTicks() & 0xFF);
 	data[8] = (byte) ((leftMotor.getSpeed() >> 8) & 0xFF);
 	data[9] = (byte) (leftMotor.getSpeed() & 0xFF);
-	data[10] = (byte) (leftMotor.getPwmSpeed() & 0xFF);
+	data[10] = (byte) (abs(leftMotor.getPwmSpeed()) & 0xFF);
 	data[11] = (byte) ((rightMotor.encoder.getTicks() >> 8) & 0xFF);
 	data[12] = (byte) (rightMotor.encoder.getTicks() & 0xFF);
 	data[13] = (byte) ((rightMotor.getSpeed() >> 8) & 0xFF);
 	data[14] = (byte) (rightMotor.getSpeed() & 0xFF);
-	data[15] = (byte) (rightMotor.getPwmSpeed() & 0xFF);
+	data[15] = (byte) (abs(rightMotor.getPwmSpeed()) & 0xFF);
 	data[16] = (byte) 0;  // bot snr
 	data[17] = (byte) 0;  // bot rssi
 	data[18] = (byte) 0;  // base snr
