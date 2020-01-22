@@ -152,13 +152,19 @@ void Robot::regularResponse(){
 		dataDump();
 		break;
 	case 1:
-		Serial1.print("<A,Rp>");
+		if (armResponding) {
+			Serial1.print("<A,Rp>");
+		}
 		break;
 	case 2:
-		Serial1.print("<A,Rt>");
+		if (armResponding) {
+			Serial1.print("<A,Rt>");
+		}
 		break;
 	case 3:
-		Serial1.print("<A,Rs>");
+		if (armResponding) {
+			Serial1.print("<A,Rs>");
+		}
 		break;
 	}
 
@@ -204,21 +210,23 @@ void Robot::setSpeed(int32_t aLeft, int32_t aRight) {
 }
 
 
-void Robot::setDriveMode(DriveModeEnum aDriveMode){
+void Robot::setDriveMode(DriveModeEnum aDriveMode) {
 	driveMode = aDriveMode;
-	if(driveMode >= NUMBER_OF_MODES){
-		driveMode = (DriveModeEnum)((int)driveMode % NUMBER_OF_MODES);
+	if (driveMode >= NUMBER_OF_MODES) {
+		driveMode = (DriveModeEnum) ((int) driveMode % NUMBER_OF_MODES);
 	}
-	switch (driveMode){
-	case DRIVE:
-		Serial1.print("<A,CMD>");
-		break;
-	case ARM:
-		Serial1.print("<A,CMA>");
-		break;
-	case MINE:
-		Serial1.print("<A,CMM>");
-		break;
+	if (armResponding) {
+		switch (driveMode) {
+		case DRIVE:
+			Serial1.print("<A,CMD>");
+			break;
+		case ARM:
+			Serial1.print("<A,CMA>");
+			break;
+		case MINE:
+			Serial1.print("<A,CMM>");
+			break;
+		}
 	}
 }
 

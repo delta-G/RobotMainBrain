@@ -78,7 +78,7 @@ bool armEnabled = true;
 void xboxCommand(char* p) {
 	xbox.handleIncomingASCII(p + 2);
 
-	if(robot.getDriveMode() == ARM){
+	if((robot.armResponding)&&(robot.getDriveMode() == ARM)){
 		Serial1.print(p);
 	}
 	robot.regularResponse();
@@ -92,7 +92,7 @@ void xboxCommandRaw(char* p) {
 		memcpy(temp, p+1, 14);
 		temp[1] = 0x0D;  // xboxHandler Expects this
 		xbox.handleIncoming(temp);
-		if(robot.getDriveMode() == ARM){
+		if((robot.armResponding)&&(robot.getDriveMode() == ARM)){
 			for(uint8_t i=0; i<16; i++){
 				Serial1.write(p[i]);
 			}
@@ -285,7 +285,7 @@ void motorControl(char* p) {
 
 void armControl(char* p) {
 
-	if(armEnabled) {
+	if(robot.armResponding) {
 
 		Serial1.print(p);
 

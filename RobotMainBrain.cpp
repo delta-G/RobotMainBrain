@@ -50,7 +50,7 @@ Robot robot;
 
 unsigned long lastCommandTime;
 
-unsigned long commandTimeout = 1000;
+unsigned long commandTimeout = 3000;
 
 void parseCommand(char *aCommand) {
 	if (strcmp(aCommand, "<LOST_COM>") == 0) {
@@ -142,6 +142,9 @@ void bootup() {
 		}
 		// Timeout in case arm is not there
 		if (millis() - armStartTime >= ARM_BOOT_TIMEOUT) {
+			Serial1.end();
+			robot.armPresent = false;
+			robot.armResponding = false;
 			bootState = CONNECT_COM;
 		}
 
@@ -165,7 +168,6 @@ void bootup() {
 			Serial.print(gitbuf);
 			Serial.print(">");
 			bootState = CONNECT_WAIT;
-			heartbeatInterval = 2000;
 		}
 
 		break;
@@ -194,6 +196,7 @@ void bootup() {
 					if (started) {
 						if (strcmp(waitBuf, COM_CONNECT_STRING) == 0) {
 							bootState = RUNNING;
+							heartbeatInterval = 2000;
 						}
 					} else {
 						if (strcmp(waitBuf, COM_START_STRING) == 0) {
@@ -201,11 +204,13 @@ void bootup() {
 							waitBuf[windx] = 0;
 							started = true;  // next packet should be connection
 							waitRec = false;  // wait for another SOP
+							heartbeatInterval = 1000;
 						}
 
 						//  BackDoor for testing
 						else if (strcmp(waitBuf, "<GO>") == 0) {
 							bootState = RUNNING; // this will break the while loop calling us
+							heartbeatInterval = 2000;
 						}
 
 					}

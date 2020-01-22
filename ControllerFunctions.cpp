@@ -129,25 +129,27 @@ void mainControllerLoop() {
 }
 
 void panTiltStick(int aPan, int aTilt) {
-	static char followOrUse = 'J';
-	int panVal = aPan;
-	int tiltVal = aTilt;
+	if (robot_ptr->armResponding) {
+		static char followOrUse = 'J';
+		int panVal = aPan;
+		int tiltVal = aTilt;
 
-	if (xbox_ptr->isClicked(L3)) {
-		if (followOrUse == 'J') {
-			followOrUse = 'F';
-		} else if (followOrUse == 'F') {
-			followOrUse = 'J';
+		if (xbox_ptr->isClicked(L3)) {
+			if (followOrUse == 'J') {
+				followOrUse = 'F';
+			} else if (followOrUse == 'F') {
+				followOrUse = 'J';
+			}
 		}
-	}
 
-	Serial1.print("<A,S6,");
-	Serial1.print(followOrUse);
-	Serial1.print(panVal);
-	Serial1.print(",S7,");
-	Serial1.print(followOrUse);
-	Serial1.print(tiltVal);
-	Serial1.print(">");
+		Serial1.print("<A,S6,");
+		Serial1.print(followOrUse);
+		Serial1.print(panVal);
+		Serial1.print(",S7,");
+		Serial1.print(followOrUse);
+		Serial1.print(tiltVal);
+		Serial1.print(">");
+	}
 }
 
 void robotButtonMode(){
@@ -177,27 +179,27 @@ void robotButtonMode(){
 }
 
 void armButtonMode() {
-	if(!armButtonModeActive){
-		xbox_ptr->clear();
-		armButtonModeActive = true;
-	}
-	if (xbox_ptr->isClicked(UP)) {
-		Serial1.print("<A,CV256>"); // Standing Up Looking Forward
-	} else if (xbox_ptr->isClicked(LEFT)) {
-		Serial1.print("<A,CV352>");   // Forward and low
-	} else if (xbox_ptr->isClicked(DOWN)) {
-		Serial1.print("<A,CV320>");   ///  Forward and as low as possible
-	} else if (xbox_ptr->isClicked(RIGHT)) {
-		Serial1.print("<A,CV288>");   ///  Sitting Scorpion Pose
-	}
-	if (xbox_ptr->isPressed(L1)) {
-		Serial1.print("<A,S0,a200>");
-	}
-	else if (xbox_ptr->isPressed(R1)) {
-		Serial1.print("<A,S0,a-200>");
-	}
-	else {
-		Serial1.print("<A,S0,J0>");
+	if (robot_ptr->armResponding) {
+		if (!armButtonModeActive) {
+			xbox_ptr->clear();
+			armButtonModeActive = true;
+		}
+		if (xbox_ptr->isClicked(UP)) {
+			Serial1.print("<A,CV256>"); // Standing Up Looking Forward
+		} else if (xbox_ptr->isClicked(LEFT)) {
+			Serial1.print("<A,CV352>");   // Forward and low
+		} else if (xbox_ptr->isClicked(DOWN)) {
+			Serial1.print("<A,CV320>");   ///  Forward and as low as possible
+		} else if (xbox_ptr->isClicked(RIGHT)) {
+			Serial1.print("<A,CV288>");   ///  Sitting Scorpion Pose
+		}
+		if (xbox_ptr->isPressed(L1)) {
+			Serial1.print("<A,S0,a200>");
+		} else if (xbox_ptr->isPressed(R1)) {
+			Serial1.print("<A,S0,a-200>");
+		} else {
+			Serial1.print("<A,S0,J0>");
+		}
 	}
 }
 
@@ -215,25 +217,27 @@ void returnControl(){
 }
 
 void dpadPanAndTilt() {
+	if (robot_ptr->armResponding) {
 
-	if (xbox_ptr->isPressed(UP)) {
-		Serial1.print("<A,S7,a");
-		Serial1.print(-200);
-		Serial1.print(">");
-	} else if (xbox_ptr->isPressed(DOWN)) {
-		Serial1.print("<A,S7,a");
-		Serial1.print(200);
-		Serial1.print(">");
-	}
+		if (xbox_ptr->isPressed(UP)) {
+			Serial1.print("<A,S7,a");
+			Serial1.print(-200);
+			Serial1.print(">");
+		} else if (xbox_ptr->isPressed(DOWN)) {
+			Serial1.print("<A,S7,a");
+			Serial1.print(200);
+			Serial1.print(">");
+		}
 
-	if (xbox_ptr->isPressed(RIGHT)) {
-		Serial1.print("<A,S6,a");
-		Serial1.print(-200);
-		Serial1.print(">");
-	} else if (xbox_ptr->isPressed(LEFT)) {
-		Serial1.print("<A,S6,a");
-		Serial1.print(200);
-		Serial1.print(">");
+		if (xbox_ptr->isPressed(RIGHT)) {
+			Serial1.print("<A,S6,a");
+			Serial1.print(-200);
+			Serial1.print(">");
+		} else if (xbox_ptr->isPressed(LEFT)) {
+			Serial1.print("<A,S6,a");
+			Serial1.print(200);
+			Serial1.print(">");
+		}
 	}
 }
 
