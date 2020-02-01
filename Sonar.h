@@ -24,21 +24,38 @@
 
 #include "Arduino.h"
 #include <PingTimer.h>
+#include <Gimbal.h>
+#include <Joint.h>
 
 class Sonar {
 
 private:
 
 	int16_t distance;
+	//  Joint (name, pin, starting pos, length, min us, min angle, max us, max angle)
+	Joint panJoint;
+	Joint tiltJoint;
+
+	GimbalClass gimbal;
 
 public:
 
-	void Sonar() : distance(0){};
+	Sonar() : distance(1234),panJoint(19, 1500, 0, 544, 0, 2400, 3.1415), tiltJoint(18, 1500, 0, 544, 0, 2400, 3.1415), gimbal(&panJoint, &tiltJoint){};
 
 	void begin();
-	void run();
+	void loop();
+	void startPing();
+
+	uint8_t* dataDump();
 
 	int16_t getDistance();
+	uint16_t getPan();
+	uint16_t getTilt();
+	void setPan(uint16_t);
+	void setTilt(uint16_t);
+
+	void setPanSpeed(uint16_t);
+	void setTiltSpeed(uint16_t);
 
 };
 

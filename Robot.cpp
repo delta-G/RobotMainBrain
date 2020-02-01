@@ -47,6 +47,7 @@ void Switchable::toggle(){
 void Robot::init(){
 	leftMotor.init();
 	rightMotor.init();
+	sonar.begin();
 //	battery.initReadings();
 }
 
@@ -54,6 +55,7 @@ void Robot::mainLoop(){
 	battery.monitor();
 	leftMotor.loop();
 	rightMotor.loop();
+	sonar.loop();
 }
 
 void Robot::allStop(){
@@ -152,23 +154,26 @@ void Robot::regularResponse(){
 		dataDump();
 		break;
 	case 1:
+		sonar.dataDump();
+		break;
+	case 2:
 		if (armResponding) {
 			Serial1.print("<A,Rp>");
 		}
 		break;
-	case 2:
+	case 3:
 		if (armResponding) {
 			Serial1.print("<A,Rt>");
 		}
 		break;
-	case 3:
+	case 4:
 		if (armResponding) {
 			Serial1.print("<A,Rs>");
 		}
 		break;
 	}
 
-	if (counter >= 4){
+	if (counter >= 5){
 		counter = 0;
 	}
 }

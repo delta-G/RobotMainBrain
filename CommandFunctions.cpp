@@ -41,7 +41,8 @@ Command commands[] = {
 		{ 'V', videoControl },
 		{ 'S', armControl },
 		{ 'A', armControl },
-		{ '#', armControl }
+		{ '#', armControl },
+		{ 'U', ultrasonicControl }
 };
 
 
@@ -55,6 +56,33 @@ void testFunc(char* p) {
 		robot.rightMotor.setSpeed(speed);
 	}
 
+}
+
+
+void ultrasonicControl(char *p) {
+	switch (p[3]) {
+
+	case 'S':
+		robot.sonar.startPing();
+		break;
+	case 'P':
+		if (p[4] == 's') {
+			robot.sonar.setPanSpeed(atoi((const char*) (p + 5)));
+		} else {
+			robot.sonar.setPan(atoi((const char*) (p + 4)));
+		}
+		break;
+	case 'T':
+		if (p[4] == 's') {
+			robot.sonar.setTiltSpeed(atoi((const char*) (p + 5)));
+		} else {
+			robot.sonar.setTilt(atoi((const char*) (p + 4)));
+		}
+		break;
+	default:
+		break;
+
+	}
 }
 
 
@@ -148,6 +176,10 @@ void headlightControl(char* p) {
 
 void requestFromBot(char* p) {
 	switch (p[3]) {
+
+	case 'P':
+		robot.sonar.startPing();
+		break;
 
 	case 'H':
 

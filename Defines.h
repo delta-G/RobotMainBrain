@@ -61,10 +61,10 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #define LEFT_MOTOR_ENABLE_PIN 4
 
 
-#define GIMBAL_PAN_SERVO_PIN 12
-#define GIMBAL_TILT_SERVO_PIN 13
-
-#define PING_SENSOR_PIN 14
+//#define GIMBAL_PAN_SERVO_PIN 12
+//#define GIMBAL_TILT_SERVO_PIN 13
+//
+//#define PING_SENSOR_PIN 14
 
 #define HEADLIGHT_PIN 15
 

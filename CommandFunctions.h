@@ -41,6 +41,7 @@ void motorControl(char*);
 void armControl(char*);
 void videoControl(char*);
 void headlightControl(char*);
+void ultrasonicControl(char*);
 
 void testFunc(char*);
 

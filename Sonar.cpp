@@ -23,12 +23,21 @@
 
 void Sonar::begin(){
 	ping.begin();
+//	ping.sendPing();
+	gimbal.init();
+}
+
+void Sonar::startPing(){
+//	Serial.print("<SONAR_PING>");
 	ping.sendPing();
+//	digitalWrite(13, !digitalRead(13));
 }
 
 
-void Sonar::run(){
+void Sonar::loop(){
+	gimbal.run();
 	if(ping.hasNewData()){
+//		Serial.print("<NEW_SONAR>");
 		distance = ping.getDistanceMM();
 		ping.sendPing();
 	}
@@ -38,3 +47,53 @@ int16_t Sonar::getDistance(){
 	return distance;
 }
 
+uint8_t* Sonar::dataDump(){
+
+	uint8_t dataSize = 10;
+	static uint8_t data[10];
+
+	uint16_t curpan = getPan();
+	uint16_t curtilt = getTilt();
+
+	data[0] = '<';
+	data[1] = 0x13;
+	data[2] = dataSize;
+	data[3] = ((distance >> 8) & 0xFF);
+	data[4] = (distance & 0xFF);
+	data[5] = ((curpan >> 8) & 0xFF);
+	data[6] = (curpan & 0xFF);
+	data[7] = ((curtilt >> 8) & 0xFF);
+	data[8] = (curtilt & 0xFF);
+	data[9] = '>';
+
+	for(int i=0; i<dataSize; i++){
+		Serial.write(data[i]);
+	}
+
+	return data;
+}
+
+
+void Sonar::setPan(uint16_t aTargetMicros) {
+	gimbal.getPanJoint()->setTarget(aTargetMicros);
+}
+
+void Sonar::setTilt(uint16_t aTargetMicros) {
+	gimbal.getTiltJoint()->setTarget(aTargetMicros);
+}
+
+uint16_t Sonar::getPan(){
+	return gimbal.getPanJoint()->getPosition();
+}
+
+uint16_t Sonar::getTilt(){
+	return gimbal.getTiltJoint()->getPosition();
+}
+
+void Sonar::setPanSpeed(uint16_t aPanSpeed){
+	gimbal.getPanJoint()->setSpeed(aPanSpeed);
+}
+
+void Sonar::setTiltSpeed(uint16_t aTiltSpeed){
+	gimbal.getTiltJoint()->setSpeed(aTiltSpeed);
+}

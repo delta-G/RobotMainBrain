@@ -25,6 +25,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "Defines.h"
 #include "Motor.h"
 #include "Battery.h"
+#include "Sonar.h"
 
 
 class Switchable {
@@ -68,6 +69,8 @@ public:
 
 	Battery battery;
 
+	Sonar sonar;
+
 	uint8_t throttle;
 
 	boolean armPresent;
@@ -80,7 +83,10 @@ public:
 			leftMotor(LEFT_MOTOR_DIRECTION_PIN, LEFT_MOTOR_ENABLE_PIN, true),
 			rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false),
 	        battery(BATTERY_PIN, 1000),
-			throttle(255){};
+			sonar(),
+			throttle(255),
+			armPresent(false),
+			armResponding(false){};
 
 	void init();
 	void mainLoop();
