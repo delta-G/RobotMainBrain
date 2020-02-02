@@ -23,7 +23,6 @@
 
 void Sonar::begin(){
 	ping.begin();
-//	ping.sendPing();
 	gimbal.init();
 	state = NOT_RUNNING;
 }
