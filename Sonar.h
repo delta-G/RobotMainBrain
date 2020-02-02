@@ -27,35 +27,65 @@
 #include <Gimbal.h>
 #include <Joint.h>
 
+
+//  Let's keep a reading for every 15 degrees.  That gives us 12 sections over our
+//  180 degree range.  Plus the starting "fencepost" and we have 13 readings.
+// They are at, 0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180
+
+enum sweepStates {
+	STARTING,
+	MOVING,
+	DELAYING,
+	PINGING,
+};
+
+enum SonarStates {
+	NOT_READY,
+	NOT_RUNNING,
+	HOLDING,
+	SWEEPING,
+	NUM_SONAR_STATES
+};
+
 class Sonar {
 
 private:
+	SonarStates state;
+	sweepStates sweepState;
+	uint8_t sweepIndex;
+	boolean dumpSweep = false;
 
+	// Last set of readings taken
 	int16_t distance;
+	uint16_t curpan;
+	uint16_t curtilt;
 	//  Joint (name, pin, starting pos, length, min us, min angle, max us, max angle)
+
+	int16_t distances[13];
 	Joint panJoint;
 	Joint tiltJoint;
 
-	GimbalClass gimbal;
+
 
 public:
 
-	Sonar() : distance(1234),panJoint(19, 1500, 0, 544, 0, 2400, 3.1415), tiltJoint(18, 1500, 0, 544, 0, 2400, 3.1415), gimbal(&panJoint, &tiltJoint){};
+	GimbalClass gimbal;
+
+	Sonar() : state(NOT_READY), sweepState(STARTING), sweepIndex(0), distance(1234), curpan(0), curtilt(0),
+			panJoint(19, 1500, 0, 544, 0, 2400, 3.1415), tiltJoint(18, 1500, 0, 544, 0, 2400, 3.1415),
+			gimbal(&panJoint, &tiltJoint){};
 
 	void begin();
 	void loop();
 	void startPing();
+	void stopPing();
+
+	void sweep();
+	void startSweep();
 
 	uint8_t* dataDump();
 
 	int16_t getDistance();
-	uint16_t getPan();
-	uint16_t getTilt();
-	void setPan(uint16_t);
-	void setTilt(uint16_t);
-
-	void setPanSpeed(uint16_t);
-	void setTiltSpeed(uint16_t);
 
 };
 

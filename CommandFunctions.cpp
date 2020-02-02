@@ -67,17 +67,23 @@ void ultrasonicControl(char *p) {
 		break;
 	case 'P':
 		if (p[4] == 's') {
-			robot.sonar.setPanSpeed(atoi((const char*) (p + 5)));
+			robot.sonar.gimbal.setPanSpeed(atoi((const char*) (p + 5)));
 		} else {
-			robot.sonar.setPan(atoi((const char*) (p + 4)));
+			robot.sonar.gimbal.setPan(atoi((const char*) (p + 4)));
 		}
 		break;
 	case 'T':
 		if (p[4] == 's') {
-			robot.sonar.setTiltSpeed(atoi((const char*) (p + 5)));
+			robot.sonar.gimbal.setTiltSpeed(atoi((const char*) (p + 5)));
 		} else {
-			robot.sonar.setTilt(atoi((const char*) (p + 4)));
+			robot.sonar.gimbal.setTilt(atoi((const char*) (p + 4)));
 		}
+		break;
+	case 'X':
+		robot.sonar.stopPing();
+		break;
+	case 'W':
+		robot.sonar.startSweep();
 		break;
 	default:
 		break;
