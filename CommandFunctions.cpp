@@ -93,6 +93,9 @@ void ultrasonicControl(char *p) {
 			robot.sonar.startSweep();
 		}
 		break;
+	case 'D':
+		robot.sonar.setSweepDelay(atoi((const char*) (p + 4)));
+		break;
 	default:
 		break;
 

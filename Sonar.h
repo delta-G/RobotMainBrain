@@ -37,6 +37,7 @@ enum sweepStates {
 	MOVING,
 	DELAYING,
 	PINGING,
+	SWEEP_DELAY
 };
 
 enum SonarStates {
@@ -67,6 +68,7 @@ private:
 	Joint tiltJoint;
 
 	boolean continuousSweep = false;
+	uint16_t sweepDelay = 1000;
 
 
 
@@ -86,6 +88,7 @@ public:
 	void sweep();
 	void startSweep();
 	void setContinuous(bool);
+	void setSweepDelay(uint16_t);
 
 	uint8_t* dataDump();
 
