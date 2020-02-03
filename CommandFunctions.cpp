@@ -85,6 +85,14 @@ void ultrasonicControl(char *p) {
 	case 'W':
 		robot.sonar.startSweep();
 		break;
+	case 'C':
+		if(p[4] == '0'){
+			robot.sonar.setContinuous(false);
+		} else {
+			robot.sonar.setContinuous(true);
+			robot.sonar.startSweep();
+		}
+		break;
 	default:
 		break;
 

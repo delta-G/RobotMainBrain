@@ -25,6 +25,8 @@ void Sonar::begin(){
 	ping.begin();
 	gimbal.init();
 	state = NOT_RUNNING;
+	gimbal.setPanSpeed(1750);
+	gimbal.setTiltSpeed(1000);
 }
 
 void Sonar::startPing(){
@@ -39,9 +41,9 @@ void Sonar::stopPing(){
 }
 
 void Sonar::startSweep() {
-	if (state != SWEEPING) {
+	if ((state != SWEEP_FORW)&&(state != SWEEP_BACK)) {
 		sweepState = STARTING;
-		state = SWEEPING;
+		state = SWEEP_FORW;
 		sweep();
 	}
 }
@@ -52,8 +54,13 @@ void Sonar::sweep() {
 
 	switch (sweepState) {
 	case STARTING:
-		gimbal.setPanAngle(0);
-		sweepIndex = 0;
+		if(state == SWEEP_FORW){
+			gimbal.setPanAngle(0);
+			sweepIndex = 0;
+		} else if(state == SWEEP_BACK){
+			gimbal.setPanAngle(3.141592);
+			sweepIndex = 12;
+		}
 		sweepState = MOVING;
 		break;
 	case MOVING:
@@ -71,15 +78,36 @@ void Sonar::sweep() {
 	case PINGING:
 		if (ping.hasNewData()) {
 			distances[sweepIndex] = ping.getDistanceMM();
-			sweepIndex++;
-			if (sweepIndex < 13) {
+
+			if(state == SWEEP_FORW){
+				if(sweepIndex < 12){
+					sweepIndex++;
+				} else {
+					if(continuousSweep){
+						state = SWEEP_BACK;
+					} else {
+						state = NOT_RUNNING;
+					}
+					dumpSweep = true;
+				}
+			} else if (state == SWEEP_BACK) {
+				if(sweepIndex > 0){
+					sweepIndex--;
+				} else {
+					if(continuousSweep){
+						state = SWEEP_FORW;
+					} else {
+						state = NOT_RUNNING;
+					}
+					dumpSweep = true;
+				}
+			}
+			if (state == SWEEP_FORW || state == SWEEP_BACK) {
 				gimbal.setPanAngle(((float) sweepIndex / 12.0) * 3.141592);
 				sweepState = MOVING;
 			} else {
 				gimbal.setPanAngle(1.570796);
 				sweepState = STARTING;
-				state = NOT_RUNNING;
-				dumpSweep = true;
 			}
 		}
 		break;
@@ -87,9 +115,13 @@ void Sonar::sweep() {
 
 }
 
+void Sonar::setContinuous(bool aBool){
+	continuousSweep = aBool;
+}
+
 void Sonar::loop() {
 	gimbal.run();
-	if (state == SWEEPING) {
+	if (state == SWEEP_FORW || state == SWEEP_BACK) {
 		sweep();
 	} else {
 		if (ping.hasNewData()) {

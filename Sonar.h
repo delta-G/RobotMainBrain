@@ -43,7 +43,8 @@ enum SonarStates {
 	NOT_READY,
 	NOT_RUNNING,
 	HOLDING,
-	SWEEPING,
+	SWEEP_FORW,
+	SWEEP_BACK,
 	NUM_SONAR_STATES
 };
 
@@ -65,6 +66,8 @@ private:
 	Joint panJoint;
 	Joint tiltJoint;
 
+	boolean continuousSweep = false;
+
 
 
 public:
@@ -82,6 +85,7 @@ public:
 
 	void sweep();
 	void startSweep();
+	void setContinuous(bool);
 
 	uint8_t* dataDump();
 
