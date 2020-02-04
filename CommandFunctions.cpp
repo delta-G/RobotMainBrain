@@ -100,6 +100,9 @@ void ultrasonicControl(char *p) {
 			robot.sonar.setHoldDelay(atoi((const char*) (p + 5)));
 		}
 		break;
+	case 'Z':
+		robot.sonar.parkSensor();
+		break;
 	default:
 		break;
 

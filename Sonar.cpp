@@ -169,6 +169,11 @@ void Sonar::loop() {
 	}
 }
 
+void Sonar::parkSensor(){
+	gimbal.setPan(1450);
+	gimbal.setTilt(550);
+}
+
 int16_t Sonar::getDistance(){
 	return distance;
 }

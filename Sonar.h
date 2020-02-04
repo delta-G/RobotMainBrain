@@ -91,6 +91,8 @@ public:
 	void setSweepDelay(uint16_t);
 	void setHoldDelay(uint16_t);
 
+	void parkSensor();
+
 	uint8_t* dataDump();
 
 	int16_t getDistance();
