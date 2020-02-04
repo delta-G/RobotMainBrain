@@ -44,6 +44,7 @@ enum SonarStates {
 	NOT_READY,
 	NOT_RUNNING,
 	HOLDING,
+	HOLD_DELAY,
 	SWEEP_FORW,
 	SWEEP_BACK,
 	NUM_SONAR_STATES
@@ -52,16 +53,15 @@ enum SonarStates {
 class Sonar {
 
 private:
-	SonarStates state;
-	sweepStates sweepState;
-	uint8_t sweepIndex;
+	SonarStates state = NOT_READY;
+	sweepStates sweepState = STARTING;
+	uint8_t sweepIndex = 0;
 	boolean dumpSweep = false;
 
 	// Last set of readings taken
-	int16_t distance;
-	uint16_t curpan;
-	uint16_t curtilt;
-	//  Joint (name, pin, starting pos, length, min us, min angle, max us, max angle)
+	int16_t distance = -2;
+	uint16_t curpan = 0;
+	uint16_t curtilt = 0;
 
 	int16_t distances[13];
 	Joint panJoint;
@@ -70,15 +70,15 @@ private:
 	boolean continuousSweep = false;
 	uint16_t sweepDelay = 1000;
 
+	uint16_t holdDelay = 200;
+
 
 
 public:
 
 	GimbalClass gimbal;
-
-	Sonar() : state(NOT_READY), sweepState(STARTING), sweepIndex(0), distance(1234), curpan(0), curtilt(0),
-			panJoint(19, 1500, 0, 544, 0, 2400, 3.1415), tiltJoint(18, 1500, 0, 544, 0, 2400, 3.1415),
-			gimbal(&panJoint, &tiltJoint){};
+	//  Joint (name, pin, starting pos, length, min us, min angle, max us, max angle)
+	Sonar() : panJoint(19, 1500, 0, 544, 0, 2400, 3.1415), tiltJoint(18, 1500, 0, 544, 0, 2400, 3.1415), gimbal(&panJoint, &tiltJoint){};
 
 	void begin();
 	void loop();
@@ -89,6 +89,7 @@ public:
 	void startSweep();
 	void setContinuous(bool);
 	void setSweepDelay(uint16_t);
+	void setHoldDelay(uint16_t);
 
 	uint8_t* dataDump();
 

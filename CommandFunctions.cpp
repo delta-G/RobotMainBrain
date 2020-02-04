@@ -86,7 +86,7 @@ void ultrasonicControl(char *p) {
 		robot.sonar.startSweep();
 		break;
 	case 'C':
-		if(p[4] == '0'){
+		if (p[4] == '0') {
 			robot.sonar.setContinuous(false);
 		} else {
 			robot.sonar.setContinuous(true);
@@ -94,7 +94,11 @@ void ultrasonicControl(char *p) {
 		}
 		break;
 	case 'D':
-		robot.sonar.setSweepDelay(atoi((const char*) (p + 4)));
+		if (p[4] == 's') {
+			robot.sonar.setSweepDelay(atoi((const char*) (p + 5)));
+		} else if (p[4] == 'h') {
+			robot.sonar.setHoldDelay(atoi((const char*) (p + 5)));
+		}
 		break;
 	default:
 		break;

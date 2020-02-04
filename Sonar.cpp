@@ -137,17 +137,33 @@ void Sonar::setSweepDelay(uint16_t aDelay){
 	sweepDelay = aDelay;
 }
 
+void Sonar::setHoldDelay(uint16_t aDelay){
+	holdDelay = aDelay;
+}
+
 void Sonar::loop() {
+	static uint32_t delayStart = millis();
 	gimbal.run();
 	if (state == SWEEP_FORW || state == SWEEP_BACK) {
 		sweep();
-	} else {
+	}
+	else if(state == HOLD_DELAY){
+		if(millis() - delayStart >= holdDelay){
+			state = HOLDING;
+			startPing();
+		}
+	}
+	else {
 		if (ping.hasNewData()) {
 			distance = ping.getDistanceMM();
 			curpan = gimbal.getPan();
 			curtilt = gimbal.getTilt();
 			if (state == HOLDING) {
-				ping.sendPing();
+				state = HOLD_DELAY;
+				delayStart = millis();
+			}
+			else {
+				state = NOT_RUNNING;
 			}
 		}
 	}
