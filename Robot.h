@@ -76,6 +76,12 @@ public:
 	boolean armPresent;
 	boolean armResponding;
 
+	uint32_t leftTarget = 0;
+	boolean runLeftToTarget = false;
+	uint32_t rightTarget = 0;
+	boolean runRightToTarget = false;
+
+
 	Robot():camera(CAM_ENABLE),
 			arm(ARM_ENABLE),
 			headlight(HEADLIGHT_PIN),
@@ -90,6 +96,8 @@ public:
 
 	void init();
 	void mainLoop();
+	void autoLoop();
+
 	uint8_t* dataDump();
 	uint8_t getStatusByte();
 	void regularResponse();
@@ -100,6 +108,7 @@ public:
 
 	void stop();
 	void driveForward();
+	void driveForward(int32_t aDistance);
 	void driveBackward();
 	void spinLeft();
 	void spinRight();

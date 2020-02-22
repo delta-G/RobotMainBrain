@@ -42,8 +42,14 @@ Command commands[] = {
 		{ 'S', armControl },
 		{ 'A', armControl },
 		{ '#', armControl },
-		{ 'U', ultrasonicControl }
+		{ 'U', ultrasonicControl },
+		{ 'D', autoDrive }
 };
+
+void autoDrive(char* p){
+	int32_t dist = atol(p+2);
+	robot.driveForward(dist);
+}
 
 
 void testFunc(char* p) {

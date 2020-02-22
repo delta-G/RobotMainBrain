@@ -52,11 +52,46 @@ void Robot::init(){
 }
 
 void Robot::mainLoop(){
+	if(driveMode == AUTO){
+		autoLoop();
+	}
 	battery.monitor();
 	leftMotor.loop();
 	rightMotor.loop();
 	sonar.loop();
 }
+
+
+void Robot::autoLoop() {
+
+	int16_t leftOut = 0;
+	int16_t rightOut = 0;
+
+	if (runLeftToTarget) {
+		if (leftTarget < leftMotor.encoder.getTicks()) {
+			leftOut = 255;
+		} else if (leftTarget > leftMotor.encoder.getTicks()) {
+			leftOut = -255;
+		} else {
+			runLeftToTarget = false;
+			leftOut = 0;
+		}
+	}
+	if (runRightToTarget) {
+		if (rightTarget < rightMotor.encoder.getTicks()) {
+			rightOut = 255;
+		} else if (rightTarget > rightMotor.encoder.getTicks()) {
+			rightOut = -255;
+		} else {
+			runRightToTarget = false;
+			rightOut = 0;
+		}
+	}
+
+	drive(leftOut, rightOut);
+
+}
+
 
 void Robot::allStop(){
 
@@ -115,6 +150,9 @@ uint8_t Robot::getStatusByte(){
 		break;
 	case MINE:
 		retval |= 0x03;
+		break;
+	case AUTO:
+		retval |= 0x00;
 		break;
 	default:
 		break;
@@ -195,6 +233,18 @@ void Robot::stop() {
 void Robot::driveForward() {
 	drive(255,255);
 }
+
+void Robot::driveForward(int32_t aDistance){
+
+	leftTarget = leftTarget + aDistance;
+	runLeftToTarget = true;
+	rightTarget = rightTarget + aDistance;
+	runRightToTarget = true;
+
+	setDriveMode(AUTO);
+
+}
+
 void Robot::driveBackward() {
 	drive(-255,-255);
 }
@@ -230,6 +280,11 @@ void Robot::setDriveMode(DriveModeEnum aDriveMode) {
 			break;
 		case MINE:
 			Serial1.print("<A,CMM>");
+			break;
+		case AUTO:
+			Serial1.print("<A,CMT>");
+			break;
+		default:
 			break;
 		}
 	}

@@ -123,6 +123,9 @@ void mainControllerLoop() {
 
 				break;
 			}
+			case AUTO: {
+				break;
+			}
 			default: {
 				break;
 			}
@@ -168,7 +171,7 @@ void driveModeSelection() {
 	} else if (xbox_ptr->isClicked(DOWN)) {
 		robot_ptr->setDriveMode(MINE);
 	} else if (xbox_ptr->isClicked(RIGHT)) {
-		robot_ptr->setDriveMode(DRIVE);
+		robot_ptr->setDriveMode(AUTO);
 	}
 }
 
