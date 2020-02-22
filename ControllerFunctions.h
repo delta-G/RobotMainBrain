@@ -54,5 +54,6 @@ void panTiltStick(int, int);
 
 void armButtonMode();
 void robotButtonMode();
+void driveModeSelection();
 
 #endif /* CONTROLLERFUNCTIONS_H_ */

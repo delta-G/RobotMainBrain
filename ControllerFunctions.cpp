@@ -33,6 +33,7 @@ boolean started = false;
 
 boolean armButtonModeActive = false;
 boolean robotButtonModeActive = false;
+boolean driveModeSelectActive = false;
 
 unsigned int updateInterval = 20;
 
@@ -75,54 +76,57 @@ void mainControllerLoop() {
 			}
 		}
 
-		if (xbox_ptr->isClicked(Y)) {
-			robot_ptr->advanceDriveMode();
-		}
+		if (xbox_ptr->isPressed(Y)) {
+			driveModeSelection();
+		} else {
+			driveModeSelectActive = false;
 
-		switch (robot_ptr->getDriveMode()) {
+			switch (robot_ptr->getDriveMode()) {
 
-		case DRIVE:{
-			static boolean stickMode = true;
-			if (xbox_ptr->isPressed(A)) {
-				armButtonMode();
-			} else if (xbox_ptr->isPressed(B)) {
-				robotButtonMode();
-			} else {
-				if(xbox_ptr->isClicked(X)){
-					stickMode = !stickMode;
-				}
-				armButtonModeActive = false;
-				robotButtonModeActive = false;
-				dpadPanAndTilt();
-				if(stickMode){
-				driveWithTwoSticks();
+			case DRIVE: {
+				static boolean stickMode = true;
+				if (xbox_ptr->isPressed(A)) {
+					armButtonMode();
+				} else if (xbox_ptr->isPressed(B)) {
+					robotButtonMode();
 				} else {
-					driveWithTwoBrakes();
+					if (xbox_ptr->isClicked(X)) {
+						stickMode = !stickMode;
+					}
+					armButtonModeActive = false;
+					robotButtonModeActive = false;
+					dpadPanAndTilt();
+					if (stickMode) {
+						driveWithTwoSticks();
+					} else {
+						driveWithTwoBrakes();
+					}
 				}
 			}
-		}
-			break;
-		case ARM:
-			driveByDpad();
-			break;
-		case MINE: {
-			if (xbox_ptr->isPressed(A)) {
-				armButtonMode();
-			} else if (xbox_ptr->isPressed(B)){
-				robotButtonMode();
-			} else {
-				robotButtonModeActive = false;
-				armButtonModeActive = false;
-				driveWithOneStickAlg2(xbox_ptr->getHatValue(RightHatX),
-									xbox_ptr->getHatValue(RightHatY));
-				panTiltStick(-xbox_ptr->getHatValue(LeftHatX) , -xbox_ptr->getHatValue(LeftHatY));
-			}
+				break;
+			case ARM:
+				driveByDpad();
+				break;
+			case MINE: {
+				if (xbox_ptr->isPressed(A)) {
+					armButtonMode();
+				} else if (xbox_ptr->isPressed(B)) {
+					robotButtonMode();
+				} else {
+					robotButtonModeActive = false;
+					armButtonModeActive = false;
+					driveWithOneStickAlg2(xbox_ptr->getHatValue(RightHatX),
+							xbox_ptr->getHatValue(RightHatY));
+					panTiltStick(-xbox_ptr->getHatValue(LeftHatX),
+							-xbox_ptr->getHatValue(LeftHatY));
+				}
 
-			break;
-		}
-		default: {
-			break;
-		}
+				break;
+			}
+			default: {
+				break;
+			}
+			}
 		}
 
 	}
@@ -149,6 +153,22 @@ void panTiltStick(int aPan, int aTilt) {
 		Serial1.print(followOrUse);
 		Serial1.print(tiltVal);
 		Serial1.print(">");
+	}
+}
+
+void driveModeSelection() {
+	if (!driveModeSelectActive) {
+		xbox_ptr->clear();
+		driveModeSelectActive = true;
+	}
+	if (xbox_ptr->isClicked(UP)) {
+		robot_ptr->setDriveMode(DRIVE);
+	} else if (xbox_ptr->isClicked(LEFT)) {
+		robot_ptr->setDriveMode(ARM);
+	} else if (xbox_ptr->isClicked(DOWN)) {
+		robot_ptr->setDriveMode(MINE);
+	} else if (xbox_ptr->isClicked(RIGHT)) {
+		robot_ptr->setDriveMode(DRIVE);
 	}
 }
 
