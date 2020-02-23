@@ -76,9 +76,9 @@ public:
 	boolean armPresent;
 	boolean armResponding;
 
-	uint32_t leftTarget = 0;
+	int32_t leftTarget = 0;
 	boolean runLeftToTarget = false;
-	uint32_t rightTarget = 0;
+	int32_t rightTarget = 0;
 	boolean runRightToTarget = false;
 
 

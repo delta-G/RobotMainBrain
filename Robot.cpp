@@ -68,9 +68,9 @@ void Robot::autoLoop() {
 	int16_t rightOut = 0;
 
 	if (runLeftToTarget) {
-		if (leftTarget < leftMotor.encoder.getTicks()) {
+		if (leftTarget > leftMotor.encoder.getTicks()) {
 			leftOut = 255;
-		} else if (leftTarget > leftMotor.encoder.getTicks()) {
+		} else if (leftTarget < leftMotor.encoder.getTicks()) {
 			leftOut = -255;
 		} else {
 			runLeftToTarget = false;
@@ -78,9 +78,9 @@ void Robot::autoLoop() {
 		}
 	}
 	if (runRightToTarget) {
-		if (rightTarget < rightMotor.encoder.getTicks()) {
+		if (rightTarget > rightMotor.encoder.getTicks()) {
 			rightOut = 255;
-		} else if (rightTarget > rightMotor.encoder.getTicks()) {
+		} else if (rightTarget < rightMotor.encoder.getTicks()) {
 			rightOut = -255;
 		} else {
 			runRightToTarget = false;
@@ -235,10 +235,12 @@ void Robot::driveForward() {
 }
 
 void Robot::driveForward(int32_t aDistance){
+	int32_t leftCurrent = leftMotor.encoder.getTicks();
+	int32_t rightCurrent = rightMotor.encoder.getTicks();
 
-	leftTarget = leftTarget + aDistance;
+	leftTarget = leftCurrent + aDistance;
 	runLeftToTarget = true;
-	rightTarget = rightTarget + aDistance;
+	rightTarget = rightCurrent + aDistance;
 	runRightToTarget = true;
 
 	setDriveMode(AUTO);
