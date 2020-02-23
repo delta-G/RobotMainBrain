@@ -47,8 +47,31 @@ Command commands[] = {
 };
 
 void autoDrive(char* p){
-	int32_t dist = atol(p+2);
-	robot.driveForward(dist);
+
+	switch(p[2]){
+	case 'L':{
+		int32_t dist = atol(p+3);
+		robot.driveTicks(dist,0);
+		break;
+	}
+	case 'R':{
+		int32_t dist = atol(p+3);
+		robot.driveTicks(0,dist);
+		break;
+	}
+	case 'D':{
+		int32_t distL = atol(p+3);
+		char* commaPointer = strchr(p, ',');
+		int32_t distR = atol(commaPointer + 1);
+		robot.driveTicks(distL,distR);
+		break;
+	}
+	case '0'...'9':{
+		int32_t dist = atol(p+2);
+		robot.driveTicks(dist,dist);
+		break;
+	}
+	}
 }
 
 

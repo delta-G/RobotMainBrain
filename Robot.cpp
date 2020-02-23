@@ -234,15 +234,18 @@ void Robot::driveForward() {
 	drive(255,255);
 }
 
-void Robot::driveForward(int32_t aDistance){
-	int32_t leftCurrent = leftMotor.encoder.getTicks();
-	int32_t rightCurrent = rightMotor.encoder.getTicks();
-
-	leftTarget = leftCurrent + aDistance;
-	runLeftToTarget = true;
-	rightTarget = rightCurrent + aDistance;
-	runRightToTarget = true;
-
+void Robot::driveTicks(int32_t aLeft, int32_t aRight) {
+	// Use 0 to leave one motor alone and run the other.
+	if (aLeft != 0) {
+		int32_t leftCurrent = leftMotor.encoder.getTicks();
+		leftTarget = leftCurrent + aLeft;
+		runLeftToTarget = true;
+	}
+	if (aRight != 0) {
+		int32_t rightCurrent = rightMotor.encoder.getTicks();
+		rightTarget = rightCurrent + aRight;
+		runRightToTarget = true;
+	}
 	setDriveMode(AUTO);
 
 }

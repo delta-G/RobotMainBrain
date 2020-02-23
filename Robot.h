@@ -108,7 +108,7 @@ public:
 
 	void stop();
 	void driveForward();
-	void driveForward(int32_t aDistance);
+	void driveTicks(int32_t aLeft, int32_t aRight);
 	void driveBackward();
 	void spinLeft();
 	void spinRight();
