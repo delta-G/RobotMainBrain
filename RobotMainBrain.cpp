@@ -45,9 +45,6 @@ XboxHandler xbox;
 StreamParser parser(&Serial, START_OF_PACKET, END_OF_PACKET, parseCommand);
 StreamParser armParser(&Serial1, START_OF_PACKET, END_OF_PACKET, armParserCallback);
 
-
-Robot robot;
-
 unsigned long lastCommandTime;
 
 unsigned long commandTimeout = 3000;
@@ -89,7 +86,7 @@ void setup() {
 
 	analogReference(INTERNAL1V1);
 
-	initializeControllerFunctions(&robot, &Serial, &Serial1, &xbox);
+	initializeControllerFunctions(&Serial, &Serial1, &xbox);
 
 	setupPCint();  // for the encoders
 

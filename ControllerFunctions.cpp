@@ -27,7 +27,7 @@ Stream* outStream;
 
 Stream* servoStream;
 
-Robot* robot_ptr;
+Robot* robot_ptr = &robot;
 
 boolean started = false;
 
@@ -42,9 +42,8 @@ float leftOut = 0.0;
 float rightOut = 0.0;
 
 
-void initializeControllerFunctions(Robot* aRobot, Stream* aOutStream, Stream* aServStream, XboxHandler* aXbox){
+void initializeControllerFunctions(Stream* aOutStream, Stream* aServStream, XboxHandler* aXbox){
 
-	robot_ptr = aRobot;
 	outStream = aOutStream;
 	servoStream = aServStream;
 	xbox_ptr = aXbox;
@@ -78,52 +77,46 @@ void mainControllerLoop() {
 
 		if (xbox_ptr->isPressed(Y)) {
 			driveModeSelection();
+		} else if (xbox_ptr->isPressed(A)) {
+			armButtonMode();
+		} else if (xbox_ptr->isPressed(B)) {
+			robotButtonMode();
 		} else {
 			driveModeSelectActive = false;
+			armButtonModeActive = false;
+			robotButtonModeActive = false;
 
 			switch (robot_ptr->getDriveMode()) {
 
 			case DRIVE: {
 				static boolean stickMode = true;
-				if (xbox_ptr->isPressed(A)) {
-					armButtonMode();
-				} else if (xbox_ptr->isPressed(B)) {
-					robotButtonMode();
-				} else {
-					if (xbox_ptr->isClicked(X)) {
-						stickMode = !stickMode;
-					}
-					armButtonModeActive = false;
-					robotButtonModeActive = false;
-					dpadPanAndTilt();
-					if (stickMode) {
-						driveWithTwoSticks();
-					} else {
-						driveWithTwoBrakes();
-					}
+
+				if (xbox_ptr->isClicked(X)) {
+					stickMode = !stickMode;
 				}
+
+				dpadPanAndTilt();
+				if (stickMode) {
+					driveWithTwoSticks();
+				} else {
+					driveWithTwoBrakes();
+				}
+
 			}
 				break;
 			case ARM:
+				//  Arm mode mostly happens on Arm Controller
 				driveByDpad();
 				break;
 			case MINE: {
-				if (xbox_ptr->isPressed(A)) {
-					armButtonMode();
-				} else if (xbox_ptr->isPressed(B)) {
-					robotButtonMode();
-				} else {
-					robotButtonModeActive = false;
-					armButtonModeActive = false;
-					driveWithOneStickAlg2(xbox_ptr->getHatValue(RightHatX),
-							xbox_ptr->getHatValue(RightHatY));
-					panTiltStick(-xbox_ptr->getHatValue(LeftHatX),
-							-xbox_ptr->getHatValue(LeftHatY));
-				}
-
+				driveWithOneStickAlg2(xbox_ptr->getHatValue(RightHatX),
+						xbox_ptr->getHatValue(RightHatY));
+				panTiltStick(-xbox_ptr->getHatValue(LeftHatX),
+						-xbox_ptr->getHatValue(LeftHatY));
 				break;
 			}
 			case AUTO: {
+				//  AUTO mode is all handled in Robot class.
 				break;
 			}
 			default: {

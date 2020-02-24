@@ -38,7 +38,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 //	NUMBER_OF_MODES
 //};
 
-void initializeControllerFunctions(Robot*, Stream*, Stream*, XboxHandler*);
+void initializeControllerFunctions(Stream*, Stream*, XboxHandler*);
 
 void mainControllerLoop();
 void runStartup();

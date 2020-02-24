@@ -127,7 +127,7 @@ public:
 };
 
 
-
+extern Robot robot;
 
 
 

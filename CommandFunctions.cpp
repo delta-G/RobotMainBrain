@@ -23,7 +23,6 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 extern XboxHandler xbox;
 
-extern Robot robot;
 
 extern int32_t leftCounter;
 extern int32_t rightCounter;
