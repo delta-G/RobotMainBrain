@@ -37,8 +37,10 @@ Battery::Battery(uint8_t aPin, uint16_t aReadInterval) {
 void Battery::initReadings() {
 	// Fill reading array with an initial value.
 	int val = analogRead(pin);
+	val = analogRead(pin);  // read twice since we're probably at startup
 	for (int i = 0; i < NUMBER_BATTERY_READINGS_TO_AVERAGE; i++) {
 		readings[i] = val;
+		total += val;
 	}
 }
 

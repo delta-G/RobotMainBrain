@@ -48,7 +48,7 @@ void Robot::init(){
 	leftMotor.init();
 	rightMotor.init();
 	sonar.begin();
-//	battery.initReadings();
+	battery.initReadings();
 }
 
 void Robot::mainLoop(){
