@@ -119,18 +119,18 @@ void Robot::randomWalk() {
 			// Find which direction has greatest distance
 			if (sonar.getDistance(0) >= sonar.getDistance(12)) {
 				if (sonar.getDistance(6) > sonar.getDistance(0)) {
-					randomWalkState = rws_MOVING;
+					randomWalkState = rws_TURNING;
 				} else {
-					// turn left
-					driveTicks(-80, 80);
+					// turn right
+					driveTicks(80, -80);
 					randomWalkState = rws_TURNING;
 				}
 			} else {
 				if (sonar.getDistance(6) > sonar.getDistance(12)) {
-					randomWalkState = rws_MOVING;
+					randomWalkState = rws_TURNING;
 				} else {
-					//turn right
-					driveTicks(80, -80);
+					//turn left
+					driveTicks(-80, 80);
 					randomWalkState = rws_TURNING;
 				}
 			}
@@ -150,7 +150,7 @@ void Robot::randomWalk() {
 		}
 		break;
 	case rws_MOVING:
-		if (sonar.getDistance() < 100) {
+		if (sonar.getDistance() < 300) {
 			stop();
 			sonar.startSweep();
 			randomWalkState = rws_SCANNING;
