@@ -243,9 +243,6 @@ void loop() {
 }
 
 
-//  TODO :
-//  heartbeat needs to move to robot.h
-
 void heartBeat() {
 	static boolean heartState = false;
 

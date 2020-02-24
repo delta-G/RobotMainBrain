@@ -59,6 +59,8 @@ private:
 	boolean dumpSweep = false;
 	boolean scanDone = false;
 
+	boolean newDump = false;
+
 	// Last set of readings taken
 	int16_t distance = -2;
 	uint16_t curpan = 0;
@@ -111,6 +113,7 @@ public:
 	int16_t getDistance(uint8_t);
 
 	boolean scanFinished();
+	boolean hasNewDump();
 
 	void setMinAngle(float);
 	void setMaxAngle(float);

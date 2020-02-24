@@ -261,8 +261,13 @@ void Robot::regularResponse(){
 		dataDump();
 		break;
 	case 1:
-		sonar.dataDump();
-		break;
+		if (sonar.hasNewDump()) {
+			sonar.dataDump();
+			break;
+		} else {
+			counter++;
+		}
+		/* no break */
 	case 2:
 		if (armResponding) {
 			Serial1.print("<A,Rp>");

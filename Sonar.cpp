@@ -103,6 +103,7 @@ void Sonar::sweep() {
 					}
 					dumpSweep = true;
 					scanDone = true;
+					newDump = true;
 					if(sweepCallback != NULL){
 						sweepCallback();
 					}
@@ -123,6 +124,7 @@ void Sonar::sweep() {
 					}
 					dumpSweep = true;
 					scanDone = true;
+					newDump = true;
 					if(sweepCallback != NULL){
 						sweepCallback();
 					}
@@ -184,6 +186,7 @@ void Sonar::loop() {
 			if(pingCallback != NULL){
 				pingCallback();
 			}
+			newDump = true;
 		}
 	}
 }
@@ -233,7 +236,7 @@ uint8_t* Sonar::dataDump() {
 	for (int i = 0; i < dataSize; i++) {
 		Serial.write(data[i]);
 	}
-
+	newDump = false;
 	return data;
 }
 
@@ -242,6 +245,10 @@ boolean Sonar::scanFinished(){
 	boolean retval = scanDone;
 	scanDone = false;
 	return retval;
+}
+
+boolean Sonar::hasNewDump(){
+	return newDump;
 }
 
 

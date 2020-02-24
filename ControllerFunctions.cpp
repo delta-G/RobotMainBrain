@@ -27,8 +27,6 @@ Stream* outStream;
 
 Stream* servoStream;
 
-Robot* robot_ptr = &robot;
-
 boolean started = false;
 
 boolean armButtonModeActive = false;
@@ -86,7 +84,7 @@ void mainControllerLoop() {
 			armButtonModeActive = false;
 			robotButtonModeActive = false;
 
-			switch (robot_ptr->getDriveMode()) {
+			switch (robot.getDriveMode()) {
 
 			case DRIVE: {
 				static boolean stickMode = true;
@@ -129,7 +127,7 @@ void mainControllerLoop() {
 }
 
 void panTiltStick(int aPan, int aTilt) {
-	if (robot_ptr->armResponding) {
+	if (robot.armResponding) {
 		static char followOrUse = 'J';
 		int panVal = aPan;
 		int tiltVal = aTilt;
@@ -158,13 +156,13 @@ void driveModeSelection() {
 		driveModeSelectActive = true;
 	}
 	if (xbox_ptr->isClicked(UP)) {
-		robot_ptr->setDriveMode(DRIVE);
+		robot.setDriveMode(DRIVE);
 	} else if (xbox_ptr->isClicked(LEFT)) {
-		robot_ptr->setDriveMode(ARM);
+		robot.setDriveMode(ARM);
 	} else if (xbox_ptr->isClicked(DOWN)) {
-		robot_ptr->setDriveMode(MINE);
+		robot.setDriveMode(MINE);
 	} else if (xbox_ptr->isClicked(RIGHT)) {
-		robot_ptr->setDriveMode(AUTO);
+		robot.setDriveMode(AUTO);
 	}
 }
 
@@ -174,10 +172,10 @@ void robotButtonMode(){
 		robotButtonModeActive = true;
 	}
 	if (xbox_ptr->isClicked(L1)){
-		robot_ptr->headlight.toggle();
+		robot.headlight.toggle();
 	}
 
-	int throt = (int)robot_ptr->getThrottle() + (xbox_ptr->getHatValue(LeftHatY) / 3276);
+	int throt = (int)robot.getThrottle() + (xbox_ptr->getHatValue(LeftHatY) / 3276);
 	if(xbox_ptr->isPressed(UP)){
 		throt = throt + 1;
 	}
@@ -191,11 +189,11 @@ void robotButtonMode(){
 	} else if (throt > 255){
 		throt = 255;
 	}
-	robot_ptr->setThrottle(throt);
+	robot.setThrottle(throt);
 }
 
 void armButtonMode() {
-	if (robot_ptr->armResponding) {
+	if (robot.armResponding) {
 		if (!armButtonModeActive) {
 			xbox_ptr->clear();
 			armButtonModeActive = true;
@@ -233,7 +231,7 @@ void returnControl(){
 }
 
 void dpadPanAndTilt() {
-	if (robot_ptr->armResponding) {
+	if (robot.armResponding) {
 
 		if (xbox_ptr->isPressed(UP)) {
 			Serial1.print("<A,S7,a");
@@ -278,7 +276,7 @@ void driveWithTwoSticks() {
 		}
 	}
 
-	robot_ptr->drive(leftOutput,rightOutput);
+	robot.drive(leftOutput,rightOutput);
 }
 
 void driveWithTwoSticksAlg2() {
@@ -302,33 +300,33 @@ void driveWithTwoSticksAlg2() {
 		}
 	}
 
-	robot_ptr->setSpeed(leftOutput,rightOutput);
+	robot.setSpeed(leftOutput,rightOutput);
 }
 
 void driveByDpad() {
 
 	if (xbox_ptr->isPressed(UP)) {
 		if (xbox_ptr->isPressed(RIGHT)) {
-			robot_ptr->drive(255,0);
+			robot.drive(255,0);
 		} else if (xbox_ptr->isPressed(LEFT)) {
-			robot_ptr->drive(0,255);
+			robot.drive(0,255);
 		} else {
-			robot_ptr->driveForward();
+			robot.driveForward();
 		}
 	} else if (xbox_ptr->isPressed(DOWN)) {
 		if (xbox_ptr->isPressed(RIGHT)) {
-			robot_ptr->drive(-255,0);
+			robot.drive(-255,0);
 		} else if (xbox_ptr->isPressed(LEFT)) {
-			robot_ptr->drive(0,-255);
+			robot.drive(0,-255);
 		} else {
-			robot_ptr->driveBackward();
+			robot.driveBackward();
 		}
 	} else if (xbox_ptr->isPressed(LEFT)) {
-		robot_ptr->spinLeft();
+		robot.spinLeft();
 	} else if (xbox_ptr->isPressed(RIGHT)) {
-		robot_ptr->spinRight();
+		robot.spinRight();
 	} else {
-		robot_ptr->stop();
+		robot.stop();
 	}
 }
 
@@ -359,7 +357,7 @@ void driveWithOneStick() {
 	if (rightOut > 255) rightOut = 255;
 		if (rightOut < -255) rightOut = -255;
 
-	robot_ptr->drive(leftOut, rightOut);
+	robot.drive(leftOut, rightOut);
 
 }
 
@@ -411,7 +409,7 @@ void driveWithOneStickAlg2(int aXval, int aYval) {
 	}
 
 	///  Write to the motors.
-	robot_ptr->drive((int16_t)leftOut,(int16_t)rightOut);
+	robot.drive((int16_t)leftOut,(int16_t)rightOut);
 }
 
 
@@ -420,5 +418,5 @@ void driveWithTwoBrakes(){
 	int leftBrake = xbox_ptr->getTriggerValue(L2);
 	int rightBrake = xbox_ptr->getTriggerValue(R2);
 
-	robot_ptr->drive(255 - leftBrake, 255 - rightBrake);
+	robot.drive(255 - leftBrake, 255 - rightBrake);
 }
