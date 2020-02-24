@@ -57,6 +57,7 @@ private:
 	sweepStates sweepState = STARTING;
 	uint8_t sweepIndex = 0;
 	boolean dumpSweep = false;
+	boolean scanDone = false;
 
 	// Last set of readings taken
 	int16_t distance = -2;
@@ -72,18 +73,29 @@ private:
 
 	uint16_t holdDelay = 200;
 
+	float minAngle = 0.0;
+	float maxAngle = 3.14159;
+
+	void (*sweepCallback)() = 0;
+	void (*pingCallback)() = 0;
+
 
 
 public:
 
 	GimbalClass gimbal;
 	//  Joint (name, pin, starting pos, length, min us, min angle, max us, max angle)
-	Sonar() : panJoint(19, 1500, 0, 544, 0, 2400, 3.1415), tiltJoint(18, 1500, 0, 544, 0, 2400, 3.1415), gimbal(&panJoint, &tiltJoint){};
+	Sonar() : panJoint(19, 1500, 0, 544, 0, 2400, 3.1415), tiltJoint(18, 1500, 0, 544, 0, 2400, 3.1415), sweepCallback(NULL), pingCallback(NULL), gimbal(&panJoint, &tiltJoint){};
+
+	void setSweepCallback(void (*aCallback)());
+	void setPingCallback(void (*aCallback)());
 
 	void begin();
 	void loop();
 	void startPing();
 	void stopPing();
+
+
 
 	void sweep();
 	void startSweep();
@@ -96,6 +108,16 @@ public:
 	uint8_t* dataDump();
 
 	int16_t getDistance();
+	int16_t getDistance(uint8_t);
+
+	boolean scanFinished();
+
+	void setMinAngle(float);
+	void setMaxAngle(float);
+	float getMinAngle();
+	float getMaxAngle();
+
+
 
 };
 

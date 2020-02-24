@@ -66,6 +66,9 @@ void autoDrive(char* p){
 		robot.driveTicks(distL,distR);
 		break;
 	}
+	case 'W':
+		robot.startRandomWalk();
+		break;
 	case '0'...'9':{
 		int32_t dist = atol(p+2);
 		robot.driveTicks(dist,dist);

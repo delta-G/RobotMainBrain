@@ -67,31 +67,100 @@ void Robot::autoLoop() {
 	int16_t leftOut = 0;
 	int16_t rightOut = 0;
 
-	if (runLeftToTarget) {
-		if (leftTarget > leftMotor.encoder.getTicks()) {
-			leftOut = 255;
-		} else if (leftTarget < leftMotor.encoder.getTicks()) {
-			leftOut = -255;
-		} else {
-			runLeftToTarget = false;
-			leftOut = 0;
-		}
-	}
-	if (runRightToTarget) {
-		if (rightTarget > rightMotor.encoder.getTicks()) {
-			rightOut = 255;
-		} else if (rightTarget < rightMotor.encoder.getTicks()) {
-			rightOut = -255;
-		} else {
-			runRightToTarget = false;
-			rightOut = 0;
-		}
+	if(randomWalking){
+		randomWalk();
 	}
 
-	drive(leftOut, rightOut);
+	if (runLeftToTarget || runRightToTarget) {
 
+		if (runLeftToTarget) {
+			if (leftTarget > leftMotor.encoder.getTicks()) {
+				leftOut = 255;
+			} else if (leftTarget < leftMotor.encoder.getTicks()) {
+				leftOut = -255;
+			} else {
+				runLeftToTarget = false;
+				leftOut = 0;
+			}
+		}
+		if (runRightToTarget) {
+			if (rightTarget > rightMotor.encoder.getTicks()) {
+				rightOut = 255;
+			} else if (rightTarget < rightMotor.encoder.getTicks()) {
+				rightOut = -255;
+			} else {
+				runRightToTarget = false;
+				rightOut = 0;
+			}
+		}
+
+		drive(leftOut, rightOut);
+	}
 }
 
+void Robot::startRandomWalk(){
+	randomWalkState = rws_STARTING;
+	randomWalking = true;
+	setDriveMode(AUTO);
+}
+
+
+void Robot::randomWalk() {
+
+	static uint32_t delayStart = 0;
+
+	switch (randomWalkState) {
+	case rws_STARTING:
+		sonar.startSweep();
+		randomWalkState = rws_SCANNING;
+		break;
+	case rws_SCANNING:
+		if (sonar.scanFinished()) {
+			// Find which direction has greatest distance
+			if (sonar.getDistance(0) >= sonar.getDistance(12)) {
+				if (sonar.getDistance(6) > sonar.getDistance(0)) {
+					randomWalkState = rws_MOVING;
+				} else {
+					// turn left
+					driveTicks(-80, 80);
+					randomWalkState = rws_TURNING;
+				}
+			} else {
+				if (sonar.getDistance(6) > sonar.getDistance(12)) {
+					randomWalkState = rws_MOVING;
+				} else {
+					//turn right
+					driveTicks(80, -80);
+					randomWalkState = rws_TURNING;
+				}
+			}
+		}
+		break;
+	case rws_TURNING:
+		if (!(runLeftToTarget || runRightToTarget)) {
+			sonar.gimbal.setPanAngle(1.5708);
+			sonar.startPing();
+			delayStart = millis();
+			randomWalkState = rws_DELAY;
+		}
+		break;
+	case rws_DELAY:
+		if (millis() - delayStart >= 500) {
+			randomWalkState = rws_MOVING;
+		}
+		break;
+	case rws_MOVING:
+		if (sonar.getDistance() < 100) {
+			stop();
+			sonar.startSweep();
+			randomWalkState = rws_SCANNING;
+		} else {
+			driveForward();
+		}
+		break;
+	}
+
+}
 
 void Robot::allStop(){
 
@@ -228,6 +297,8 @@ uint8_t Robot::getThrottle(){
 void Robot::stop() {
 	leftMotor.stop();
 	rightMotor.stop();
+	runLeftToTarget = false;
+	runRightToTarget = false;
 }
 
 void Robot::driveForward() {
@@ -274,6 +345,11 @@ void Robot::setDriveMode(DriveModeEnum aDriveMode) {
 	driveMode = aDriveMode;
 	if (driveMode >= NUMBER_OF_MODES) {
 		driveMode = (DriveModeEnum) ((int) driveMode % NUMBER_OF_MODES);
+	}
+	if (driveMode != AUTO){
+		randomWalking = false;
+		runLeftToTarget = false;
+		runRightToTarget = false;
 	}
 	if (armResponding) {
 		switch (driveMode) {

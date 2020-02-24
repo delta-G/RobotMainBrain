@@ -20,6 +20,13 @@
 
 #include "Sonar.h"
 
+void Sonar::setSweepCallback(void (*aCallback)()){
+	sweepCallback = aCallback;
+}
+
+void Sonar::setPingCallback(void (*aCallback)()){
+	sweepCallback = aCallback;
+}
 
 void Sonar::begin(){
 	ping.begin();
@@ -55,10 +62,11 @@ void Sonar::sweep() {
 	switch (sweepState) {
 	case STARTING:
 		if(state == SWEEP_FORW){
-			gimbal.setPanAngle(0);
+			gimbal.setPanAngle(minAngle);
 			sweepIndex = 0;
+
 		} else if(state == SWEEP_BACK){
-			gimbal.setPanAngle(3.141592);
+			gimbal.setPanAngle(maxAngle);
 			sweepIndex = 12;
 		}
 		sweepState = MOVING;
@@ -94,6 +102,10 @@ void Sonar::sweep() {
 						sweepState = STARTING;
 					}
 					dumpSweep = true;
+					scanDone = true;
+					if(sweepCallback != NULL){
+						sweepCallback();
+					}
 				}
 			} else if (state == SWEEP_BACK) {
 				if (sweepIndex > 0) {
@@ -110,6 +122,10 @@ void Sonar::sweep() {
 						sweepState = STARTING;
 					}
 					dumpSweep = true;
+					scanDone = true;
+					if(sweepCallback != NULL){
+						sweepCallback();
+					}
 				}
 			}
 		}
@@ -165,6 +181,9 @@ void Sonar::loop() {
 			else {
 				state = NOT_RUNNING;
 			}
+			if(pingCallback != NULL){
+				pingCallback();
+			}
 		}
 	}
 }
@@ -176,6 +195,10 @@ void Sonar::parkSensor(){
 
 int16_t Sonar::getDistance(){
 	return distance;
+}
+
+int16_t Sonar::getDistance(uint8_t aIndex){
+	return distances[aIndex];
 }
 
 uint8_t* Sonar::dataDump() {
@@ -213,6 +236,22 @@ uint8_t* Sonar::dataDump() {
 
 	return data;
 }
+
+
+boolean Sonar::scanFinished(){
+	boolean retval = scanDone;
+	scanDone = false;
+	return retval;
+}
+
+
+
+void Sonar::setMinAngle(float aStart){minAngle = aStart;}
+void Sonar::setMaxAngle(float aEnd){maxAngle = aEnd;}
+float Sonar::getMinAngle(){return minAngle;}
+float Sonar::getMaxAngle(){return maxAngle;}
+
+
 
 
 

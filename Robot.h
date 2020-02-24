@@ -49,13 +49,16 @@ public:
 };
 
 
-
+enum RandomWalkStates {rws_STARTING, rws_SCANNING, rws_TURNING, rws_DELAY, rws_MOVING};
 
 class Robot {
 
 private:
 
 	DriveModeEnum driveMode = DRIVE;
+
+	RandomWalkStates randomWalkState = rws_STARTING;
+	boolean randomWalking = false;
 
 public:
 
@@ -97,6 +100,9 @@ public:
 	void init();
 	void mainLoop();
 	void autoLoop();
+
+	void startRandomWalk();
+	void randomWalk();
 
 	uint8_t* dataDump();
 	uint8_t getStatusByte();
