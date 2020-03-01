@@ -60,18 +60,18 @@ void mainControllerLoop() {
 			return;
 		}
 
-		// START
-		if (xbox_ptr->isClicked(START)) {
-			if (!started) {
-				runStartup();
-			}
-		}
-		//BACK
-		if (xbox_ptr->isClicked(BACK)) {
-			if (started) {
-				returnControl();
-			}
-		}
+//		// START
+//		if (xbox_ptr->isClicked(START)) {
+//			if (!started) {
+//				runStartup();
+//			}
+//		}
+//		//BACK
+//		if (xbox_ptr->isClicked(BACK)) {
+//			if (started) {
+//				returnControl();
+//			}
+//		}
 
 		if (xbox_ptr->isPressed(Y)) {
 			driveModeSelection();
@@ -198,8 +198,8 @@ void robotButtonMode(){
 	if (xbox_ptr->isClicked(RIGHT)) {
 		robot.sonar.gimbal.setTilt(600);
 	}
-	robot.sonar.gimbal.getPanJoint()->useStick(xbox_ptr->getHatValue(RightHatY));
-	robot.sonar.gimbal.getTiltJoint()->useStick(xbox_ptr->getHatValue(RightHatX));
+	robot.sonar.gimbal.getPanJoint()->useStick(xbox_ptr->getHatValue(RightHatX));
+	robot.sonar.gimbal.getTiltJoint()->useStick(xbox_ptr->getHatValue(RightHatY));
 
 
 
