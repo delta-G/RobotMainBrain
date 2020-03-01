@@ -36,10 +36,12 @@ void Sonar::begin(){
 	gimbal.setTiltSpeed(1000);
 }
 
-void Sonar::startPing(){
-	ping.sendPing();
-	if(state == NOT_RUNNING){
-		state = HOLDING;
+void Sonar::startPing() {
+	if (!(state == SWEEP_FORW || state == SWEEP_BACK)) {
+		ping.sendPing();
+		if (state == NOT_RUNNING) {
+			state = HOLDING;
+		}
 	}
 }
 
@@ -259,6 +261,8 @@ float Sonar::getMinAngle(){return minAngle;}
 float Sonar::getMaxAngle(){return maxAngle;}
 
 
-
+bool Sonar::isHolding(){
+	return (state == HOLDING || state == HOLD_DELAY);
+}
 
 

@@ -102,6 +102,8 @@ public:
 	void sweep();
 	void startSweep();
 	void setContinuous(bool);
+	bool getContinuous(){return continuousSweep;}
+	bool isHolding();
 	void setSweepDelay(uint16_t);
 	void setHoldDelay(uint16_t);
 

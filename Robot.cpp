@@ -164,8 +164,8 @@ void Robot::randomWalk() {
 
 void Robot::allStop(){
 
-	leftMotor.stop();
-	rightMotor.stop();
+	stop();
+	Serial1.print("<CX>");  // stops the arm
 
 }
 

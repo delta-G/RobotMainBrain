@@ -54,7 +54,7 @@ void mainControllerLoop() {
 
 	if (xbox_ptr->newDataAvailable()) {
 		// XBOX
-		if (xbox_ptr->isClicked(XBOX)) {
+		if (xbox_ptr->isPressed(XBOX)) {
 			// This button is for DiscoBot
 			// it means python is using the controller
 			return;
@@ -174,6 +174,34 @@ void robotButtonMode(){
 	if (xbox_ptr->isClicked(L1)){
 		robot.headlight.toggle();
 	}
+	if (xbox_ptr->isClicked(R1)) {
+		if(robot.sonar.isHolding()){
+			robot.sonar.stopPing();
+		} else {
+			robot.sonar.startPing();
+		}
+	}
+	if (xbox_ptr->isClicked(START)) {
+		if(robot.sonar.getContinuous()){
+			robot.sonar.setContinuous(false);
+		} else {
+			robot.sonar.setContinuous(true);
+			robot.sonar.startSweep();
+		}
+	}
+	if (xbox_ptr->isClicked(BACK)) {
+		robot.sonar.startSweep();
+	}
+	if (xbox_ptr->isClicked(LEFT)) {
+		robot.sonar.gimbal.setTilt(1200);
+	}
+	if (xbox_ptr->isClicked(RIGHT)) {
+		robot.sonar.gimbal.setTilt(600);
+	}
+	robot.sonar.gimbal.getPanJoint()->useStick(xbox_ptr->getHatValue(RightHatY));
+	robot.sonar.gimbal.getTiltJoint()->useStick(xbox_ptr->getHatValue(RightHatX));
+
+
 
 	int throt = (int)robot.getThrottle() + (xbox_ptr->getHatValue(LeftHatY) / 3276);
 	if(xbox_ptr->isPressed(UP)){
