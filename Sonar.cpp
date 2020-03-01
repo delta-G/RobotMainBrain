@@ -37,11 +37,9 @@ void Sonar::begin(){
 }
 
 void Sonar::startPing() {
-	if (!(state == SWEEP_FORW || state == SWEEP_BACK)) {
-		ping.sendPing();
-		if (state == NOT_RUNNING) {
-			state = HOLDING;
-		}
+	ping.sendPing();
+	if (state == NOT_RUNNING) {
+		state = HOLDING;
 	}
 }
 
