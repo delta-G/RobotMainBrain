@@ -198,8 +198,8 @@ void robotButtonMode(){
 	if (xbox_ptr->isClicked(RIGHT)) {
 		robot.sonar.gimbal.setTilt(600);
 	}
-	robot.sonar.gimbal.getPanJoint()->useStick(xbox_ptr->getHatValue(RightHatX));
-	robot.sonar.gimbal.getTiltJoint()->useStick(xbox_ptr->getHatValue(RightHatY));
+	robot.sonar.gimbal.getPanJoint()->useStick(0-(xbox_ptr->getHatValue(RightHatX)));
+	robot.sonar.gimbal.getTiltJoint()->useStick(0-(xbox_ptr->getHatValue(RightHatY)));
 
 
 
