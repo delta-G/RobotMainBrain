@@ -110,10 +110,10 @@ void mainControllerLoop() {
 				driveByDpad();
 				break;
 			case MINE: {
-				driveWithOneStickAlg2(xbox_ptr->getHatValue(RightHatX),
-						xbox_ptr->getHatValue(RightHatY));
-				panTiltStick(-xbox_ptr->getHatValue(LeftHatX),
-						-xbox_ptr->getHatValue(LeftHatY));
+				driveWithOneStickAlg2(xbox_ptr->getHatValue(LeftHatX),
+						xbox_ptr->getHatValue(LeftHatY));
+				panTiltStick(-xbox_ptr->getHatValue(RightHatX),
+						-xbox_ptr->getHatValue(RightHatY));
 				break;
 			}
 			case AUTO: {
