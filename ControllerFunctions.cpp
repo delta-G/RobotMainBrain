@@ -80,6 +80,9 @@ void mainControllerLoop() {
 		} else if (xbox_ptr->isPressed(B)) {
 			robotButtonMode();
 		} else {
+			if(driveModeSelectActive || armButtonModeActive || robotButtonModeActive){
+				xbox_ptr->clear();  // No lingering clicks from other modes.
+			}
 			driveModeSelectActive = false;
 			armButtonModeActive = false;
 			robotButtonModeActive = false;

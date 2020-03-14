@@ -48,7 +48,6 @@ void parseCommand(char*);
 void rawDataCallback(char*);
 void armParserCallback(char*);
 void armParserRawCallback(char*);
-//void monitorBattery();
 
 
 

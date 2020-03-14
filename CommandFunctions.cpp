@@ -45,6 +45,18 @@ Command commands[] = {
 		{ 'D', autoDrive }
 };
 
+
+CommandParser cp(&commands[0], NUM_ELEMENTS(commands), true);
+
+/*
+ *
+ * These functions will receive the full command with packet markers intact.
+ * Offset into these char arrays with that in mind.  p[0] will be '<' and
+ * the last char will be '>'
+ *
+ */
+
+
 void autoDrive(char* p){
 
 	switch(p[2]){
@@ -141,20 +153,7 @@ void ultrasonicControl(char *p) {
 }
 
 
-//Command armCommands[] = {
-//		{ 'C', enableArm }
-//};
 
-CommandParser cp(&commands[0], NUM_ELEMENTS(commands), true);
-//CommandParser cpArm(&Serial1, &armCommands[0], NUM_ELEMENTS(armCommands));
-
-/*
- *
- * These functions will receive the full command with packet markers intact.
- * Offset into these char arrays with that in mind.  p[0] will be '<' and
- * the last char will be '>'
- *
- */
 
 bool armEnabled = true;
 
@@ -165,7 +164,6 @@ void xboxCommand(char* p) {
 		Serial1.print(p);
 	}
 	robot.regularResponse();
-
 }
 
 void xboxCommandRaw(char* p) {

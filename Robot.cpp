@@ -251,7 +251,11 @@ uint8_t Robot::getStatusByte(){
 
 }
 
-
+/*  TODO:
+ * This is all messed up.  It wastes cycles if the arm isn't there
+ * and we need code so that if the arm isn't moving we keep sending
+ * the robot dump instead of the same data over and over from the arm
+ */
 void Robot::regularResponse(){
 
 	static uint8_t counter = 0;
