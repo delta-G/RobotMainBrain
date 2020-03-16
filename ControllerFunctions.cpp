@@ -135,7 +135,7 @@ void panTiltStick(int aPan, int aTilt) {
 		int panVal = aPan;
 		int tiltVal = aTilt;
 
-		if (xbox_ptr->isClicked(L3)) {
+		if (xbox_ptr->isClicked(R3)) {
 			if (followOrUse == 'J') {
 				followOrUse = 'F';
 			} else if (followOrUse == 'F') {
@@ -237,6 +237,9 @@ void armButtonMode() {
 			Serial1.print("<A,CV320>");   ///  Forward and as low as possible
 		} else if (xbox_ptr->isClicked(RIGHT)) {
 			Serial1.print("<A,CV288>");   ///  Sitting Scorpion Pose
+		}
+		if (xbox_ptr->isClicked(R3)) {
+			Serial1.print("<A,GC>");
 		}
 		if (xbox_ptr->isPressed(L1)) {
 			Serial1.print("<A,S0,a200>");
