@@ -91,13 +91,7 @@ void autoDrive(char* p){
 
 void testFunc(char* p) {
 
-	int32_t speed = atol(p + 4);
-	if (p[2] == 'L') {
-		robot.leftMotor.setSpeed(speed);
-	}
-	if (p[2] == 'R') {
-		robot.rightMotor.setSpeed(speed);
-	}
+	Serial.print("<RMB_RESPONDING>");
 
 }
 
