@@ -29,6 +29,7 @@ extern int32_t rightCounter;
 
 //  'E' reserved for ESP board
 Command commands[] = {
+		// 'p' and 'P' and 'l' and 'E' are used by radios
 		{ 'X', xboxCommand },
 		{ 'R', requestFromBot },
 		{ 'T', setThrottle },
@@ -227,7 +228,9 @@ void requestFromBot(char* p) {
 	case 'P':
 		robot.sonar.startPing();
 		break;
-
+	case 'F': // flush radio
+		Serial.print("<FFF>");
+		break;
 	case 'H':
 
 		if (p[4] == 'B') {
