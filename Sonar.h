@@ -75,8 +75,8 @@ private:
 
 	uint16_t holdDelay = 200;
 
-	float minAngle = 0.0;
-	float maxAngle = 3.14159;
+	float minSweepAngle = 0.0;
+	float maxSweepAngle = 3.14159;
 
 	void (*sweepCallback)() = 0;
 	void (*pingCallback)() = 0;

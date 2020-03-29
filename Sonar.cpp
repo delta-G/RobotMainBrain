@@ -62,11 +62,11 @@ void Sonar::sweep() {
 	switch (sweepState) {
 	case STARTING:
 		if(state == SWEEP_FORW){
-			gimbal.setPanAngle(minAngle);
+			gimbal.setPanAngle(minSweepAngle);
 			sweepIndex = 0;
 
 		} else if(state == SWEEP_BACK){
-			gimbal.setPanAngle(maxAngle);
+			gimbal.setPanAngle(maxSweepAngle);
 			sweepIndex = 12;
 		}
 		sweepState = MOVING;
@@ -253,10 +253,10 @@ boolean Sonar::hasNewDump(){
 
 
 
-void Sonar::setMinAngle(float aStart){minAngle = aStart;}
-void Sonar::setMaxAngle(float aEnd){maxAngle = aEnd;}
-float Sonar::getMinAngle(){return minAngle;}
-float Sonar::getMaxAngle(){return maxAngle;}
+void Sonar::setMinAngle(float aStart){minSweepAngle = aStart;}
+void Sonar::setMaxAngle(float aEnd){maxSweepAngle = aEnd;}
+float Sonar::getMinAngle(){return minSweepAngle;}
+float Sonar::getMaxAngle(){return maxSweepAngle;}
 
 
 bool Sonar::isHolding(){
