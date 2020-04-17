@@ -38,16 +38,16 @@ class EncoderInterface {
 
 private:
 
-	volatile uint32_t lastTickMicros;
-	volatile uint32_t lastDeltaMicros;
-	volatile int32_t ticks;
-	volatile boolean forward;
+	volatile uint32_t lastTickMicros = 0;
+	volatile uint32_t lastDeltaMicros = 0;
+	volatile int32_t ticks = 0;
+	volatile boolean forward = false;
 
 
 
 public:
 
-	EncoderInterface():lastTickMicros(0), lastDeltaMicros(0), ticks(0), forward(false){}
+	EncoderInterface(){}
 
 	void tick(boolean);
 	int32_t getSpeed();

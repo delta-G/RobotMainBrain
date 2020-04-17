@@ -26,6 +26,7 @@ void Motor::init(){
 	digitalWrite(directionPin, invertForward);
 	pinMode(directionPin, OUTPUT);
 	targetSpeed = 0;
+	motorPID.SetOutputLimits(-255.0, 255.0);
 }
 
 void Motor::stop(){
@@ -57,6 +58,32 @@ void Motor::drivePWM() {
 	analogWrite(enablePin, abs(pwmSpeed));
 }
 
+void Motor::setTuningByString(char* aTuningString){
+	char tuningString[30];
+	double Kp, Ki, Kd;
+	strncpy(tuningString, aTuningString, 29);
+	char* p = strtok(tuningString, ",");
+	if (*p == 'x'){
+		Kp = motorPID.GetKp();
+	} else {
+		Kp = atof(p);
+	}
+	p = strtok(NULL, ",");
+	if (*p == 'x'){
+		Ki = motorPID.GetKi();
+	} else {
+		Ki = atof(p);
+	}
+	p = strtok(NULL, ",");
+	if (*p == 'x'){
+		Kd = motorPID.GetKd();
+	} else {
+		Kd = atof(p);
+	}
+
+	motorPID.SetTunings(Kp,Ki,Kd);
+}
+
 void Motor::loop() {
 
 	static uint32_t lastLoop = millis();
@@ -64,6 +91,7 @@ void Motor::loop() {
 
 	if (thisLoop - lastLoop >= 10) {   // only every 10 ms.  One tick at full speed is like 8.5ms
 
+		//  These are all the cases for where speed is under manual control
 		if (targetSpeed == 0){
 			stop();
 			return;
@@ -81,31 +109,37 @@ void Motor::loop() {
 			return;
 		}
 
+//		/////   START HERE WE WILL CHANGE TO PID
+//		int32_t curSpeed = getSpeed();
+//
+//		if (targetSpeed > 0){
+//			if (curSpeed < targetSpeed) {
+//				if (pwmSpeed < 255) {
+//					pwmSpeed++;
+//				}
+//			} else if (curSpeed > targetSpeed) {
+//				if (pwmSpeed > 0){
+//					pwmSpeed--;
+//				}
+//			}
+//		}
+//		if (targetSpeed < 0) {
+//			if (curSpeed > targetSpeed) {
+//				if (pwmSpeed > -255) {
+//					pwmSpeed--;
+//				}
+//			} else if (curSpeed < targetSpeed) {
+//				if (pwmSpeed < 0) {
+//					pwmSpeed++;
+//				}
+//			}
+//		}
+//		///////   END HERE WE WILL CHANGE FOR PID
 
-		int32_t curSpeed = getSpeed();
-
-		if (targetSpeed > 0){
-			if (curSpeed < targetSpeed) {
-				if (pwmSpeed < 255) {
-					pwmSpeed++;
-				}
-			} else if (curSpeed > targetSpeed) {
-				if (pwmSpeed > 0){
-					pwmSpeed--;
-				}
-			}
-		}
-		if (targetSpeed < 0) {
-			if (curSpeed > targetSpeed) {
-				if (pwmSpeed > -255) {
-					pwmSpeed--;
-				}
-			} else if (curSpeed < targetSpeed) {
-				if (pwmSpeed < 0) {
-					pwmSpeed++;
-				}
-			}
-		}
+		pidInput = getSpeed();
+		pidSetpoint = targetSpeed;
+		motorPID.Compute();
+		pwmSpeed = pidOutput;
 
 		lastLoop = thisLoop;
 		drivePWM();

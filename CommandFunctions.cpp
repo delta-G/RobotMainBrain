@@ -353,20 +353,21 @@ void motorControl(char* p) {
 				robot.leftMotor.stop();
 			}
 		}
+		else if (p[2] == 'P') {
+			robot.leftMotor.setTuningByString(p+4);
+			robot.rightMotor.setTuningByString(p+4);
+		}
 	}
 	else if (p[1] == 'm') {
-		int amt = atoi(p + 4);
+		long amt = atol(p + 4);
 
 		if (p[2] == 'R') {
-			robot.rightMotor.drive(amt);
+			robot.rightMotor.setSpeed(amt);
 		}
 		else if (p[2] == 'L') {
-			robot.leftMotor.drive(amt);
+			robot.leftMotor.setSpeed(amt);
 		}
 	}
-
-
-
 }
 
 void armControl(char* p) {
