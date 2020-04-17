@@ -224,6 +224,10 @@ void headlightControl(char* p) {
 
 void requestFromBot(char* p) {
 	switch (p[3]) {
+	case 'E':  // Echo
+		Serial.print("<");
+		Serial.print(p+5);
+		break;
 
 	case 'P':
 		robot.sonar.startPing();
