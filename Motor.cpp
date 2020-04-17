@@ -177,3 +177,7 @@ void Motor::setSpeed(int32_t aTarget){
 int16_t Motor::getPwmSpeed(){
 	return pwmSpeed;
 }
+
+int32_t Motor::getTargetSpeed(){
+	return targetSpeed;
+}

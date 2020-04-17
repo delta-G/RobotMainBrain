@@ -241,6 +241,8 @@ void loop() {
 		robot.allStop();
 	}
 
+	reportSpeeds();
+
 }
 
 

@@ -66,6 +66,7 @@ public:
 
 	int32_t getSpeed();
 	int16_t getPwmSpeed();
+	int32_t getTargetSpeed();
 
 	void setSpeed(int32_t);
 	void setTuningByString(char*);
