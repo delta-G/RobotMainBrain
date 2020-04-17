@@ -22,6 +22,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "CommandFunctions.h"
 
 extern XboxHandler xbox;
+extern boolean commandTimeoutOverride;
 
 
 extern int32_t leftCounter;
@@ -228,7 +229,13 @@ void requestFromBot(char* p) {
 		Serial.print("<");
 		Serial.print(p+5);
 		break;
-
+	case 'O':  // override
+		if(p[4] == '1'){
+			commandTimeoutOverride = true;
+		} else if(p[4] == '0'){
+			commandTimeoutOverride = false;
+		}
+		break;
 	case 'P':
 		robot.sonar.startPing();
 		break;

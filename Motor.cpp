@@ -171,6 +171,7 @@ int32_t Motor::getSpeed(){
 
 void Motor::setSpeed(int32_t aTarget){
 	targetSpeed = aTarget;
+	motorPID.SetMode(AUTOMATIC);
 }
 
 int16_t Motor::getPwmSpeed(){

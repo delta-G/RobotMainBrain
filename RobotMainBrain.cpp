@@ -48,6 +48,7 @@ StreamParser armParser(&Serial1, START_OF_PACKET, END_OF_PACKET, armParserCallba
 unsigned long lastCommandTime;
 
 unsigned long commandTimeout = 3000;
+boolean commandTimeoutOverride = false;
 
 void parseCommand(char *aCommand) {
 	if (strcmp(aCommand, "<LOST_COM>") == 0) {
@@ -236,7 +237,7 @@ void loop() {
 	parser.run();          // Reads in commands from Serial
 	mainControllerLoop();  // Interacts with Xbox controller.
 
-	if(millis() - lastCommandTime >= commandTimeout){
+	if((millis() - lastCommandTime >= commandTimeout) && (!commandTimeoutOverride)){
 		robot.allStop();
 	}
 
