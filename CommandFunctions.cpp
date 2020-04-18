@@ -33,6 +33,7 @@ Command commands[] = {
 		// 'p' and 'P' and 'l' and 'E' are used by radios
 		{ 'X', xboxCommand },
 		{ 'R', requestFromBot },
+		{ 'C', configureBot },
 		{ 'T', setThrottle },
 		{ 'M', motorControl },
 		{ 'm', motorControl },
@@ -149,6 +150,36 @@ void ultrasonicControl(char *p) {
 }
 
 
+void configureBot(char *p) {
+
+	switch (p[2]) {
+	case 'P': {  // set CS0[2:0] to set PWM frequency on Timer0
+		byte val = TCCR0B;
+		val &= !7;  // clear bottom three bits (CS0[2:0])
+		if (p[3] == '1') {
+			val |= CS02;
+		}
+		if (p[4] == '1') {
+			val |= CS01;
+		}
+		if (p[5] == '1') {
+			val |= CS00;
+		}
+		TCCR0B = val;
+		break;
+	}
+	case 'O':  // override
+		if (p[4] == '1') {
+			commandTimeoutOverride = true;
+		} else if (p[4] == '0') {
+			commandTimeoutOverride = false;
+		}
+		break;
+
+	default:
+		break;
+	}
+}
 
 
 bool armEnabled = true;
@@ -229,13 +260,6 @@ void requestFromBot(char* p) {
 		Serial.print("<");
 		Serial.print(p+5);
 		break;
-	case 'O':  // override
-		if(p[4] == '1'){
-			commandTimeoutOverride = true;
-		} else if(p[4] == '0'){
-			commandTimeoutOverride = false;
-		}
-		break;
 	case 'P':
 		robot.sonar.startPing();
 		break;
@@ -243,7 +267,6 @@ void requestFromBot(char* p) {
 		Serial.print("<FFF>");
 		break;
 	case 'H':
-
 		if (p[4] == 'B') {
 			Serial.print(HBOR_STRING);
 		}

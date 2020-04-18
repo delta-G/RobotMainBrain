@@ -35,6 +35,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 void enableArm(char*);
 void xboxCommand(char*);
 void xboxCommandRaw(char*);
+void configureBot(char*);
 void requestFromBot(char*);
 void setThrottle(char*);
 void motorControl(char*);
