@@ -60,19 +60,6 @@ void mainControllerLoop() {
 			return;
 		}
 
-//		// START
-//		if (xbox_ptr->isClicked(START)) {
-//			if (!started) {
-//				runStartup();
-//			}
-//		}
-//		//BACK
-//		if (xbox_ptr->isClicked(BACK)) {
-//			if (started) {
-//				returnControl();
-//			}
-//		}
-
 		if (xbox_ptr->isPressed(Y)) {
 			driveModeSelection();
 		} else if (xbox_ptr->isPressed(A)) {
@@ -98,9 +85,9 @@ void mainControllerLoop() {
 
 				dpadPanAndTilt();
 				if (stickMode) {
-					driveWithTwoSticks();
+					driveWithTwoSticksAlg2();
 				} else {
-					driveWithTwoBrakes();
+					driveWithTwoBrakesAlg2();
 				}
 
 			}
@@ -110,7 +97,7 @@ void mainControllerLoop() {
 				driveByDpad();
 				break;
 			case MINE: {
-				driveWithOneStickAlg2(xbox_ptr->getHatValue(LeftHatX),
+				driveWithOneStickAlg3(xbox_ptr->getHatValue(LeftHatX),
 						xbox_ptr->getHatValue(LeftHatY));
 				panTiltStick(-xbox_ptr->getHatValue(RightHatX),
 						-xbox_ptr->getHatValue(RightHatY));
@@ -321,14 +308,23 @@ void driveWithTwoSticksAlg2() {
 	int16_t leftOutput = 0;
 	int16_t rightOutput = 0;
 
+	int16_t topSpeed = 112;
+
+	if((robot.leftMotor.getSpeed() < robot.rightMotor.getSpeed())&&(abs(robot.leftMotor.getPwmSpeed()) == robot.getThrottle()) && (abs(robot.leftMotor.getSpeed()) < topSpeed)){
+		topSpeed = abs(robot.leftMotor.getSpeed());
+	} else if ((abs(robot.rightMotor.getPwmSpeed()) == robot.getThrottle()) && (abs(robot.rightMotor.getSpeed()) < topSpeed)){
+		topSpeed = abs(robot.rightMotor.getSpeed());
+	}
+
+
 	if (abs(leftVal) > DEFAULT_DEADZONE) {
-		leftOutput = map(leftVal, -32768, 32767, -100, 100);
+		leftOutput = map(leftVal, -32768, 32767, 0-topSpeed, topSpeed);
 		if (abs(leftOutput) < 30) {
 			leftOutput = 0;
 		}
 	}
 	if (abs(rightVal) > DEFAULT_DEADZONE) {
-		rightOutput = map(rightVal, -32768, 32767, -100, 100);
+		rightOutput = map(rightVal, -32768, 32767, 0-topSpeed, topSpeed);
 		if (abs(rightOutput) < 30) {
 			rightOutput = 0;
 		}
@@ -446,6 +442,54 @@ void driveWithOneStickAlg2(int aXval, int aYval) {
 	robot.drive((int16_t)leftOut,(int16_t)rightOut);
 }
 
+void driveWithOneStickAlg3(int aXval, int aYval) {
+
+	int16_t xVal = aXval;
+	int16_t yVal = aYval;
+
+	float s = 0.707107;  // at pi/4 sin == cos =~= 0.707107
+
+	//  rotation matrix
+	float xRot = (xVal * s) - (yVal * s);
+	float yRot = (xVal * s) + (yVal * s);
+	//  Now left motor lies along y axis and right motor along x axis.
+	int16_t topSpeed = 112;
+
+	if ((robot.leftMotor.getSpeed() < robot.rightMotor.getSpeed())
+			&& (abs(robot.leftMotor.getPwmSpeed()) == robot.getThrottle())
+			&& (abs(robot.leftMotor.getSpeed()) < topSpeed)) {
+		topSpeed = abs(robot.leftMotor.getSpeed());
+	} else if ((abs(robot.rightMotor.getPwmSpeed()) == robot.getThrottle())
+			&& (abs(robot.rightMotor.getSpeed()) < topSpeed)) {
+		topSpeed = abs(robot.rightMotor.getSpeed());
+	}
+
+	leftOut = (yRot / 32768.0) * topSpeed;
+	rightOut = (xRot / 32768.0) * 0 - topSpeed;
+
+	if (abs(rightOut) > abs(leftOut)) {
+		leftOut = topSpeed * (leftOut / rightOut);
+		rightOut = (rightOut < 0) ? 0 - topSpeed : topSpeed;
+	} else if (abs(leftOut) > abs(rightOut)) {
+		rightOut = topSpeed * (rightOut / leftOut);
+		leftOut = (leftOut < 0) ? 0 - topSpeed : topSpeed;
+	} else {
+		rightOut = (rightOut < 0) ? 0 - topSpeed :
+					(rightOut > 0) ? topSpeed : 0;
+		leftOut = (leftOut < 0) ? 0 - topSpeed : (leftOut > 0) ? topSpeed : 0;
+	}
+	///  Some bounds Checking
+	if (abs(leftOut) < 30) {
+		leftOut = 0;
+	}
+
+	if (abs(rightOut) < 30) {
+		rightOut = 0;
+	}
+
+	robot.setSpeed(leftOut, rightOut);
+
+}
 
 void driveWithTwoBrakes(){
 
@@ -453,4 +497,25 @@ void driveWithTwoBrakes(){
 	int rightBrake = xbox_ptr->getTriggerValue(R2);
 
 	robot.drive(255 - leftBrake, 255 - rightBrake);
+}
+
+void driveWithTwoBrakesAlg2() {
+
+	int leftBrake = xbox_ptr->getTriggerValue(L2);
+	int rightBrake = xbox_ptr->getTriggerValue(R2);
+	int16_t topSpeed = 112;
+
+	if ((robot.leftMotor.getSpeed() < robot.rightMotor.getSpeed())
+			&& (abs(robot.leftMotor.getPwmSpeed()) == robot.getThrottle())
+			&& (abs(robot.leftMotor.getSpeed()) < topSpeed)) {
+		topSpeed = abs(robot.leftMotor.getSpeed());
+	} else if ((abs(robot.rightMotor.getPwmSpeed()) == robot.getThrottle())
+			&& (abs(robot.rightMotor.getSpeed()) < topSpeed)) {
+		topSpeed = abs(robot.rightMotor.getSpeed());
+	}
+
+	long leftSpeed = topSpeed - ((long)leftBrake * topSpeed / 255);
+	long rightSpeed = topSpeed - ((long)rightBrake * topSpeed / 255);
+
+	robot.setSpeed(leftSpeed, rightSpeed);
 }

@@ -49,7 +49,9 @@ void driveWithTwoSticksAlg2();
 void driveByDpad();
 void driveWithOneStick();
 void driveWithOneStickAlg2(int, int);
+void driveWithOneStickAlg3(int, int);
 void driveWithTwoBrakes();
+void driveWithTwoBrakesAlg2();
 void panTiltStick(int, int);
 
 void armButtonMode();

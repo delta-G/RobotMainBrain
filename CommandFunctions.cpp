@@ -257,12 +257,15 @@ void headlightControl(char* p) {
 
 void requestFromBot(char* p) {
 	switch (p[3]) {
-	case 'R':
+	case 'r':
 		if (p[4] == '1') {
 			runSpeedReport = true;
 		} else if (p[4] == '0') {
 			runSpeedReport = false;
 		}
+		break;
+	case 'R':
+		robot.regularResponse();
 		break;
 	case 'E':  // Echo
 		Serial.print("<");
