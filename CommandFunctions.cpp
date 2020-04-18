@@ -23,6 +23,8 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 extern XboxHandler xbox;
 extern boolean commandTimeoutOverride;
+extern boolean useSpeedBasedAlgs;
+
 extern boolean runSpeedReport;
 
 
@@ -154,6 +156,13 @@ void ultrasonicControl(char *p) {
 void configureBot(char *p) {
 
 	switch (p[2]) {
+	case 'A':
+		if (p[3] == '1') {
+			useSpeedBasedAlgs = true;
+		} else if (p[3] == '0') {
+			useSpeedBasedAlgs = false;
+		}
+		break;
 	case 'P': {  // set CS0[2:0] to set PWM frequency on Timer0
 		byte val = TCCR0B;
 		val &= !7;  // clear bottom three bits (CS0[2:0])

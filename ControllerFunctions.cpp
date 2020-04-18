@@ -33,11 +33,14 @@ boolean armButtonModeActive = false;
 boolean robotButtonModeActive = false;
 boolean driveModeSelectActive = false;
 
+extern boolean useSpeedBasedAlgs;
+
 unsigned int updateInterval = 20;
 
 
 float leftOut = 0.0;
 float rightOut = 0.0;
+
 
 
 void initializeControllerFunctions(Stream* aOutStream, Stream* aServStream, XboxHandler* aXbox){
@@ -85,9 +88,17 @@ void mainControllerLoop() {
 
 				dpadPanAndTilt();
 				if (stickMode) {
-					driveWithTwoSticksAlg2();
+					if (useSpeedBasedAlgs) {
+						driveWithTwoSticksAlg2();
+					} else {
+						driveWithTwoSticks();
+					}
 				} else {
-					driveWithTwoBrakesAlg2();
+					if (useSpeedBasedAlgs) {
+						driveWithTwoBrakesAlg2();
+					} else {
+						driveWithTwoBrakes();
+					}
 				}
 
 			}
@@ -97,8 +108,13 @@ void mainControllerLoop() {
 				driveByDpad();
 				break;
 			case MINE: {
-				driveWithOneStickAlg3(xbox_ptr->getHatValue(LeftHatX),
-						xbox_ptr->getHatValue(LeftHatY));
+				if (useSpeedBasedAlgs) {
+					driveWithOneStickAlg3(xbox_ptr->getHatValue(LeftHatX),
+							xbox_ptr->getHatValue(LeftHatY));
+				} else {
+					driveWithOneStickAlg2(xbox_ptr->getHatValue(LeftHatX),
+							xbox_ptr->getHatValue(LeftHatY));
+				}
 				panTiltStick(-xbox_ptr->getHatValue(RightHatX),
 						-xbox_ptr->getHatValue(RightHatY));
 				break;
