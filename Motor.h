@@ -55,7 +55,7 @@ public:
 //	Motor(uint8_t aDirpin, uint8_t aEnabpin, boolean aInvert) : directionPin(aDirpin), enablePin(aEnabpin), invertForward(aInvert), encoder(NULL){};
 
 	Motor(uint8_t aDirpin, uint8_t aEnabpin, boolean aInvert) : directionPin(aDirpin), enablePin(aEnabpin), invertForward(aInvert),
-			motorPID(&pidInput, &pidOutput, &pidSetpoint, 2.0, 0.0, 0.0, DIRECT){};
+			motorPID(&pidInput, &pidOutput, &pidSetpoint, 6.0, 1.0, 0.0, DIRECT){};
 
 	void init();
 

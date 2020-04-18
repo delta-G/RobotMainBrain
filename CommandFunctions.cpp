@@ -158,13 +158,13 @@ void configureBot(char *p) {
 		byte val = TCCR0B;
 		val &= !7;  // clear bottom three bits (CS0[2:0])
 		if (p[3] == '1') {
-			val |= CS02;
+			val |= (1<<CS02);
 		}
 		if (p[4] == '1') {
-			val |= CS01;
+			val |= (1<<CS01);
 		}
 		if (p[5] == '1') {
-			val |= CS00;
+			val |= (1<<CS00);
 		}
 		TCCR0B = val;
 		break;
