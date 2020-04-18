@@ -52,6 +52,8 @@ unsigned long lastCommandTime;
 unsigned long commandTimeout = 3000;
 boolean commandTimeoutOverride = false;
 
+boolean runSpeedReport = false;
+
 void parseCommand(char *aCommand) {
 	if (strcmp(aCommand, "<LOST_COM>") == 0) {
 		robot.allStop();
@@ -243,7 +245,9 @@ void loop() {
 		robot.allStop();
 	}
 
-	reportSpeeds();
+	if(runSpeedReport){
+		reportSpeeds();
+	}
 
 }
 

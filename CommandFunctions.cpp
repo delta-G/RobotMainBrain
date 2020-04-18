@@ -23,6 +23,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 extern XboxHandler xbox;
 extern boolean commandTimeoutOverride;
+extern boolean runSpeedReport;
 
 
 extern int32_t leftCounter;
@@ -169,9 +170,9 @@ void configureBot(char *p) {
 		break;
 	}
 	case 'O':  // override
-		if (p[4] == '1') {
+		if (p[3] == '1') {
 			commandTimeoutOverride = true;
-		} else if (p[4] == '0') {
+		} else if (p[3] == '0') {
 			commandTimeoutOverride = false;
 		}
 		break;
@@ -256,6 +257,13 @@ void headlightControl(char* p) {
 
 void requestFromBot(char* p) {
 	switch (p[3]) {
+	case 'R':
+		if (p[4] == '1') {
+			runSpeedReport = true;
+		} else if (p[4] == '0') {
+			runSpeedReport = false;
+		}
+		break;
 	case 'E':  // Echo
 		Serial.print("<");
 		Serial.print(p+5);
