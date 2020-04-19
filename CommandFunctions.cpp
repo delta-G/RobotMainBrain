@@ -185,6 +185,11 @@ void configureBot(char *p) {
 			commandTimeoutOverride = false;
 		}
 		break;
+	case 'm': {  // set minPWM
+		int setpt = atoi(p+3);
+		robot.setMinPWM(setpt);
+		break;
+	}
 
 	default:
 		break;

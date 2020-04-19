@@ -74,10 +74,11 @@ public:
 
 	Sonar sonar;
 
-	uint8_t throttle;
+	uint8_t throttle = 255;  // maxPWM
+	uint8_t minPWM = 127;
 
-	boolean armPresent;
-	boolean armResponding;
+	boolean armPresent = false;
+	boolean armResponding = false;
 
 	int32_t leftTarget = 0;
 	boolean runLeftToTarget = false;
@@ -92,10 +93,7 @@ public:
 			leftMotor(LEFT_MOTOR_DIRECTION_PIN, LEFT_MOTOR_ENABLE_PIN, true),
 			rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false),
 	        battery(BATTERY_PIN, 1000),
-			sonar(),
-			throttle(255),
-			armPresent(false),
-			armResponding(false){};
+			sonar(){};
 
 	void init();
 	void mainLoop();
@@ -111,6 +109,8 @@ public:
 
 	void setThrottle(uint8_t);
 	uint8_t getThrottle();
+	uint8_t getMinPWM();
+	void setMinPWM(uint8_t);
 
 	void stop();
 	void driveForward();
@@ -120,6 +120,8 @@ public:
 	void spinRight();
 	void drive(int16_t, int16_t);
 	void setSpeed(int32_t, int32_t);
+
+
 
 	void setDriveMode(DriveModeEnum);
 	DriveModeEnum getDriveMode();

@@ -303,6 +303,16 @@ uint8_t Robot::getThrottle(){
 	return throttle;
 }
 
+void Robot::setMinPWM(uint8_t aVal){
+	minPWM = aVal;
+	leftMotor.setMinPWM(aVal);
+	rightMotor.setMinPWM(aVal);
+}
+
+uint8_t Robot::getMinPWM(){
+	return minPWM;
+}
+
 void Robot::stop() {
 	leftMotor.stop();
 	rightMotor.stop();

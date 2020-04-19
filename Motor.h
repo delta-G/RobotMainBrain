@@ -39,6 +39,8 @@ class Motor {
 
 	int16_t pwmSpeed = 0;
 
+	uint8_t minPWM = 127;
+
 	PID motorPID;
 	double pidInput = 0.0;
 	double pidOutput = 0.0;
@@ -67,6 +69,9 @@ public:
 	int32_t getSpeed();
 	int16_t getPwmSpeed();
 	int32_t getTargetSpeed();
+
+	void setMinPWM(uint8_t);
+	uint8_t getMinPWM();
 
 	void setSpeed(int32_t);
 	void setTuningByString(char*);

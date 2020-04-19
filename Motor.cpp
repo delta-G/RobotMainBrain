@@ -153,10 +153,10 @@ void Motor::drive(int16_t aSpeed){
 		aSpeed = 255;
 	} else if(aSpeed < -255){
 		aSpeed = -255;
-	} else if((aSpeed > 0) && (aSpeed < 127)){
-		aSpeed = 127;
-	} else if((aSpeed < 0) && (aSpeed > -127)){
-		aSpeed = -127;
+	} else if((aSpeed > 0) && (aSpeed < minPWM)){
+		aSpeed = minPWM;
+	} else if((aSpeed < 0) && (aSpeed > (0-minPWM))){
+		aSpeed = (0-minPWM);
 	}
 	pwmSpeed = aSpeed;
 	drivePWM();
@@ -180,4 +180,12 @@ int16_t Motor::getPwmSpeed(){
 
 int32_t Motor::getTargetSpeed(){
 	return targetSpeed;
+}
+
+void Motor::setMinPWM(uint8_t aVal){
+	minPWM = aVal;
+}
+
+uint8_t Motor::getMinPWM(){
+	return minPWM;
 }

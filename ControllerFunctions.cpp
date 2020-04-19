@@ -302,13 +302,13 @@ void driveWithTwoSticks() {
 
 	if (abs(leftVal) > DEFAULT_DEADZONE) {
 		leftOutput = map(leftVal, -32768, 32767, -255, 255);
-		if (abs(leftOutput) < 127) {
+		if (abs(leftOutput) < robot.getMinPWM()) {
 			leftOutput = 0;
 		}
 	}
 	if (abs(rightVal) > DEFAULT_DEADZONE) {
 		rightOutput = map(rightVal, -32768, 32767, -255, 255);
-		if (abs(rightOutput) < 127) {
+		if (abs(rightOutput) < robot.getMinPWM()) {
 			rightOutput = 0;
 		}
 	}
@@ -389,7 +389,7 @@ void driveWithOneStick() {
 	//  Now left motor lies along y axis and right motor along x axis.
 
 	leftOut = (yRot / 32768) * 255;
-	if (abs(leftOut) < 127) {
+	if (abs(leftOut) < robot.getMinPWM()) {
 		leftOut = 0;
 	}
 	if (leftOut > 255) leftOut = 255;
@@ -397,7 +397,7 @@ void driveWithOneStick() {
 
 
 	rightOut = (xRot / 32768) * -255;
-	if (abs(rightOut) < 127) {
+	if (abs(rightOut) < robot.getMinPWM()) {
 		rightOut = 0;
 	}
 	if (rightOut > 255) rightOut = 255;
@@ -434,7 +434,7 @@ void driveWithOneStickAlg2(int aXval, int aYval) {
 	}
 
 	///  Some bounds Checking
-	if (abs(leftOut) < 127) {
+	if (abs(leftOut) < robot.getMinPWM()) {
 		leftOut = 0;
 	}
 	if (leftOut > 255) {
@@ -444,7 +444,7 @@ void driveWithOneStickAlg2(int aXval, int aYval) {
 		leftOut = -255;
 	}
 
-	if (abs(rightOut) < 127) {
+	if (abs(rightOut) < robot.getMinPWM()) {
 		rightOut = 0;
 	}
 	if (rightOut > 255) {
@@ -481,7 +481,7 @@ void driveWithOneStickAlg3(int aXval, int aYval) {
 	}
 
 	leftOut = (yRot / 32768.0) * topSpeed;
-	rightOut = (xRot / 32768.0) * 0 - topSpeed;
+	rightOut = (xRot / 32768.0) * (0 - topSpeed);
 
 	if (abs(rightOut) > abs(leftOut)) {
 		leftOut = topSpeed * (leftOut / rightOut);
