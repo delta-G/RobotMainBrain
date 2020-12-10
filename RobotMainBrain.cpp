@@ -136,6 +136,7 @@ void bootup() {
 		robot.motorPower.enable();
 		robot.comPower.enable();
 		robot.motorController.enable();
+		bootState = BOOTING;
 		break;
 
 	//   3 seconds at bootup for power to stabilize etc.
