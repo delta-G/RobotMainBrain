@@ -21,10 +21,10 @@ Encoder.cpp  --  runs on 1284P and handles motor encoders of my robot
 #include "Encoder.h"
 
 
-#define LEFT_INT_MASK 0x80
-#define LEFT_B_MASK 0x40
-#define RIGHT_INT_MASK 0x20
-#define RIGHT_B_MASK 0x10
+#define RIGHT_INT_MASK 0x80
+#define RIGHT_B_MASK 0x40
+#define LEFT_INT_MASK 0x20
+#define LEFT_B_MASK 0x10
 
 extern Robot robot;
 
