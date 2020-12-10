@@ -20,41 +20,79 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 #include "Motor.h"
 
+/*
+ *   NOTES on MC33926 motor controllers
+ *
+ *   D2 must be HIGH to drive.  D1 must be LOW but it's tied low on our board
+ *
+ *   To Drive the motor IN1 and IN2 must be opposite each other
+ *   If they are both grounded then motor will dynamic brake
+ *   To coast, D2 must be LOW to coast
+ *
+ *   The way this is written it's brakes unless you explicitly call for coasting
+ *
+ *
+ *
+ */
+
 void Motor::init(){
-	digitalWrite(enablePin, LOW);
+	coast();
 	pinMode(enablePin, OUTPUT);
-	digitalWrite(directionPin, invertForward);
-	pinMode(directionPin, OUTPUT);
-	targetSpeed = 0;
+	pinMode(directionPin1, OUTPUT);
+	pinMode(directionPin2, OUTPUT);
 	motorPID.SetOutputLimits(-255.0, 255.0);
 }
 
+void Motor::setDirection(uint8_t aDirection) {
+	if (aDirection == MOTOR_FORWARD) {
+		digitalWrite(directionPin1, invertForward);
+		digitalWrite(directionPin2, !invertForward);
+	} else if (aDirection == MOTOR_REVERSE) {
+		digitalWrite(directionPin1, !invertForward);
+		digitalWrite(directionPin2, invertForward);
+	} else if (aDirection == MOTOR_STOP) {
+		digitalWrite(directionPin1, LOW);
+		digitalWrite(directionPin2, LOW);
+	}
+}
+
+// dynamic braking
 void Motor::stop(){
+	setDirection(MOTOR_STOP);
+	digitalWrite(enablePin, HIGH);
+	pwmSpeed = 0;
+	targetSpeed = 0;
+}
+
+// no braking
+void Motor::coast(){
+	setDirection(MOTOR_STOP);
 	digitalWrite(enablePin, LOW);
 	pwmSpeed = 0;
 	targetSpeed = 0;
 }
 
 void Motor::driveForward(){
-	digitalWrite(directionPin, invertForward);
+	setDirection(MOTOR_FORWARD);
 	digitalWrite(enablePin, HIGH);
 	targetSpeed = 0x7FFFFFFF;
 }
 
 void Motor::driveBackward() {
-	digitalWrite(directionPin, !invertForward);
+	setDirection(MOTOR_REVERSE);
 	digitalWrite(enablePin, HIGH);
 	targetSpeed = 0xFFFFFFFF;
 }
 
 void Motor::drivePWM() {
 	if (pwmSpeed > 0) {
-		digitalWrite(directionPin, invertForward);
+		setDirection(MOTOR_FORWARD);
 	} else if (pwmSpeed < 0) {
-		digitalWrite(directionPin, !invertForward);
+		setDirection(MOTOR_REVERSE);
+	} else {
+		setDirection(MOTOR_STOP);
 	}
-	// if aSpeed is 0 then direction is untouched but motor turns off just like stop()
-	// otherwise the absolute value goes out there.
+	//  PWM speed of 0 will actively brake use coast() to coast.
 	analogWrite(enablePin, abs(pwmSpeed));
 }
 

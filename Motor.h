@@ -26,11 +26,17 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "EncoderInterface.h"
 #include <PID_v1.h>
 
+#define MOTOR_FORWARD 2
+#define MOTOR_REVERSE 1
+#define MOTOR_STOP 0
+
 
 class Motor {
 
-	uint8_t directionPin;
+	uint8_t directionPin1;
+	uint8_t directionPin2;
 	uint8_t enablePin;
+
 
 	uint8_t invertForward;  //HIGH / true for left LOW / false for right
 
@@ -56,15 +62,18 @@ public:
 
 //	Motor(uint8_t aDirpin, uint8_t aEnabpin, boolean aInvert) : directionPin(aDirpin), enablePin(aEnabpin), invertForward(aInvert), encoder(NULL){};
 
-	Motor(uint8_t aDirpin, uint8_t aEnabpin, boolean aInvert) : directionPin(aDirpin), enablePin(aEnabpin), invertForward(aInvert),
+	Motor(uint8_t aDirpin1, uint8_t aDirpin2, uint8_t aPwmpin, boolean aInvert) : directionPin1(aDirpin1), directionPin2(aDirpin2),enablePin(aPwmpin), invertForward(aInvert),
 			motorPID(&pidInput, &pidOutput, &pidSetpoint, 6.0, 1.0, 0.0, DIRECT){};
 
 	void init();
+
+	void setDirection(uint8_t);
 
 	void driveForward();
 	void driveBackward();
 	void drive(int16_t);
 	void stop();
+	void coast();
 
 	int32_t getSpeed();
 	int16_t getPwmSpeed();

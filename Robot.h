@@ -27,6 +27,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "Battery.h"
 #include "Sonar.h"
 
+#include <MCP23S08.h>
 
 class Switchable {
 
@@ -45,6 +46,7 @@ public:
 	void enable();
 	void disable();
 	void toggle();
+	void init(uint8_t);
 
 };
 
@@ -62,10 +64,19 @@ private:
 
 public:
 
+	MCP23S08 xpander;
+	MCP23S08 powerXpander;
+
 	Switchable camera;
 	Switchable arm;
 	Switchable headlight;
 	Switchable comPower;
+
+	Switchable motorPower;
+	Switchable motorController;
+	Switchable v12Power;
+	Switchable auxPower;
+	Switchable sonarPower;
 
 	Motor leftMotor;
 	Motor rightMotor;
@@ -86,12 +97,19 @@ public:
 	boolean runRightToTarget = false;
 
 
-	Robot():camera(CAM_ENABLE),
-			arm(ARM_ENABLE),
+	Robot():xpander(XPANDER_CS_PIN, MB_XPANDER_HW_ADDY),
+			powerXpander(XPANDER_CS_PIN, POWER_XPANDER_HW_ADDY),
+			camera(CAM_ENABLE_PIN),
+			arm(ARM_ENABLE_PIN, true),
 			headlight(HEADLIGHT_PIN),
-			comPower(COM_POWER_ENABLE),
-			leftMotor(LEFT_MOTOR_DIRECTION_PIN, LEFT_MOTOR_ENABLE_PIN, true),
-			rightMotor(RIGHT_MOTOR_DIRECTION_PIN, RIGHT_MOTOR_ENABLE_PIN, false),
+			comPower(COM_POWER_ENABLE_PIN),
+			motorPower(MOTOR_POWER_ENABLE_PIN),
+			motorController(MOTOR_CONTROLLER_ENABLE_PIN),
+			v12Power(V12_ENABLE),
+			auxPower(AUX_POWER_ENABLE_PIN),
+			sonarPower(SONAR_ENABLE_PIN),
+			leftMotor(LEFT_MOTOR_DIRECTION_PIN_1, LEFT_MOTOR_DIRECTION_PIN_2, LEFT_MOTOR_ENABLE_PIN, true),
+			rightMotor(RIGHT_MOTOR_DIRECTION_PIN_1, RIGHT_MOTOR_DIRECTION_PIN_2, RIGHT_MOTOR_ENABLE_PIN, false),
 	        battery(BATTERY_PIN, 1000),
 			sonar(){};
 

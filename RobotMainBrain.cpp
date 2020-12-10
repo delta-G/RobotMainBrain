@@ -23,6 +23,7 @@
 
 
 enum BootStates {
+	POWERUP,
 	BOOTING,
 	BOOT_ARM,
 	BOOTING_ARM,
@@ -65,21 +66,37 @@ void parseCommand(char *aCommand) {
 	}
 }
 
+void cancelStartup(){
+	Serial.begin(115200);
+	delay(250);
+	Serial.println("Hello");
+	Serial.println("The program is not ready");
+	Serial.println("Lots of things to fix first");
+	Serial.println("The motor code all has to change");
+	Serial.println("The bootup code is all wrong");
+	Serial.println("Pins have changed");
+	Serial.println("Just stop now");
+	Serial.flush();
+	while(true);
+}
+
 void setup() {
+	pinMode(4, OUTPUT); // Stop SPI from going slave while we set up
 
-	// Start with everything off
-
-	pinMode(COM_POWER_ENABLE, OUTPUT);
-	digitalWrite(COM_POWER_ENABLE, HIGH);  //except this, this is on
-
-	pinMode(ARM_ENABLE, OUTPUT);
-	digitalWrite(ARM_ENABLE, LOW);
-
-	pinMode(CAM_ENABLE, OUTPUT);
-	digitalWrite(CAM_ENABLE, LOW);
-
-	pinMode(HEADLIGHT_PIN, OUTPUT);
-	digitalWrite(HEADLIGHT_PIN, LOW);
+//	cancelStartup();
+//	// Start with everything off
+	// Happens in robot.init() now...
+//	pinMode(COM_POWER_ENABLE, OUTPUT);
+//	digitalWrite(COM_POWER_ENABLE, HIGH);  //except this, this is on
+//
+//	pinMode(ARM_ENABLE, OUTPUT);
+//	digitalWrite(ARM_ENABLE, LOW);
+//
+//	pinMode(CAM_ENABLE, OUTPUT);
+//	digitalWrite(CAM_ENABLE, LOW);
+//
+//	pinMode(HEADLIGHT_PIN, OUTPUT);
+//	digitalWrite(HEADLIGHT_PIN, LOW);
 
 	robot.init();
 
@@ -114,6 +131,12 @@ void bootup() {
 	static unsigned long comStartedTime = 0;
 
 	switch (bootState) {
+
+	case POWERUP:
+		robot.motorPower.enable();
+		robot.comPower.enable();
+		robot.motorController.enable();
+		break;
 
 	//   3 seconds at bootup for power to stabilize etc.
 	case BOOTING:

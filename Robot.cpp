@@ -22,17 +22,30 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 Robot robot;
 
-boolean Switchable::isEnabled(){
+boolean Switchable::isEnabled() {
 	return enabled;
 }
 
 void Switchable::enable() {
-	digitalWrite(pin, inverted ? LOW : HIGH);
+	if (pin < 100) {
+		digitalWrite(pin, inverted ? LOW : HIGH);
+	} else if (pin < 108) {
+		robot.xpander.writePin(pin - 100, inverted ? LOW : HIGH);
+	} else if (pin < 116) {
+		robot.powerXpander.writePin(pin - 108, inverted ? LOW : HIGH);
+	}
+
 	enabled = true;
 }
 
 void Switchable::disable() {
-	digitalWrite(pin, inverted ? HIGH : LOW);
+	if (pin < 100) {
+			digitalWrite(pin, inverted ? HIGH : LOW);
+		} else if (pin < 108) {
+			robot.xpander.writePin(pin - 100, inverted ? HIGH : LOW);
+		} else if (pin < 116) {
+			robot.powerXpander.writePin(pin - 108, inverted ? HIGH : LOW);
+		}
 	enabled = false;
 }
 
@@ -44,7 +57,44 @@ void Switchable::toggle(){
 	}
 }
 
-void Robot::init(){
+void Switchable::init(uint8_t aState) {
+	if (pin < 100) {
+		pinMode(pin, OUTPUT);
+		digitalWrite(pin, aState);
+	} else if (pin < 108) {
+		robot.xpander.setPinMode(pin - 100, OUTPUT);
+		robot.xpander.writePin(pin - 100, aState);
+	} else if (pin < 116) {
+		robot.powerXpander.setPinMode(pin - 108, OUTPUT);
+		robot.powerXpander.writePin(pin - 108, aState);
+	}
+	if(aState != inverted){
+		enabled = true;
+	} else {
+		enabled = false;
+	}
+}
+
+
+
+void Robot::init() {
+
+	pinMode(XPANDER_RESET_PIN, OUTPUT);
+	digitalWrite(XPANDER_RESET_PIN, HIGH);
+	xpander.init();
+	powerXpander.init();
+
+	camera.init(LOW);
+	arm.init(HIGH);
+	headlight.init(LOW);
+	comPower.init(LOW);
+
+	motorPower.init(LOW);
+	motorController.init(LOW);
+	v12Power.init(LOW);
+	auxPower.init(LOW);
+	sonarPower.init(LOW);
+
 	leftMotor.init();
 	rightMotor.init();
 	sonar.begin();
