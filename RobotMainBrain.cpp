@@ -98,6 +98,15 @@ void setup() {
 //	pinMode(HEADLIGHT_PIN, OUTPUT);
 //	digitalWrite(HEADLIGHT_PIN, LOW);
 
+// Setup SPI hardware bus...
+	pinMode(SCK, OUTPUT); // @suppress("Invalid arguments")
+	pinMode(MISO, INPUT); // @suppress("Invalid arguments")
+	pinMode(MOSI, OUTPUT); // @suppress("Invalid arguments")
+
+	SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0);
+	SPSR = 0;
+	SPSR = (1 << SPI2X);
+
 	robot.init();
 
 	pinMode(HEARTBEAT_PIN, OUTPUT);

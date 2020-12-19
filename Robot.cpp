@@ -225,12 +225,13 @@ void Robot::allStop(){
 
 void Robot::readSupplyVoltages(){
 
-	char data[32];
+	char data[40];
 	uint16_t battery = powerADC.read(BATTERY_ADC_PIN);
 	uint16_t V12 = powerADC.read(V12_ADC_PIN);
 	uint16_t aux = powerADC.read(AUX_ADC_PIN);
 	uint16_t main5 = powerADC.read(MAIN5_ADC_PIN);
 	uint16_t radio = powerADC.read(RADIO_ADC_PIN);
+	uint16_t motor = analogRead(0);
 
 	snprintf(data, 32, "<VR,%i,%i,%i,%i,%i>", battery, V12, aux, main5, radio);
 	Serial.print(data);
