@@ -133,9 +133,9 @@ void bootup() {
 	switch (bootState) {
 
 	case POWERUP:
-		robot.motorPower.enable();
+//		robot.motorPower.enable();
 		robot.comPower.enable();
-		robot.motorController.enable();
+//		robot.motorController.enable();
 		bootState = BOOTING;
 		break;
 

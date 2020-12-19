@@ -39,6 +39,7 @@ void configureBot(char*);
 void requestFromBot(char*);
 void setThrottle(char*);
 void motorControl(char*);
+void powerControl(char*);
 void armControl(char*);
 void videoControl(char*);
 void headlightControl(char*);

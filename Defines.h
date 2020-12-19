@@ -57,14 +57,14 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
  *
  *                                   +---\/---+
  *                            SCK   1|        |18 VDD
- *                             SI   2|        |17 GP7   Motor Controller Enable
- *                             SO   3|        |16 GP6   Arm Enable
- *                             A1   4|        |15 GP5   Sonar Enable
- *                             A0   5|        |14 GP4   M1SF Status Flag
- *                          _RESET  6|        |13 GP3   M2SF Status Flag
- *                             _CS  7|        |12 GP2
- *                       INTERRUPT  8|        |11 GP1
- *                             VSS  9|        |10 GP0
+ *                             SI   2|        |17 GP7 (107)   Motor Controller Enable
+ *                             SO   3|        |16 GP6 (106)   Arm Enable
+ *                             A1   4|        |15 GP5 (105)   Sonar Enable
+ *                             A0   5|        |14 GP4 (104)   M1SF Status Flag
+ *                          _RESET  6|        |13 GP3 (103)   M2SF Status Flag
+ *                             _CS  7|        |12 GP2 (102)
+ *                       INTERRUPT  8|        |11 GP1 (101)
+ *                             VSS  9|        |10 GP0 (100)
  *                                   +--------+
  *
  *
@@ -72,14 +72,14 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
  *
  *                                   +---\/---+
  *                            SCK   1|        |18 VDD
- *                             SI   2|        |17 GP7   Motor Power Enable
- *                             SO   3|        |16 GP6
- *                             A1   4|        |15 GP5
- *                             A0   5|        |14 GP4   12V Power Rail Enable
- *                          _RESET  6|        |13 GP3   Headlight On
- *                             _CS  7|        |12 GP2   Camera On
- *                       INTERRUPT  8|        |11 GP1   Aux Power Enable
- *                             VSS  9|        |10 GP0   Radio Enable
+ *                             SI   2|        |17 GP7 (115)   Motor Power Enable
+ *                             SO   3|        |16 GP6 (114)
+ *                             A1   4|        |15 GP5 (113)
+ *                             A0   5|        |14 GP4 (112)   12V Power Rail Enable
+ *                          _RESET  6|        |13 GP3 (111)   Headlight On
+ *                             _CS  7|        |12 GP2 (110)   Camera On
+ *                       INTERRUPT  8|        |11 GP1 (109)   Aux Power Enable
+ *                             VSS  9|        |10 GP0 (108)   Radio Enable
  *                                   +--------+
  *
  *
@@ -108,6 +108,11 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #define MB_XPANDER_HW_ADDY 0
 #define POWER_XPANDER_HW_ADDY 3
 
+#define POWER_ADC_CS_PIN 15
+
+#define LEFT_MOTOR_SF_PIN 3
+#define RIGHT_MOTOR_SF_PIN 4
+
 
 #define LEFT_MOTOR_DIRECTION_PIN_1 16
 #define LEFT_MOTOR_DIRECTION_PIN_2 17
@@ -121,8 +126,8 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #define LEFT_MOTOR_FEEDBACK_PIN A2
 #define RIGHT_MOTOR_FEEDBACK_PIN A1
 
-//#define GIMBAL_PAN_SERVO_PIN 12
-//#define GIMBAL_TILT_SERVO_PIN 13
+#define GIMBAL_PAN_SERVO_PIN 30
+#define GIMBAL_TILT_SERVO_PIN 31
 //
 //#define PING_SENSOR_PIN 14
 
@@ -145,6 +150,11 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 #define BATTERY_PIN A0
 
+#define BATTERY_ADC_PIN 0
+#define V12_ADC_PIN 1
+#define AUX_ADC_PIN 4
+#define MAIN5_ADC_PIN 6
+#define RADIO_ADC_PIN 7
 
 
 

@@ -23,6 +23,7 @@
 
 
 #include "Arduino.h"
+#include "Defines.h"
 #include <PingTimer.h>
 #include <Gimbal.h>
 #include <Joint.h>
@@ -87,7 +88,7 @@ public:
 
 	GimbalClass gimbal;
 	//  Joint (name, pin, starting pos, length, min us, min angle, max us, max angle)
-	Sonar() : panJoint(19, 1500, 0, 544, 0, 2400, 3.1415), tiltJoint(18, 1500, 0, 544, 0, 2400, 3.1415), sweepCallback(NULL), pingCallback(NULL), gimbal(&panJoint, &tiltJoint){};
+	Sonar() : panJoint(GIMBAL_PAN_SERVO_PIN, 1500, 0, 544, 0, 2400, 3.1415), tiltJoint(GIMBAL_TILT_SERVO_PIN, 1500, 0, 544, 0, 2400, 3.1415), sweepCallback(NULL), pingCallback(NULL), gimbal(&panJoint, &tiltJoint){};
 
 	void setSweepCallback(void (*aCallback)());
 	void setPingCallback(void (*aCallback)());

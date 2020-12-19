@@ -201,6 +201,9 @@ void Motor::drive(int16_t aSpeed){
 	targetSpeed = 0x7FFFFFFE;
 }
 
+uint16_t Motor::getFeedback(){
+	return analogRead(feedbackPin);
+}
 
 int32_t Motor::getSpeed(){
 	return encoder.getSpeed();

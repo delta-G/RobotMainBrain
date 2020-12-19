@@ -84,6 +84,10 @@ void Robot::init() {
 	xpander.init();
 	powerXpander.init();
 
+	xpander.writeRegister(GPINTENA, ((1<<LEFT_MOTOR_SF_PIN)|(1<<RIGHT_MOTOR_SF_PIN)));
+	xpander.writeRegister(INTCONA, 0);
+
+
 	camera.init(LOW);
 	arm.init(HIGH);
 	headlight.init(LOW);
@@ -219,6 +223,19 @@ void Robot::allStop(){
 
 }
 
+void Robot::readSupplyVoltages(){
+
+	char data[32];
+	uint16_t battery = powerADC.read(BATTERY_ADC_PIN);
+	uint16_t V12 = powerADC.read(V12_ADC_PIN);
+	uint16_t aux = powerADC.read(AUX_ADC_PIN);
+	uint16_t main5 = powerADC.read(MAIN5_ADC_PIN);
+	uint16_t radio = powerADC.read(RADIO_ADC_PIN);
+
+	snprintf(data, 32, "<VR,%i,%i,%i,%i,%i>", battery, V12, aux, main5, radio);
+	Serial.print(data);
+}
+
 uint8_t* Robot::dataDump() {
 
 	Serial.print(HBOR_STRING);
@@ -319,7 +336,7 @@ void Robot::regularResponse(){
 			sonar.dataDump();
 			break;
 		} else {
-			counter++;
+			counter++; /* no break */
 		}
 		/* no break */
 	case 2:
@@ -344,6 +361,11 @@ void Robot::regularResponse(){
 	}
 }
 
+boolean Robot::checkMotorStatus(){
+	uint8_t readByte = xpander.readIO();
+	// bits 3 and 4 are the two status flags.  Lets return true if either is low
+	return !((readByte & (1<<3)) && (readByte & (1<<4)));
+}
 
 void Robot::setThrottle(uint8_t aLevel){
 	throttle = aLevel;

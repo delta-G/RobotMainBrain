@@ -61,7 +61,59 @@ CommandParser cp(&commands[0], NUM_ELEMENTS(commands), true);
  * the last char will be '>'
  *
  */
-
+void powerControl(char* p){
+	switch(p[2]){
+	case 'R':
+		if(p[3] == '0'){
+			robot.comPower.disable();
+		} else if (p[3] == '1'){
+			robot.comPower.enable();
+		}
+		break;
+	case 'A':
+		if(p[3] == '0'){
+			robot.arm.disable();
+		} else if (p[3] == '1'){
+			robot.arm.enable();
+		}
+		break;
+	case 'a':
+		if(p[3] == '0'){
+			robot.auxPower.disable();
+		} else if (p[3] == '1'){
+			robot.auxPower.enable();
+		}
+		break;
+	case 'M':
+		if(p[3] == '0'){
+			robot.motorPower.disable();
+		} else if (p[3] == '1'){
+			robot.motorPower.enable();
+		}
+		break;
+	case 'm':
+		if(p[3] == '0'){
+			robot.motorController.disable();
+		} else if (p[3] == '1'){
+			robot.motorController.enable();
+		}
+		break;
+	case 'V':
+		if(p[3] == '0'){
+			robot.v12Power.disable();
+		} else if (p[3] == '1'){
+			robot.v12Power.enable();
+		}
+		break;
+	case 'S':
+		if(p[3] == '0'){
+			robot.sonarPower.disable();
+		} else if (p[3] == '1'){
+			robot.sonarPower.enable();
+		}
+		break;
+	}
+}
 
 void autoDrive(char* p){
 
@@ -97,7 +149,7 @@ void autoDrive(char* p){
 
 void testFunc(char* p) {
 
-	Serial.print("<RMB_RESPONDING>");
+	Serial.print(F("<RMB_RESPONDING>"));
 
 }
 
@@ -226,7 +278,7 @@ void xboxCommandRaw(char* p) {
 
 void enableArm(char* p) {
 	if (p[3] == '0'){
-		Serial.print("<Arm Responding>");
+		Serial.print(F("<Arm Responding>"));
 		armEnabled = true;
 	}
 }
@@ -282,73 +334,73 @@ void requestFromBot(char* p) {
 		robot.regularResponse();
 		break;
 	case 'E':  // Echo
-		Serial.print("<");
+		Serial.print(F("<"));
 		Serial.print(p+5);
 		break;
 	case 'P':
 		robot.sonar.startPing();
 		break;
 	case 'F': // flush radio
-		Serial.print("<FFF>");
+		Serial.print(F("<FFF>"));
 		break;
 	case 'H':
 		if (p[4] == 'B') {
-			Serial.print(HBOR_STRING);
+			Serial.print(F(HBOR_STRING));
 		}
 		break;
 	case 'G': {
 		char gitbuf[9];
 		strncpy(gitbuf, GIT_HASH, 8);
 		gitbuf[8] = 0;
-		Serial.print("<RMBGIT-");
+		Serial.print(F("<RMBGIT-"));
 		Serial.print(gitbuf);
-		Serial.print(">");
+		Serial.print(F(">"));
 		break;
 	}
 
 	case 'C':
-		Serial.print("<Cnts,");
+		Serial.print(F("<Cnts,"));
 		Serial.print(leftCounter);
-		Serial.print(",");
+		Serial.print(F(","));
 		Serial.print(rightCounter);
-		Serial.print(">");
+		Serial.print(F(">"));
 		break;
 
 
 	case 'S':
-		Serial.print("<Spd,");
+		Serial.print(F("<Spd,"));
 		Serial.print(robot.leftMotor.getSpeed());
-		Serial.print(",");
+		Serial.print(F(","));
 		Serial.print(robot.rightMotor.getSpeed());
-		Serial.print(">");
+		Serial.print(F(">"));
 		break;
 
 	case 's':
-		Serial.print("<Out,");
+		Serial.print(F("<Out,"));
 		Serial.print(robot.leftMotor.getPwmSpeed());
-		Serial.print(",");
+		Serial.print(F(","));
 		Serial.print(robot.rightMotor.getPwmSpeed());
-		Serial.print(">");
+		Serial.print(F(">"));
 		break;
 
 	case 'M':
-		Serial.print("<Cnts,");
+		Serial.print(F("<Cnts,"));
 		Serial.print(leftCounter);
-		Serial.print(",");
+		Serial.print(F(","));
 		Serial.print(rightCounter);
-		Serial.print(">");
+		Serial.print(F(">"));
 
-		Serial.print("<Spd,");
+		Serial.print(F("<Spd,"));
 		Serial.print(robot.leftMotor.getSpeed());
-		Serial.print(",");
+		Serial.print(F(","));
 		Serial.print(robot.rightMotor.getSpeed());
-		Serial.print(">");
+		Serial.print(F(">"));
 
-		Serial.print("<Out,");
+		Serial.print(F("<Out,"));
 		Serial.print(robot.leftMotor.getPwmSpeed());
-		Serial.print(",");
+		Serial.print(F(","));
 		Serial.print(robot.rightMotor.getPwmSpeed());
-		Serial.print(">");
+		Serial.print(F(">"));
 
 		break;
 
@@ -361,13 +413,16 @@ void requestFromBot(char* p) {
 		float v = robot.battery.getVoltage();
 		int r = (v - 0.79690) / 0.020104;
 
-		Serial.print("<BAT,");
+		Serial.print(F("<BAT,"));
 		Serial.print(r);
-		Serial.print(",");
+		Serial.print(F(","));
 		Serial.print(v, 1);
-		Serial.print(">");
+		Serial.print(F(">"));
 		break;
 	}
+	case 'V':
+		robot.readSupplyVoltages();
+		break;
 
 	default:
 	{
@@ -388,6 +443,11 @@ void setThrottle(char* p) {
 
 
 void motorControl(char* p) {
+	if (p[1] == 'S') {
+		if(robot.checkMotorStatus()){
+			Serial.print(F("<Motor Fail Bit Error>"));
+		}
+	}
 
 	if (p[1] == 'M') {
 		if (p[2] == 'R') {

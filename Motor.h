@@ -36,6 +36,7 @@ class Motor {
 	uint8_t directionPin1;
 	uint8_t directionPin2;
 	uint8_t enablePin;
+	uint8_t feedbackPin;
 
 
 	uint8_t invertForward;  //HIGH / true for left LOW / false for right
@@ -62,8 +63,11 @@ public:
 
 //	Motor(uint8_t aDirpin, uint8_t aEnabpin, boolean aInvert) : directionPin(aDirpin), enablePin(aEnabpin), invertForward(aInvert), encoder(NULL){};
 
-	Motor(uint8_t aDirpin1, uint8_t aDirpin2, uint8_t aPwmpin, boolean aInvert) : directionPin1(aDirpin1), directionPin2(aDirpin2),enablePin(aPwmpin), invertForward(aInvert),
-			motorPID(&pidInput, &pidOutput, &pidSetpoint, 6.0, 1.0, 0.0, DIRECT){};
+	Motor(uint8_t aDirpin1, uint8_t aDirpin2, uint8_t aPwmpin,
+			uint8_t aFeedbackPin, boolean aInvert) :
+			directionPin1(aDirpin1), directionPin2(aDirpin2), enablePin(
+					aPwmpin), feedbackPin(aFeedbackPin), invertForward(aInvert), motorPID(
+					&pidInput, &pidOutput, &pidSetpoint, 6.0, 1.0, 0.0, DIRECT) {};
 
 	void init();
 
@@ -78,6 +82,7 @@ public:
 	int32_t getSpeed();
 	int16_t getPwmSpeed();
 	int32_t getTargetSpeed();
+	uint16_t getFeedback();
 
 	void setMinPWM(uint8_t);
 	uint8_t getMinPWM();

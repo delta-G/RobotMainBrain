@@ -28,6 +28,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "Sonar.h"
 
 #include <MCP23S08.h>
+#include <MCP3008.h>
 
 class Switchable {
 
@@ -67,6 +68,8 @@ public:
 	MCP23S08 xpander;
 	MCP23S08 powerXpander;
 
+	MCP3008 powerADC;
+
 	Switchable camera;
 	Switchable arm;
 	Switchable headlight;
@@ -99,6 +102,7 @@ public:
 
 	Robot():xpander(XPANDER_CS_PIN, MB_XPANDER_HW_ADDY),
 			powerXpander(XPANDER_CS_PIN, POWER_XPANDER_HW_ADDY),
+			powerADC(POWER_ADC_CS_PIN),
 			camera(CAM_ENABLE_PIN),
 			arm(ARM_ENABLE_PIN, true),
 			headlight(HEADLIGHT_PIN),
@@ -108,8 +112,8 @@ public:
 			v12Power(V12_ENABLE),
 			auxPower(AUX_POWER_ENABLE_PIN),
 			sonarPower(SONAR_ENABLE_PIN),
-			leftMotor(LEFT_MOTOR_DIRECTION_PIN_1, LEFT_MOTOR_DIRECTION_PIN_2, LEFT_MOTOR_ENABLE_PIN, true),
-			rightMotor(RIGHT_MOTOR_DIRECTION_PIN_1, RIGHT_MOTOR_DIRECTION_PIN_2, RIGHT_MOTOR_ENABLE_PIN, false),
+			leftMotor(LEFT_MOTOR_DIRECTION_PIN_1, LEFT_MOTOR_DIRECTION_PIN_2, LEFT_MOTOR_ENABLE_PIN, LEFT_MOTOR_FEEDBACK_PIN, true),
+			rightMotor(RIGHT_MOTOR_DIRECTION_PIN_1, RIGHT_MOTOR_DIRECTION_PIN_2, RIGHT_MOTOR_ENABLE_PIN, RIGHT_MOTOR_FEEDBACK_PIN, false),
 	        battery(BATTERY_PIN, 1000),
 			sonar(){};
 
@@ -120,6 +124,7 @@ public:
 	void startRandomWalk();
 	void randomWalk();
 
+	void readSupplyVoltages();
 	uint8_t* dataDump();
 	uint8_t getStatusByte();
 	void regularResponse();
@@ -129,6 +134,8 @@ public:
 	uint8_t getThrottle();
 	uint8_t getMinPWM();
 	void setMinPWM(uint8_t);
+
+	boolean checkMotorStatus();
 
 	void stop();
 	void driveForward();
