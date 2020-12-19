@@ -233,7 +233,7 @@ void Robot::readSupplyVoltages(){
 	uint16_t radio = powerADC.read(RADIO_ADC_PIN);
 	uint16_t motor = analogRead(0);
 
-	snprintf(data, 32, "<VR,%i,%i,%i,%i,%i>", battery, V12, aux, main5, radio);
+	snprintf(data, 32, "<VR,%i,%i,%i,%i,%i,%i>", battery, V12, aux, main5, radio, motor);
 	Serial.print(data);
 }
 

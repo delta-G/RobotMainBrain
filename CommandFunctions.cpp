@@ -38,6 +38,7 @@ Command commands[] = {
 		{ 'R', requestFromBot },
 		{ 'C', configureBot },
 		{ 'T', setThrottle },
+		{ 'Q', powerControl},
 		{ 'M', motorControl },
 		{ 'm', motorControl },
 		{ 't', testFunc },
