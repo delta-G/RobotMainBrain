@@ -83,6 +83,7 @@ void Robot::init() {
 	digitalWrite(XPANDER_RESET_PIN, HIGH);
 	xpander.init();
 	powerXpander.init();
+	powerADC.init();
 
 	xpander.writeRegister(GPINTENA, ((1<<LEFT_MOTOR_SF_PIN)|(1<<RIGHT_MOTOR_SF_PIN)));
 	xpander.writeRegister(INTCONA, 0);
