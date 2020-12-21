@@ -156,6 +156,11 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #define MAIN5_ADC_PIN 6
 #define RADIO_ADC_PIN 7
 
+#define BATTERY_ADC_CAL_FACTOR 24.37
+#define V12_ADC_CAL_FACTOR 17.45
+#define AUX_ADC_CAL_FACTOR 9.25
+#define MAIN5_ADC_CAL_FACTOR 9.41
+#define RADIO_ADC_CAL_FACTOR 9.54
 
 
 #define NUMBER_BATTERY_READINGS_TO_AVERAGE 30
