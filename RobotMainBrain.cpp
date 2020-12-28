@@ -66,39 +66,11 @@ void parseCommand(char *aCommand) {
 	}
 }
 
-void cancelStartup(){
-	Serial.begin(115200);
-	delay(250);
-	Serial.println("Hello");
-	Serial.println("The program is not ready");
-	Serial.println("Lots of things to fix first");
-	Serial.println("The motor code all has to change");
-	Serial.println("The bootup code is all wrong");
-	Serial.println("Pins have changed");
-	Serial.println("Just stop now");
-	Serial.flush();
-	while(true);
-}
 
 void setup() {
 	pinMode(4, OUTPUT); // Stop SPI from going slave while we set up
 
-//	cancelStartup();
-//	// Start with everything off
-	// Happens in robot.init() now...
-//	pinMode(COM_POWER_ENABLE, OUTPUT);
-//	digitalWrite(COM_POWER_ENABLE, HIGH);  //except this, this is on
-//
-//	pinMode(ARM_ENABLE, OUTPUT);
-//	digitalWrite(ARM_ENABLE, LOW);
-//
-//	pinMode(CAM_ENABLE, OUTPUT);
-//	digitalWrite(CAM_ENABLE, LOW);
-//
-//	pinMode(HEADLIGHT_PIN, OUTPUT);
-//	digitalWrite(HEADLIGHT_PIN, LOW);
 
-// Setup SPI hardware bus...
 	pinMode(SCK, OUTPUT); // @suppress("Invalid arguments")
 	pinMode(MISO, INPUT); // @suppress("Invalid arguments")
 	pinMode(MOSI, OUTPUT); // @suppress("Invalid arguments")

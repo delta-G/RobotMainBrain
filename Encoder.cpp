@@ -43,7 +43,7 @@ ISR(PCINT2_vect){
 
 	if (whoFired & LEFT_INT_MASK) {
 		boolean forw = false;
-		if (pinsDiff & LEFT_INT_MASK) {
+		if (!(pinsDiff & LEFT_INT_MASK)) {
 			leftCounter++;
 			forw = true;
 		} else {
@@ -55,7 +55,7 @@ ISR(PCINT2_vect){
 	}
 	if (whoFired & RIGHT_INT_MASK) {
 		boolean forw = false;
-		if (pinsDiff & RIGHT_INT_MASK) {
+		if (!(pinsDiff & RIGHT_INT_MASK)) {
 			rightCounter++;
 			forw = true;
 		} else {
