@@ -424,6 +424,9 @@ void requestFromBot(char* p) {
 	case 'V':
 		robot.readSupplyVoltages();
 		break;
+	case 'v':
+		robot.reportSupplyVoltages();
+		break;
 
 	default:
 	{

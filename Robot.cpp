@@ -235,8 +235,43 @@ void Robot::readSupplyVoltages(){
 	uint16_t motor = (analogRead(0) + 29.64) / 0.05132;
 
 
-	snprintf(data, 32, "<VR,%i,%i,%i,%i,%i,%i>", battery, V12, aux, main5, radio, motor);
+	snprintf(data, 45, "<VR,%i,%i,%i,%i,%i,%i>", battery, V12, aux, main5, radio, motor);
 	Serial.print(data);
+}
+
+
+uint8_t* Robot::reportSupplyVoltages(){
+	uint16_t battery = powerADC.read(BATTERY_ADC_PIN) * BATTERY_ADC_CAL_FACTOR;
+	uint16_t V12 = powerADC.read(V12_ADC_PIN) * V12_ADC_CAL_FACTOR;
+	uint16_t aux = powerADC.read(AUX_ADC_PIN) * AUX_ADC_CAL_FACTOR;
+	uint16_t main5 = powerADC.read(MAIN5_ADC_PIN) * MAIN5_ADC_CAL_FACTOR;
+	uint16_t radio = powerADC.read(RADIO_ADC_PIN) * RADIO_ADC_CAL_FACTOR;
+	uint16_t motor = (analogRead(0) + 29.64) / 0.05132;
+
+	static uint8_t data[16];
+	data[0] = '<';
+	data[1] = 0x13;
+	data[2] = 16;
+	data[3] = (battery >> 8);
+	data[4] = (battery & 0xFF);
+	data[5] = (motor >> 8);
+	data[6] = (motor & 0xFF);
+	data[7] = (main5 >> 8);
+	data[8] = (main5 & 0xFF);
+	data[9] = (radio >> 8);
+	data[10] = (radio & 0xFF);
+	data[11] = (aux >> 8);
+	data[12] = (aux & 0xFF);
+	data[13] = (V12 >> 8);
+	data[14] = (V12 & 0xFF);
+	data[15] = '>';
+
+	for (int i = 0; i < 16; i++) {
+		Serial.write(data[i]);
+	}
+
+	return data;
+
 }
 
 uint8_t* Robot::dataDump() {
@@ -248,25 +283,26 @@ uint8_t* Robot::dataDump() {
 	data[0] = '<';
 	data[1] = 0x13;
 	data[2] =  ROBOT_DATA_DUMP_SIZE;
-	data[3] = getStatusByte();
-	data[4] = throttle;
-	data[5] = (byte) (battery.getVoltage() * 10);
-	data[6] = (byte) ((leftMotor.encoder.getTicks() >> 8) & 0xFF);
-	data[7] = (byte) (leftMotor.encoder.getTicks() & 0xFF);
-	data[8] = (byte) ((leftMotor.getSpeed() >> 8) & 0xFF);
-	data[9] = (byte) (leftMotor.getSpeed() & 0xFF);
-	data[10] = (byte) (abs(leftMotor.getPwmSpeed()) & 0xFF);
-	data[11] = (byte) ((rightMotor.encoder.getTicks() >> 8) & 0xFF);
-	data[12] = (byte) (rightMotor.encoder.getTicks() & 0xFF);
-	data[13] = (byte) ((rightMotor.getSpeed() >> 8) & 0xFF);
-	data[14] = (byte) (rightMotor.getSpeed() & 0xFF);
-	data[15] = (byte) (abs(rightMotor.getPwmSpeed()) & 0xFF);
-	data[16] = (byte) 0;  // bot snr
-	data[17] = (byte) 0;  // bot rssi
-	data[18] = (byte) 0;  // base snr
-	data[19] = (byte) 0;  // base rssi
+	data[3] = getStatusByte1();
+	data[4] = getStatusByte2();
+	data[5] = throttle;
+	data[6] = (byte) (battery.getVoltage() * 10);
+	data[7] = (byte) ((leftMotor.encoder.getTicks() >> 8) & 0xFF);
+	data[8] = (byte) (leftMotor.encoder.getTicks() & 0xFF);
+	data[9] = (byte) ((leftMotor.getSpeed() >> 8) & 0xFF);
+	data[10] = (byte) (leftMotor.getSpeed() & 0xFF);
+	data[11] = (byte) (abs(leftMotor.getPwmSpeed()) & 0xFF);
+	data[12] = (byte) ((rightMotor.encoder.getTicks() >> 8) & 0xFF);
+	data[13] = (byte) (rightMotor.encoder.getTicks() & 0xFF);
+	data[14] = (byte) ((rightMotor.getSpeed() >> 8) & 0xFF);
+	data[15] = (byte) (rightMotor.getSpeed() & 0xFF);
+	data[16] = (byte) (abs(rightMotor.getPwmSpeed()) & 0xFF);
+	data[17] = (byte) 0;  // bot snr
+	data[18] = (byte) 0;  // bot rssi
+	data[19] = (byte) 0;  // base snr
+	data[20] = (byte) 0;  // base rssi
 
-	data[20] = '>';
+	data[21] = '>';
 
 	for(int i=0; i<ROBOT_DATA_DUMP_SIZE; i++){
 		Serial.write(data[i]);
@@ -276,7 +312,7 @@ uint8_t* Robot::dataDump() {
 
 }
 
-uint8_t Robot::getStatusByte(){
+uint8_t Robot::getStatusByte1(){
 
 	uint8_t retval = 0;
 
@@ -319,6 +355,28 @@ uint8_t Robot::getStatusByte(){
 
 	return retval;
 
+}
+
+uint8_t Robot::getStatusByte2(){
+	uint8_t retval = 0;
+
+	if(motorPower.isEnabled()){
+		retval |= 0x01;
+	}
+	if(motorController.isEnabled()){
+		retval |= 0x02;
+	}
+	if(v12Power.isEnabled()){
+		retval |= 0x04;
+	}
+	if(auxPower.isEnabled()){
+		retval |= 0x08;
+	}
+	if(sonarPower.isEnabled()){
+		retval |= 0x10;
+	}
+
+	return retval;
 }
 
 /*  TODO:

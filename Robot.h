@@ -125,8 +125,10 @@ public:
 	void randomWalk();
 
 	void readSupplyVoltages();
+	uint8_t* reportSupplyVoltages();
 	uint8_t* dataDump();
-	uint8_t getStatusByte();
+	uint8_t getStatusByte1();
+	uint8_t getStatusByte2();
 	void regularResponse();
 	void allStop();
 
