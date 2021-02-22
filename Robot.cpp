@@ -217,6 +217,15 @@ void Robot::randomWalk() {
 
 }
 
+void Robot::silenceHeartbeat(){
+	heartSilenced = true;
+	digitalWrite(HEARTBEAT_PIN, LOW);
+}
+
+void Robot::restartHeartbeat(){
+	heartSilenced = false;
+}
+
 void Robot::allStop(){
 
 	stop();

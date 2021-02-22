@@ -137,6 +137,7 @@ void bootup() {
 			if (millis() - armStartTime >= ARM_BOOT_INIT_WAIT) {
 				Serial1.begin(ARM_BOARD_BAUD);
 				bootState = BOOTING_ARM;
+				robot.restartHeartbeat();
 			}
 		}
 		break;
@@ -268,7 +269,9 @@ void heartBeat() {
 	if (curMil - preMil >= heartbeatInterval) {
 		preMil = curMil;
 		heartState = !heartState;
-		digitalWrite(HEARTBEAT_PIN, heartState);
+		if (!robot.heartSilenced) {
+			digitalWrite(HEARTBEAT_PIN, heartState);
+		}
 	}
 }
 

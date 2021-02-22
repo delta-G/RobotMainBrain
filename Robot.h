@@ -65,6 +65,8 @@ private:
 
 public:
 
+	boolean heartSilenced;
+
 	MCP23S08 xpander;
 	MCP23S08 powerXpander;
 
@@ -100,7 +102,8 @@ public:
 	boolean runRightToTarget = false;
 
 
-	Robot():xpander(XPANDER_CS_PIN, MB_XPANDER_HW_ADDY),
+	Robot():heartSilenced(true),
+			xpander(XPANDER_CS_PIN, MB_XPANDER_HW_ADDY),
 			powerXpander(XPANDER_CS_PIN, POWER_XPANDER_HW_ADDY),
 			powerADC(POWER_ADC_CS_PIN),
 			camera(CAM_ENABLE_PIN),
@@ -116,6 +119,9 @@ public:
 			rightMotor(RIGHT_MOTOR_DIRECTION_PIN_1, RIGHT_MOTOR_DIRECTION_PIN_2, RIGHT_MOTOR_ENABLE_PIN, RIGHT_MOTOR_FEEDBACK_PIN, false),
 	        battery(BATTERY_PIN, 1000),
 			sonar(){};
+
+	void silenceHeartbeat();
+	void restartHeartbeat();
 
 	void init();
 	void mainLoop();

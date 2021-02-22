@@ -75,7 +75,11 @@ void powerControl(char* p){
 		if(p[3] == '0'){
 			robot.arm.disable();
 		} else if (p[3] == '1'){
+			robot.silenceHeartbeat();
+			delay(10);
 			robot.arm.enable();
+			delay(10);
+			robot.restartHeartbeat();
 		}
 		break;
 	case 'a':
