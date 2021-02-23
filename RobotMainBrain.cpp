@@ -293,8 +293,12 @@ void armParserCallback(char* aCommand){
 		robot.armResponding = true;
 	}
 	else {
-		if(bootState == RUNNING){
-			Serial.print(aCommand);
+		if (bootState == RUNNING) {
+			if (strcmp(aCommand, ARM_NO_NEW_DATA) == 0) {
+				robot.dataDump();
+			} else {
+				Serial.print(aCommand);
+			}
 		}
 	}
 }
