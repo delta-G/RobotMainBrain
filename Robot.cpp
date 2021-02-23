@@ -110,12 +110,6 @@ void Robot::mainLoop(){
 	if(driveMode == AUTO){
 		autoLoop();
 	}
-	static unsigned long pm = millis();
-	unsigned long cm = millis();
-	if(cm - pm >= 5000){
-		reportSupplyVoltages();
-		pm = cm;
-	}
 	battery.monitor();
 	leftMotor.loop();
 	rightMotor.loop();
@@ -402,12 +396,23 @@ uint8_t Robot::getStatusByte2(){
 void Robot::regularResponse(){
 
 	static uint8_t counter = 0;
+	static unsigned long pm = millis();
+	unsigned long cm = millis();
 
 	switch (counter++) {
 	case 0:
 		dataDump();
 		break;
 	case 1:
+		if(cm - pm >= 5000) {
+			pm = cm;
+			reportSupplyVoltages();
+			break;
+		} else {
+			counter++; /* no break */
+		}
+		/* no break */
+	case 2:
 		if (sonar.hasNewDump()) {
 			sonar.dataDump();
 			break;
@@ -415,24 +420,24 @@ void Robot::regularResponse(){
 			counter++; /* no break */
 		}
 		/* no break */
-	case 2:
+	case 3:
 		if (armResponding) {
 			Serial1.print("<A,Rp>");
 		}
 		break;
-	case 3:
+	case 4:
 		if (armResponding) {
 			Serial1.print("<A,Rt>");
 		}
 		break;
-	case 4:
+	case 5:
 		if (armResponding) {
 			Serial1.print("<A,Rs>");
 		}
 		break;
 	}
 
-	if (counter >= 5){
+	if (counter >= 6){
 		counter = 0;
 	}
 }
