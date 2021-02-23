@@ -110,6 +110,12 @@ void Robot::mainLoop(){
 	if(driveMode == AUTO){
 		autoLoop();
 	}
+	static unsigned long pm = millis();
+	unsigned long cm = millis();
+	if(cm - pm >= 5000){
+		reportSupplyVoltages();
+		pm = cm;
+	}
 	battery.monitor();
 	leftMotor.loop();
 	rightMotor.loop();
