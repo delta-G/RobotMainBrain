@@ -101,6 +101,8 @@ public:
 	int32_t rightTarget = 0;
 	boolean runRightToTarget = false;
 
+	uint8_t lastRawCommand[XBOX_RAW_BUFFER_SIZE];
+
 
 	Robot():heartSilenced(true),
 			xpander(XPANDER_CS_PIN, MB_XPANDER_HW_ADDY),
@@ -154,7 +156,7 @@ public:
 	void drive(int16_t, int16_t);
 	void setSpeed(int32_t, int32_t);
 
-
+	void saveLastRawCommand(uint8_t*);
 
 	void setDriveMode(DriveModeEnum);
 	DriveModeEnum getDriveMode();

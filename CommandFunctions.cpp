@@ -272,11 +272,7 @@ void xboxCommandRaw(char* p) {
 		memcpy(temp, p+1, 14);
 		temp[1] = 0x0D;  // xboxHandler Expects this
 		xbox.handleIncoming(temp);
-		if((robot.armResponding)&&(robot.getDriveMode() == ARM)){
-			for(uint8_t i=0; i<16; i++){
-				Serial1.write(p[i]);
-			}
-		}
+		memcpy(robot.lastRawCommand, p+1, XBOX_RAW_BUFFER_SIZE);
 		robot.regularResponse();
 	}
 }

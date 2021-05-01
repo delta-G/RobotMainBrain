@@ -502,6 +502,11 @@ void Robot::setSpeed(int32_t aLeft, int32_t aRight) {
 }
 
 
+void Robot::saveLastRawCommand(uint8_t* p){
+	memcpy(robot.lastRawCommand, p, XBOX_RAW_BUFFER_SIZE);
+}
+
+
 void Robot::setDriveMode(DriveModeEnum aDriveMode) {
 	driveMode = aDriveMode;
 	if (driveMode >= NUMBER_OF_MODES) {

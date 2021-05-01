@@ -106,6 +106,13 @@ void mainControllerLoop() {
 			case ARM:
 				//  Arm mode mostly happens on Arm Controller
 				driveByDpad();
+				if ((robot.armResponding)) {
+					Serial1.write('<');
+					for (uint8_t i = 0; i < XBOX_RAW_BUFFER_SIZE; i++) {
+						Serial1.write(robot.lastRawCommand[i]);
+					}
+					Serial1.write('>');
+				}
 				break;
 			case MINE: {
 				if (useSpeedBasedAlgs) {
