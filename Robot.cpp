@@ -393,14 +393,16 @@ uint8_t Robot::getStatusByte2(){
  * and we need code so that if the arm isn't moving we keep sending
  * the robot dump instead of the same data over and over from the arm
  */
+/*I think I've fixed that now
+ *
+ *  Commit 0b68196
+ */
 void Robot::regularResponse(){
 
 	static uint8_t counter = 0;
 
 	switch (counter++) {
-	case 0:
-		dataDump();
-		break;
+
 	case 1:
 		if (sonar.hasNewDump()) {
 			sonar.dataDump();
@@ -409,24 +411,22 @@ void Robot::regularResponse(){
 			counter++; /* no break */
 		}
 		/* no break */
+
 	case 2:
 		if (armResponding) {
-			Serial1.print("<A,Rp>");
+			Serial1.print("<A,RR>");
+			break;
+		} else {
+			counter++; /* no break */
 		}
-		break;
-	case 3:
-		if (armResponding) {
-			Serial1.print("<A,Rt>");
-		}
-		break;
-	case 4:
-		if (armResponding) {
-			Serial1.print("<A,Rs>");
-		}
+		/* no break */
+	case 0:
+		dataDump();
 		break;
 	}
 
-	if (counter >= 5){
+
+	if (counter >= 3){
 		counter = 0;
 	}
 }
