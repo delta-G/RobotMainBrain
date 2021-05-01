@@ -53,6 +53,21 @@ Command commands[] = {
 };
 
 
+/*  The following need to have the first comma removed from the requirements and start
+ *  switching on p[2] instead of p[3]
+ *
+ *  ultrasonicControl
+ *  enableArm
+ *  requestFromBot
+ *
+ *  and motorControl has a comma hiding between the MR or ML and the number.
+ *  It should be removed but we could allow for you to just use M or m without
+ *  the R or L and then give two numbers with a comma.  A two argument version
+ *  if you will that could set both motors.
+ *
+ */
+
+
 CommandParser cp(&commands[0], NUM_ELEMENTS(commands), true);
 
 /*
@@ -447,7 +462,7 @@ void setThrottle(char* p) {
 
 
 void motorControl(char* p) {
-	if (p[1] == 'S') {
+	if (p[2] == 'S') {
 		if(robot.checkMotorStatus()){
 			Serial.print(F("<Motor Fail Bit Error>"));
 		}
