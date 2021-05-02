@@ -293,6 +293,9 @@ void armParserCallback(char* aCommand){
 	else if(strcmp(aCommand, ARM_CONNECT_RESPONSE) == 0){
 		robot.armResponding = true;
 	}
+	else if(strcmp(aCommand, ARM_NO_NEW_DATA) == 0){
+		// do nothing but don't send to Discobot
+	}
 	else {
 		if(bootState == RUNNING){
 			Serial.print(aCommand);

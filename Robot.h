@@ -86,7 +86,14 @@ public:
 	Motor leftMotor;
 	Motor rightMotor;
 
-	Battery battery;
+//	Battery battery;
+
+	boolean voltageReportNeeded = false;
+	uint32_t lastVoltageReportMillis;
+
+	uint16_t voltages[6];
+	uint16_t voltagePins[6] = {BATTERY_ADC_PIN, V12_ADC_PIN, AUX_ADC_PIN, MAIN5_ADC_PIN, RADIO_ADC_PIN, 0};
+	float voltageCals[6] = {BATTERY_ADC_CAL_FACTOR, V12_ADC_CAL_FACTOR, AUX_ADC_CAL_FACTOR, MAIN5_ADC_CAL_FACTOR, RADIO_ADC_CAL_FACTOR, 1};
 
 	Sonar sonar;
 
@@ -102,6 +109,8 @@ public:
 	boolean runRightToTarget = false;
 
 	uint8_t lastRawCommand[XBOX_RAW_BUFFER_SIZE];
+	uint8_t armDumpBuffer[ARM_DUMP_SIZE];
+	boolean newArmData = false;
 
 
 	Robot():heartSilenced(true),
@@ -119,7 +128,6 @@ public:
 			sonarPower(SONAR_ENABLE_PIN),
 			leftMotor(LEFT_MOTOR_DIRECTION_PIN_1, LEFT_MOTOR_DIRECTION_PIN_2, LEFT_MOTOR_ENABLE_PIN, LEFT_MOTOR_FEEDBACK_PIN, true),
 			rightMotor(RIGHT_MOTOR_DIRECTION_PIN_1, RIGHT_MOTOR_DIRECTION_PIN_2, RIGHT_MOTOR_ENABLE_PIN, RIGHT_MOTOR_FEEDBACK_PIN, false),
-	        battery(BATTERY_PIN, 1000),
 			sonar(){};
 
 	void silenceHeartbeat();
@@ -157,6 +165,7 @@ public:
 	void setSpeed(int32_t, int32_t);
 
 	void saveLastRawCommand(uint8_t*);
+	void saveArmReport(uint8_t*);
 
 	void setDriveMode(DriveModeEnum);
 	DriveModeEnum getDriveMode();

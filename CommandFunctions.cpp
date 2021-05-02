@@ -426,7 +426,7 @@ void requestFromBot(char* p) {
 //		int r = analogRead(BATTERY_PIN);
 //		float v = (r * 20.75) / 1024;
 		// Calibrated
-		float v = robot.battery.getVoltage();
+		float v = robot.voltages[VOLT_ENUM_BATTERY];
 		int r = (v - 0.79690) / 0.020104;
 
 		Serial.print(F("<BAT,"));

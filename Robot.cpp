@@ -103,14 +103,14 @@ void Robot::init() {
 	leftMotor.init();
 	rightMotor.init();
 	sonar.begin();
-	battery.initReadings();
+//	battery.initReadings();
 }
 
 void Robot::mainLoop(){
 	if(driveMode == AUTO){
 		autoLoop();
 	}
-	battery.monitor();
+	readSupplyVoltages();
 	leftMotor.loop();
 	rightMotor.loop();
 	sonar.loop();
@@ -235,44 +235,59 @@ void Robot::allStop(){
 
 void Robot::readSupplyVoltages(){
 
-	char data[50];
-	uint16_t battery = powerADC.read(BATTERY_ADC_PIN) * BATTERY_ADC_CAL_FACTOR;
-	uint16_t V12 = powerADC.read(V12_ADC_PIN) * V12_ADC_CAL_FACTOR;
-	uint16_t aux = powerADC.read(AUX_ADC_PIN) * AUX_ADC_CAL_FACTOR;
-	uint16_t main5 = powerADC.read(MAIN5_ADC_PIN) * MAIN5_ADC_CAL_FACTOR;
-	uint16_t radio = powerADC.read(RADIO_ADC_PIN) * RADIO_ADC_CAL_FACTOR;
-	uint16_t motor = (analogRead(0) + 29.64) / 0.05132;
+//	uint16_t battery = powerADC.read(BATTERY_ADC_PIN) * BATTERY_ADC_CAL_FACTOR;
+//	uint16_t V12 = powerADC.read(V12_ADC_PIN) * V12_ADC_CAL_FACTOR;
+//	uint16_t aux = powerADC.read(AUX_ADC_PIN) * AUX_ADC_CAL_FACTOR;
+//	uint16_t main5 = powerADC.read(MAIN5_ADC_PIN) * MAIN5_ADC_CAL_FACTOR;
+//	uint16_t radio = powerADC.read(RADIO_ADC_PIN) * RADIO_ADC_CAL_FACTOR;
+//	uint16_t motor = (analogRead(0) + 29.64) / 0.05132;
 
+	static unsigned long pm = millis();
+	unsigned long cm = millis();
+	if (cm - pm >= VOLTAGE_READING_INTERVAL) {
+		pm = cm;
+		for (int i = 0; i < 6; i++) {
+			uint16_t volts;
 
-	snprintf(data, 45, "<VR,%i,%i,%i,%i,%i,%i>", battery, V12, aux, main5, radio, motor);
-	Serial.print(data);
+			if (i < 5) {
+				// first five are on the ADC chip
+				volts = powerADC.read(voltagePins[i]) * voltageCals[i];
+			} else {
+				// the motor voltage reads on an analog pin on the 1284 chip
+				volts = (analogRead(0) + 29.64) / 0.05132;
+			}
+			// if voltage has changed by more than 10% we need to report to DiscoBot
+			if (fabs((float) voltages[i] - (float) volts)
+					> (voltages[i] * 0.10)) {
+				voltageReportNeeded = true;
+			}
+			voltages[i] = volts;
+		}
+	}
+	if (millis() - lastVoltageReportMillis >= VOLTAGE_REPORTING_INTERVAL) {
+		voltageReportNeeded = true;
+	}
 }
 
 
 uint8_t* Robot::reportSupplyVoltages(){
-	uint16_t battery = powerADC.read(BATTERY_ADC_PIN) * BATTERY_ADC_CAL_FACTOR;
-	uint16_t V12 = powerADC.read(V12_ADC_PIN) * V12_ADC_CAL_FACTOR;
-	uint16_t aux = powerADC.read(AUX_ADC_PIN) * AUX_ADC_CAL_FACTOR;
-	uint16_t main5 = powerADC.read(MAIN5_ADC_PIN) * MAIN5_ADC_CAL_FACTOR;
-	uint16_t radio = powerADC.read(RADIO_ADC_PIN) * RADIO_ADC_CAL_FACTOR;
-	uint16_t motor = (analogRead(0) + 29.64) / 0.05132;
-
+	lastVoltageReportMillis = millis();
 	static uint8_t data[16];
 	data[0] = '<';
 	data[1] = 0x13;
 	data[2] = 16;
-	data[3] = (battery >> 8);
-	data[4] = (battery & 0xFF);
-	data[5] = (motor >> 8);
-	data[6] = (motor & 0xFF);
-	data[7] = (main5 >> 8);
-	data[8] = (main5 & 0xFF);
-	data[9] = (radio >> 8);
-	data[10] = (radio & 0xFF);
-	data[11] = (aux >> 8);
-	data[12] = (aux & 0xFF);
-	data[13] = (V12 >> 8);
-	data[14] = (V12 & 0xFF);
+	data[3] = (voltages[VOLT_ENUM_BATTERY] >> 8);
+	data[4] = (voltages[VOLT_ENUM_BATTERY] & 0xFF);
+	data[5] = (voltages[VOLT_ENUM_MOTOR] >> 8);
+	data[6] = (voltages[VOLT_ENUM_MOTOR] & 0xFF);
+	data[7] = (voltages[VOLT_ENUM_MAIN5] >> 8);
+	data[8] = (voltages[VOLT_ENUM_MAIN5] & 0xFF);
+	data[9] = (voltages[VOLT_ENUM_RADIO] >> 8);
+	data[10] = (voltages[VOLT_ENUM_RADIO] & 0xFF);
+	data[11] = (voltages[VOLT_ENUM_AUX] >> 8);
+	data[12] = (voltages[VOLT_ENUM_AUX] & 0xFF);
+	data[13] = (voltages[VOLT_ENUM_V12] >> 8);
+	data[14] = (voltages[VOLT_ENUM_V12] & 0xFF);
 	data[15] = '>';
 
 	for (int i = 0; i < 16; i++) {
@@ -295,7 +310,7 @@ uint8_t* Robot::dataDump() {
 	data[3] = getStatusByte1();
 	data[4] = getStatusByte2();
 	data[5] = throttle;
-	data[6] = (byte) (battery.getVoltage() * 10);
+	data[6] = (byte) /*(battery.getVoltage() * 10)*/ 1;  // THIS SPACE CURRENTLY OPEN
 	data[7] = (byte) ((leftMotor.encoder.getTicks() >> 8) & 0xFF);
 	data[8] = (byte) (leftMotor.encoder.getTicks() & 0xFF);
 	data[9] = (byte) ((leftMotor.getSpeed() >> 8) & 0xFF);
@@ -412,9 +427,29 @@ void Robot::regularResponse(){
 		}
 		/* no break */
 
-	case 2:
+	case 2: {
+		boolean gotNew = newArmData;
+		newArmData = false;
+		if (gotNew) {
+			for (int i = 0; i < ARM_DUMP_SIZE; i++) {
+				Serial.write(armDumpBuffer[i]);
+			}
+		}
 		if (armResponding) {
-			Serial1.print("<A,RR>");
+			if (gotNew && armDumpBuffer[4] == 't') {
+				Serial1.print("<A,Rp>");
+			} else {
+				Serial1.print("<A,RR>");
+			}
+			break;
+		} else {
+			counter++; /* no break */
+		}
+	}
+		/* no break */
+	case 3:
+		if (voltageReportNeeded) {
+			reportSupplyVoltages();
 			break;
 		} else {
 			counter++; /* no break */
@@ -426,7 +461,7 @@ void Robot::regularResponse(){
 	}
 
 
-	if (counter >= 3){
+	if (counter >= 4){
 		counter = 0;
 	}
 }
@@ -506,6 +541,10 @@ void Robot::saveLastRawCommand(uint8_t* p){
 	memcpy(robot.lastRawCommand, p, XBOX_RAW_BUFFER_SIZE);
 }
 
+void Robot::saveArmReport(uint8_t* p){
+	memcpy(robot.armDumpBuffer, p, ARM_DUMP_SIZE);
+	newArmData = true;
+}
 
 void Robot::setDriveMode(DriveModeEnum aDriveMode) {
 	driveMode = aDriveMode;

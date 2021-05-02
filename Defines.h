@@ -150,6 +150,15 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 #define BATTERY_PIN A0
 
+enum VoltageEnum {
+	VOLT_ENUM_BATTERY,
+	VOLT_ENUM_V12,
+	VOLT_ENUM_AUX,
+	VOLT_ENUM_MAIN5,
+	VOLT_ENUM_RADIO,
+	VOLT_ENUM_MOTOR
+};
+
 #define BATTERY_ADC_PIN 0
 #define V12_ADC_PIN 1
 #define AUX_ADC_PIN 4
@@ -164,6 +173,8 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 
 #define NUMBER_BATTERY_READINGS_TO_AVERAGE 30
+#define VOLTAGE_READING_INTERVAL 1000
+#define VOLTAGE_REPORTING_INTERVAL 10000
 
 
 
