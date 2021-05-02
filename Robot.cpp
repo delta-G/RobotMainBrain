@@ -272,6 +272,7 @@ void Robot::readSupplyVoltages(){
 
 uint8_t* Robot::reportSupplyVoltages(){
 	lastVoltageReportMillis = millis();
+	voltageReportNeeded = false;
 	static uint8_t data[16];
 	data[0] = '<';
 	data[1] = 0x13;
