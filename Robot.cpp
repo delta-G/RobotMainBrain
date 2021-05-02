@@ -403,15 +403,7 @@ uint8_t Robot::getStatusByte2(){
 	return retval;
 }
 
-/*  TODO:
- * This is all messed up.  It wastes cycles if the arm isn't there
- * and we need code so that if the arm isn't moving we keep sending
- * the robot dump instead of the same data over and over from the arm
- */
-/*I think I've fixed that now
- *
- *  Commit 1936ebd
- */
+
 void Robot::regularResponse(){
 
 	static uint8_t counter = 0;
