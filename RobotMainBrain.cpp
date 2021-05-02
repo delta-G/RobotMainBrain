@@ -125,6 +125,7 @@ void bootup() {
 
 		if (millis() > RMB_BOOT_INIT_WAIT) {
 			bootState = BOOT_ARM;
+			robot.silenceHeartbeat();
 		}
 		break;
 
