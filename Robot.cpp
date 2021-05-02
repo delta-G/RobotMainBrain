@@ -428,7 +428,7 @@ void Robot::regularResponse(){
 				Serial.write(armDumpBuffer[i]);
 			}
 		}
-		if (armResponding) {
+		if (armResponding || gotNew) {
 			if (gotNew && armDumpBuffer[4] == 't') {
 				Serial1.print("<A,Rp>");
 			} else {
