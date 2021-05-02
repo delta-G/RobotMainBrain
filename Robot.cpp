@@ -317,7 +317,7 @@ uint8_t* Robot::dataDump() {
 	data[3] = getStatusByte1();
 	data[4] = getStatusByte2();
 	data[5] = throttle;
-	data[6] = (byte) /*(battery.getVoltage() * 10)*/ 1;  // THIS SPACE CURRENTLY OPEN
+	data[6] = (byte) (robot.sonar.getCurrentAngle() * (255/3.1415));
 	data[7] = (byte) ((leftMotor.encoder.getTicks() >> 8) & 0xFF);
 	data[8] = (byte) (leftMotor.encoder.getTicks() & 0xFF);
 	data[9] = (byte) ((leftMotor.getSpeed() >> 8) & 0xFF);

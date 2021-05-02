@@ -251,7 +251,9 @@ boolean Sonar::hasNewDump(){
 	return newDump;
 }
 
-
+float Sonar::getCurrentAngle(){
+	return gimbal.getPanAngle();
+}
 
 void Sonar::setMinAngle(float aStart){minSweepAngle = aStart;}
 void Sonar::setMaxAngle(float aEnd){maxSweepAngle = aEnd;}

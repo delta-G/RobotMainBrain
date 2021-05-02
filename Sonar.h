@@ -123,6 +123,8 @@ public:
 	float getMinAngle();
 	float getMaxAngle();
 
+	float getCurrentAngle();
+
 
 
 };
