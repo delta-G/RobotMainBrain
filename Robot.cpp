@@ -256,8 +256,11 @@ void Robot::readSupplyVoltages(){
 				// the motor voltage reads on an analog pin on the 1284 chip
 				volts = (analogRead(0) + 29.64) / 0.05132;
 			}
-			// if voltage has changed by more than 10% we need to report to DiscoBot
-			if (fabs((float) voltages[i] - (float) volts)
+			// if voltage has changed by more than 10%
+			// since last report
+			// we need to report to DiscoBot
+
+			if (fabs((float) voltageLastReport[i] - (float) volts)
 					> (voltages[i] * 0.10)) {
 				voltageReportNeeded = true;
 			}
@@ -273,6 +276,9 @@ void Robot::readSupplyVoltages(){
 uint8_t* Robot::reportSupplyVoltages(){
 	lastVoltageReportMillis = millis();
 	voltageReportNeeded = false;
+	for(int i=0; i<6; i++){
+		voltageLastReport[i] = voltages[i];
+	}
 	static uint8_t data[16];
 	data[0] = '<';
 	data[1] = 0x13;

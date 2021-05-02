@@ -92,6 +92,7 @@ public:
 	uint32_t lastVoltageReportMillis;
 
 	uint16_t voltages[6];
+	uint16_t voltageLastReport[6];
 	uint16_t voltagePins[6] = {BATTERY_ADC_PIN, V12_ADC_PIN, AUX_ADC_PIN, MAIN5_ADC_PIN, RADIO_ADC_PIN, 0};
 	float voltageCals[6] = {BATTERY_ADC_CAL_FACTOR, V12_ADC_CAL_FACTOR, AUX_ADC_CAL_FACTOR, MAIN5_ADC_CAL_FACTOR, RADIO_ADC_CAL_FACTOR, 1};
 
