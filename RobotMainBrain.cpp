@@ -294,7 +294,8 @@ void armParserCallback(char* aCommand){
 		robot.armResponding = true;
 	}
 	else if(strcmp(aCommand, ARM_NO_NEW_DATA) == 0){
-		// do nothing but don't send to Discobot
+		// if no new arm data, call regular response again and get a dump or voltages
+		robot.regularResponse();
 	}
 	else {
 		if(bootState == RUNNING){
