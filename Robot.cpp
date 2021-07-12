@@ -235,13 +235,6 @@ void Robot::allStop(){
 
 void Robot::readSupplyVoltages(){
 
-//	uint16_t battery = powerADC.read(BATTERY_ADC_PIN) * BATTERY_ADC_CAL_FACTOR;
-//	uint16_t V12 = powerADC.read(V12_ADC_PIN) * V12_ADC_CAL_FACTOR;
-//	uint16_t aux = powerADC.read(AUX_ADC_PIN) * AUX_ADC_CAL_FACTOR;
-//	uint16_t main5 = powerADC.read(MAIN5_ADC_PIN) * MAIN5_ADC_CAL_FACTOR;
-//	uint16_t radio = powerADC.read(RADIO_ADC_PIN) * RADIO_ADC_CAL_FACTOR;
-//	uint16_t motor = (analogRead(0) + 29.64) / 0.05132;
-
 	static unsigned long pm = millis();
 	unsigned long cm = millis();
 	if (cm - pm >= VOLTAGE_READING_INTERVAL) {
@@ -537,7 +530,8 @@ void Robot::setSpeed(int32_t aLeft, int32_t aRight) {
 
 
 void Robot::saveLastRawCommand(uint8_t* p){
-	memcpy(robot.lastRawCommand, p, XBOX_RAW_BUFFER_SIZE);
+	// use p+1 because we don't save the < and > to save a little space
+	memcpy(robot.lastRawCommand, p+1, XBOX_RAW_BUFFER_SIZE);
 }
 
 void Robot::saveArmReport(uint8_t* p){

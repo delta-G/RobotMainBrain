@@ -306,13 +306,9 @@ void armParserCallback(char* aCommand){
 
 
 void armParserRawCallback(char* p) {
-	// Raw data needs to write out to byte at a time
-//	int numBytes = p[2]; //  Always < then control code then number of bytes
-//	for (int i=0; i<numBytes; i++){
-//		Serial.write(p[i]);
-//	}
 	// If it is a good response
 	if(p[0]=='<' && p[2]==ARM_DUMP_SIZE && p[ARM_DUMP_SIZE-1]=='>'){
+		//  This will get sent out with next regular response.
 		robot.saveArmReport((uint8_t*)p);
 	}
 }

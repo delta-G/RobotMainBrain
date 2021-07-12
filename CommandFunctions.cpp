@@ -287,7 +287,8 @@ void xboxCommandRaw(char* p) {
 		memcpy(temp, p+1, 14);
 		temp[1] = 0x0D;  // xboxHandler Expects this
 		xbox.handleIncoming(temp);
-		memcpy(robot.lastRawCommand, p+1, XBOX_RAW_BUFFER_SIZE);
+		robot.saveLastRawCommand((uint8_t*)p);
+//		memcpy(robot.lastRawCommand, p+1, XBOX_RAW_BUFFER_SIZE);
 		robot.regularResponse();
 	}
 }
