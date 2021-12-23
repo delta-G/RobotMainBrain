@@ -420,23 +420,24 @@ void Robot::regularResponse(){
 		/* no break */
 
 	case 2: {
-		boolean gotNew = newArmData;
-		newArmData = false;
-		if (gotNew) {
-			for (int i = 0; i < ARM_DUMP_SIZE; i++) {
-				Serial.write(armDumpBuffer[i]);
+		if (armResponding) {
+			boolean gotNew = newArmData;
+			newArmData = false;
+			if (gotNew) {
+				for (int i = 0; i < ARM_DUMP_SIZE; i++) {
+					Serial.write(armDumpBuffer[i]);
+				}
+				if (armDumpBuffer[4] == 't') {
+					Serial1.print("<A,Rp>");
+				} else {
+					Serial1.print("<A,RR>");
+				}
+				break;
 			}
 		}
-		if (armResponding || gotNew) {
-			if (gotNew && armDumpBuffer[4] == 't') {
-				Serial1.print("<A,Rp>");
-			} else {
-				Serial1.print("<A,RR>");
-			}
-			break;
-		} else {
-			counter++; /* no break */
-		}
+		// We get here if armResponding is false OR if gotNew is false
+		counter++; /* no break */
+
 	}
 		/* no break */
 	case 3:
