@@ -421,21 +421,29 @@ void Robot::regularResponse(){
 
 	case 2: {
 		if (armResponding) {
-			boolean gotNew = newArmData;
-			newArmData = false;
-			if (gotNew) {
-				for (int i = 0; i < ARM_DUMP_SIZE; i++) {
-					Serial.write(armDumpBuffer[i]);
-				}
-				if (armDumpBuffer[4] == 't') {
-					Serial1.print("<A,Rp>");
+//			boolean gotNew = newArmData;
+//			newArmData = false;
+			if (newArmData) {
+				newArmData = false;
+				if (!nosendArmData) {
+					for (int i = 0; i < ARM_DUMP_SIZE; i++) {
+						Serial.write(armDumpBuffer[i]);
+					}
+					if (armDumpBuffer[4] == 't') {
+						Serial1.print("<A,Rp>");
+					} else {
+						Serial1.print("<A,RR>");
+					}
+					break; // since we send something to base we can break the switch.
 				} else {
+					nosendArmData = false;
+
 					Serial1.print("<A,RR>");
 				}
-				break;
+
 			}
 		}
-		// We get here if armResponding is false OR if gotNew is false
+		// We get here if armResponding is false OR if there's no new arm data to send out
 		counter++; /* no break */
 
 	}
@@ -538,6 +546,11 @@ void Robot::saveLastRawCommand(uint8_t* p){
 void Robot::saveArmReport(uint8_t* p){
 	memcpy(robot.armDumpBuffer, p, ARM_DUMP_SIZE);
 	newArmData = true;
+}
+
+void Robot::redundantArmReport(){
+	newArmData = true;
+	nosendArmData = true;
 }
 
 void Robot::setDriveMode(DriveModeEnum aDriveMode) {

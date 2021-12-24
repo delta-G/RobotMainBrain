@@ -112,6 +112,7 @@ public:
 	uint8_t lastRawCommand[XBOX_RAW_BUFFER_SIZE];
 	uint8_t armDumpBuffer[ARM_DUMP_SIZE] = {0x3C,0x12,0x22,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x3E};
 	boolean newArmData = true;
+	boolean nosendArmData = true;
 
 
 	Robot():heartSilenced(true),
@@ -167,6 +168,7 @@ public:
 
 	void saveLastRawCommand(uint8_t*);
 	void saveArmReport(uint8_t*);
+	void redundantArmReport();
 
 	void setDriveMode(DriveModeEnum);
 	DriveModeEnum getDriveMode();

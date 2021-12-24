@@ -295,7 +295,8 @@ void armParserCallback(char* aCommand){
 	}
 	else if(strcmp(aCommand, ARM_NO_NEW_DATA) == 0){
 		// if no new arm data, call regular response again and get a dump or voltages
-		robot.regularResponse();
+//		robot.regularResponse();
+		robot.redundantArmReport();
 	}
 	else {
 		if(bootState == RUNNING){
