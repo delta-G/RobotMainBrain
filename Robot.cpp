@@ -300,7 +300,7 @@ uint8_t* Robot::reportSupplyVoltages(){
 
 uint8_t* Robot::dataDump() {
 
-	Serial.print(HBOR_STRING);
+//	Serial.print(HBOR_STRING);
 
 	static uint8_t data[ROBOT_DATA_DUMP_SIZE];
 
@@ -546,6 +546,7 @@ void Robot::saveLastRawCommand(uint8_t* p){
 void Robot::saveArmReport(uint8_t* p){
 	memcpy(robot.armDumpBuffer, p, ARM_DUMP_SIZE);
 	newArmData = true;
+	nosendArmData = false;
 }
 
 void Robot::redundantArmReport(){
