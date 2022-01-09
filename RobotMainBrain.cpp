@@ -125,6 +125,7 @@ void bootup() {
 
 		if (millis() > RMB_BOOT_INIT_WAIT) {
 			bootState = BOOT_ARM;
+			// For some reason if the heartbeat light is on when the arm boots then RMB will lock up.  Must be a power thing somewere.
 			robot.silenceHeartbeat();
 		}
 		break;
@@ -281,6 +282,9 @@ void rawDataCallback(char* p){
 	if(p[1] == 0x14 && p[2] == 16){
 		xboxCommandRaw(p);
 		lastCommandTime = millis();
+	}
+	else {
+		sendError(ECODE_BAD_RAW_INPUT);
 	}
 }
 

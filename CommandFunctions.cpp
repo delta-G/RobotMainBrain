@@ -33,7 +33,7 @@ extern int32_t rightCounter;
 
 //  'E' reserved for ESP board
 Command commands[] = {
-		// 'p' and 'P' and 'l' and 'E' are used by radios
+		// 'p' and 'P' and 'l' and 'E' are used by radios  'Z' is error codes
 		{ 'X', xboxCommand },
 		{ 'R', requestFromBot },
 		{ 'C', configureBot },

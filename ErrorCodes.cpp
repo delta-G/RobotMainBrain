@@ -19,44 +19,17 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
      */
 
 
-#ifndef _RobotMainBrain_H_
-#define _RobotMainBrain_H_
-#include "Arduino.h"
-#include <MCP3008.h>
-#include <MCP23S08.h>
-#include <RobotSharedDefines.h>
-#include "Defines.h"
 #include "ErrorCodes.h"
 
-#include "Robot.h"
 
-#include <StreamParser.h>
-
-#include "CommandParser.h"
-#include "CommandFunctions.h"
-
-#include "ControllerFunctions.h"
-
-#include "Motor.h"
-
-#include "githash.h"
-
-#include "Encoder.h"
-
-#include "SpeedReport.h"
-
-void setup();
-void bootup();
-void loop();
-void heartBeat();
-void parseCommand(char*);
-void rawDataCallback(char*);
-void armParserCallback(char*);
-void armParserRawCallback(char*);
-
-
-
-
-
-
-#endif /* _RobotMainBrain_H_ */
+void sendError(uint8_t aErrorCode){
+	Serial.print("<Z");
+	// Discobot's parser will halt on anything larger than 127 in an ascii command
+	// if we ever need more than 128 error codes then we will have to revisit this.
+	if(aErrorCode < 128){
+		Serial.write(aErrorCode);
+	} else {
+		Serial.write(ECODE_BAD_ERROR_CODE);
+	}
+	Serial.print(">");
+}

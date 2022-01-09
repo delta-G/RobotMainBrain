@@ -106,6 +106,10 @@ void Robot::init() {
 //	battery.initReadings();
 }
 
+void Robot::setTaskLoopCallback(boolean (*aCallback)()){
+	taskLoopCallback = aCallback;
+}
+
 void Robot::mainLoop(){
 	if(driveMode == AUTO){
 		autoLoop();
@@ -114,6 +118,12 @@ void Robot::mainLoop(){
 	leftMotor.loop();
 	rightMotor.loop();
 	sonar.loop();
+
+	if(taskLoopCallback != NULL){
+		if(taskLoopCallback()){
+			taskLoopCallback = NULL;
+		}
+	}
 }
 
 

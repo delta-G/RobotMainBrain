@@ -19,44 +19,18 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
      */
 
 
-#ifndef _RobotMainBrain_H_
-#define _RobotMainBrain_H_
+#ifndef ERRORCODES_H_
+#define ERRORCODES_H_
+
 #include "Arduino.h"
-#include <MCP3008.h>
-#include <MCP23S08.h>
-#include <RobotSharedDefines.h>
-#include "Defines.h"
-#include "ErrorCodes.h"
 
-#include "Robot.h"
+void sendError(uint8_t aErrorCode);
 
-#include <StreamParser.h>
+#define ECODE_BAD_ERROR_CODE 127
 
-#include "CommandParser.h"
-#include "CommandFunctions.h"
-
-#include "ControllerFunctions.h"
-
-#include "Motor.h"
-
-#include "githash.h"
-
-#include "Encoder.h"
-
-#include "SpeedReport.h"
-
-void setup();
-void bootup();
-void loop();
-void heartBeat();
-void parseCommand(char*);
-void rawDataCallback(char*);
-void armParserCallback(char*);
-void armParserRawCallback(char*);
+#define ECODE_BAD_RAW_INPUT 10
 
 
 
 
-
-
-#endif /* _RobotMainBrain_H_ */
+#endif /* ERRORCODES_H_ */

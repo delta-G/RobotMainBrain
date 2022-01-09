@@ -27,6 +27,8 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "Battery.h"
 #include "Sonar.h"
 
+#include "ErrorCodes.h"
+
 #include <MCP23S08.h>
 #include <MCP3008.h>
 
@@ -89,7 +91,7 @@ public:
 //	Battery battery;
 
 	boolean voltageReportNeeded = false;
-	uint32_t lastVoltageReportMillis;
+	uint32_t lastVoltageReportMillis = 0;
 
 	uint16_t voltages[6];
 	uint16_t voltageLastReport[6];
@@ -110,9 +112,11 @@ public:
 	boolean runRightToTarget = false;
 
 	uint8_t lastRawCommand[XBOX_RAW_BUFFER_SIZE];
-	uint8_t armDumpBuffer[ARM_DUMP_SIZE] = {0x3C,0x12,0x22,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x3E};
+	uint8_t armDumpBuffer[ARM_DUMP_SIZE] = {0x3C,0x12,0x22,0x00,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x3E};
 	boolean newArmData = true;
 	boolean nosendArmData = true;
+
+	boolean (*taskLoopCallback)() = NULL;
 
 
 	Robot():heartSilenced(true),
@@ -138,6 +142,8 @@ public:
 	void init();
 	void mainLoop();
 	void autoLoop();
+
+	void setTaskLoopCallback(boolean (*aCallback)());
 
 	void startRandomWalk();
 	void randomWalk();
