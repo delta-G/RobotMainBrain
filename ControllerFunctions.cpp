@@ -251,6 +251,9 @@ void armButtonMode() {
 		if (xbox_ptr->isClicked(R3)) {
 			Serial1.print("<A,GC>");
 		}
+		if(xbox_ptr->isClicked(BACK)) {
+			Serial1.print("<A,CQ>");
+		}
 		if (xbox_ptr->isPressed(L1)) {
 			Serial1.print("<A,S0,a200>");
 		} else if (xbox_ptr->isPressed(R1)) {
