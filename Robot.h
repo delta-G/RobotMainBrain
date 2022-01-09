@@ -105,6 +105,7 @@ public:
 
 	boolean armPresent = false;
 	boolean armResponding = false;
+	boolean movementDoneWait = false;
 
 	int32_t leftTarget = 0;
 	boolean runLeftToTarget = false;

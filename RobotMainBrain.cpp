@@ -302,6 +302,11 @@ void armParserCallback(char* aCommand){
 //		robot.regularResponse();
 		robot.redundantArmReport();
 	}
+	else if(strcmp(aCommand, ARM_MOVEMENT_DONE) == 0){
+		if(robot.movementDoneWait){
+			robot.movementDoneWait = false;
+		}
+	}
 	else {
 		if(bootState == RUNNING){
 			Serial.print(aCommand);

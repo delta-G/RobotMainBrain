@@ -36,7 +36,8 @@ Command commands[] = {
 		// 'p' and 'P' and 'l' and 'E' are used by radios  'Z' is error codes
 		{ 'X', xboxCommand },
 		{ 'R', requestFromBot },
-		{ 'C', configureBot },
+		{ 'C', controlCodes },
+		{ 'c', configureBot },
 		{ 'T', setThrottle },
 		{ 'Q', powerControl},
 		{ 'M', motorControl },
@@ -77,6 +78,17 @@ CommandParser cp(&commands[0], NUM_ELEMENTS(commands), true);
  * the last char will be '>'
  *
  */
+
+void controlCodes(char* p){
+	switch(p[2]){
+	case 'A':
+		if(p[3] == '0'){
+			Task::startTask(Task::turnOffArm);
+		}
+		break;
+	}
+}
+
 void powerControl(char* p){
 	switch(p[2]){
 	case 'R':

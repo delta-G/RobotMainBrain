@@ -23,7 +23,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 
 void sendError(uint8_t aErrorCode){
-	Serial.print("<Z");
+	Serial.print("<!");
 	// Discobot's parser will halt on anything larger than 127 in an ascii command
 	// if we ever need more than 128 error codes then we will have to revisit this.
 	if(aErrorCode < 128){
