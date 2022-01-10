@@ -45,6 +45,7 @@ boolean exitTask(TaskFunc);
 
 
 boolean turnOffArm(TaskFuncStates);
+boolean turnOnArm(TaskFuncStates);
 
 }
 #endif /* ROBOTTASKFUNCTIONS_H_ */

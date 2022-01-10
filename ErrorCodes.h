@@ -30,6 +30,8 @@ void sendError(uint8_t aErrorCode);
 
 #define ECODE_BAD_RAW_INPUT 10
 
+#define ECODE_ARM_BOOT_TIMEOUT 101
+
 
 
 

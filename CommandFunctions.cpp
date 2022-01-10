@@ -84,6 +84,8 @@ void controlCodes(char* p){
 	case 'A':
 		if(p[3] == '0'){
 			Task::startTask(Task::turnOffArm);
+		} else if(p[3] == '1') {
+			Task::startTask(Task::turnOnArm);
 		}
 		break;
 	}

@@ -111,7 +111,55 @@ boolean turnOffArm(TaskFuncStates aState){
 	return retval;
 }
 
+boolean turnOnArm(TaskFuncStates aState){
+
+	boolean retval = false;  // assume recall, change to true to exit and true again in exit state
+	static uint32_t startTime = 0;
+	static uint8_t internalState = 0;
+
+	switch (aState){
+
+	case TF_ENTRY:
+		robot.arm.enable();
+		startTime = millis();
+		internalState = 0;
+		break;
+
+	case TF_LOOPING:
+		switch(internalState){
+		case 0:
+			if(millis() - startTime >= ARM_BOOT_INIT_WAIT){
+				Serial1.begin(ARM_BOARD_BAUD);
+				internalState = 1;
+				startTime = millis();
+			}
+			break;
+		case 1:
+			if(robot.armPresent && robot.armResponding){
+				retval = true;
+			}
+			if(millis() - startTime >= ARM_BOOT_TIMEOUT){
+				Serial1.end();
+				pinMode(10, INPUT);
+				pinMode(11, INPUT);
+				digitalWrite(10, LOW);
+				digitalWrite(11, LOW);
+				sendError(ECODE_ARM_BOOT_TIMEOUT);
+			}
+			break;
+		}
+		break;
+
+	case TF_EXIT:
+		Serial1.print("<A,RR>");
+		retval = true;
+		break;
+	}
+	return retval;
 }
+
+}
+
 
 
 //boolean templateToCopyAndPaste(TaskFuncStates aState){
@@ -129,6 +177,8 @@ boolean turnOffArm(TaskFuncStates aState){
 //		break;
 //
 //	case TF_EXIT:
+//
+//      retval = true;  // unless you want to call this whole process again. //
 //
 //		break;
 //	}
