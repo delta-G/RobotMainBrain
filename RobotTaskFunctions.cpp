@@ -120,7 +120,9 @@ boolean turnOnArm(TaskFuncStates aState){
 	switch (aState){
 
 	case TF_ENTRY:
+		robot.silenceHeartbeat();
 		robot.arm.enable();
+		robot.restartHeartbeat();
 		startTime = millis();
 		internalState = 0;
 		break;
