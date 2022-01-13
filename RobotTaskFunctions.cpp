@@ -105,6 +105,8 @@ boolean turnOffArm(TaskFuncStates aState){
 		digitalWrite(10, LOW);
 		digitalWrite(11, LOW);
 		robot.arm.disable();
+		robot.armPresent = false;
+		robot.armResponding = false;
 		retval = true;
 		break;
 	}
