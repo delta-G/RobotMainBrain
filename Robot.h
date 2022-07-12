@@ -137,6 +137,8 @@ public:
 			rightMotor(RIGHT_MOTOR_DIRECTION_PIN_1, RIGHT_MOTOR_DIRECTION_PIN_2, RIGHT_MOTOR_ENABLE_PIN, RIGHT_MOTOR_FEEDBACK_PIN, false),
 			sonar(){};
 
+	boolean selfTest();
+
 	void silenceHeartbeat();
 	void restartHeartbeat();
 

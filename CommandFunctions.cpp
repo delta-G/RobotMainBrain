@@ -88,6 +88,13 @@ void controlCodes(char* p){
 			Task::startTask(Task::turnOnArm);
 		}
 		break;
+	case 'T':
+		if(robot.selfTest()){
+			Serial.print(F("<SelfTest-Pass>"));
+		} else {
+			sendError(ECODE_SELF_TEST_FAIL);
+		}
+		break;
 	}
 }
 
@@ -363,6 +370,9 @@ void requestFromBot(char* p) {
 		break;
 	case 'R':
 		robot.regularResponse();
+		break;
+	case 'e': // error
+		sendError(ECODE_FAKE_CODE);
 		break;
 	case 'E':  // Echo
 		Serial.print(F("<"));

@@ -126,6 +126,29 @@ void Robot::mainLoop(){
 	}
 }
 
+boolean Robot::selfTest(){
+
+	uint8_t resp1 = xpander.readRegister(IOCON);
+	uint8_t resp2 = xpander.readRegister(IOCON);
+
+	if ((resp1 != resp2) || (resp1 == 0) || (resp2 == 0)) {
+		sendError(ECODE_XPANDER_SPI_FAIL);
+		return false;
+	}
+
+	resp1 = powerXpander.readRegister(IOCON);
+	resp2 = powerXpander.readRegister(IOCON);
+
+	if ((resp1 != resp2) || (resp1 == 0) || (resp2 == 0)) {
+		sendError(ECODE_POWERXPANDER_SPI_FAIL);
+		return false;
+	}
+
+
+
+	return true;
+
+}
 
 void Robot::autoLoop() {
 
