@@ -22,6 +22,12 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 
 #include "RobotTaskFunctions.h"
 
+//*  TODO:   This needs to be included differently.  The Task namespace should be for the generic stuff.
+//            The callback pointer and methods to set it should live here.
+//            There should be a separate header or headers with the actual tasks in them.
+//            There should be a method here that robot calls from its main loop that checks the callback and runs if necessary
+//            That way we could even expand to multiple tasks at once.
+
 namespace Task{
 
 TaskFunc currentTask = NULL;

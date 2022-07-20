@@ -195,6 +195,7 @@ void testFunc(char* p) {
 }
 
 
+//*  TODO:  This one uses commas in the command.  Remove them here and in DiscoBot and switch on p[2] instead.
 void ultrasonicControl(char *p) {
 	switch (p[3]) {
 
@@ -314,6 +315,7 @@ void xboxCommandRaw(char* p) {
 	}
 }
 
+//*  TODO:  This one uses commas in the command.  Remove them here and in DiscoBot and switch on p[2] instead.
 void enableArm(char* p) {
 	if (p[3] == '0'){
 		Serial.print(F("<Arm Responding>"));
@@ -359,6 +361,7 @@ void headlightControl(char* p) {
 
 }
 
+//*  TODO:  This one uses commas in the command.  Remove them here and in DiscoBot and switch on p[2] instead.
 void requestFromBot(char* p) {
 	switch (p[3]) {
 	case 'r':

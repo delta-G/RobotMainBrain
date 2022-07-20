@@ -144,7 +144,7 @@ boolean Robot::selfTest(){
 		return false;
 	}
 
-
+	//*   TODO:  Check voltages (and more)
 
 	return true;
 
