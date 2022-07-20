@@ -92,7 +92,7 @@ void Robot::init() {
 	camera.init(LOW);
 	arm.init(HIGH);
 	headlight.init(LOW);
-	comPower.init(LOW);
+	comPower.init(HIGH);   // Start with com power on so we can try to program OTA
 
 	motorPower.init(LOW);
 	motorController.init(LOW);
