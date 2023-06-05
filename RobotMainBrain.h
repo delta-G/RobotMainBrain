@@ -28,6 +28,8 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 #include "Defines.h"
 #include "ErrorCodes.h"
 
+#include <avr/wdt.h>
+
 #include "Robot.h"
 
 #include <StreamParser.h>
@@ -48,6 +50,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 void setup();
 void bootup();
 void loop();
+void debugBlink(uint8_t numTimes);
 void heartBeat();
 void parseCommand(char*);
 void rawDataCallback(char*);

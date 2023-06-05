@@ -56,6 +56,14 @@ boolean useSpeedBasedAlgs = false;
 
 boolean runSpeedReport = false;
 
+void debugBlink(uint8_t numTimes) {
+	for (uint8_t i = 0; i < numTimes; i++) {
+		digitalWrite(HEARTBEAT_PIN, HIGH);
+		delay(100);
+		digitalWrite(HEARTBEAT_PIN, LOW);
+		delay(100);
+	}
+}
 
 void parseCommand(char *aCommand) {
 	if (strcmp(aCommand, "<LOST_COM>") == 0) {
@@ -97,7 +105,7 @@ void setup() {
 
 	//  loop here while everything boots up.
 	while (bootState < RUNNING) {
-		heartBeat();
+//		heartBeat();
 		bootup();
 	}
 
@@ -118,15 +126,17 @@ void bootup() {
 		robot.comPower.enable();
 //		robot.motorController.enable();
 		bootState = BOOTING;
+		debugBlink(1);
 		break;
 
-	//   3 seconds at bootup for power to stabilize etc.
+		//   3 seconds at bootup for power to stabilize etc.
 	case BOOTING:
 
 		if (millis() > RMB_BOOT_INIT_WAIT) {
 			bootState = BOOT_ARM;
 			// For some reason if the heartbeat light is on when the arm boots then RMB will lock up.  Must be a power thing somewere.
 			robot.silenceHeartbeat();
+			debugBlink(1);
 		}
 		break;
 
@@ -140,6 +150,7 @@ void bootup() {
 				Serial1.begin(ARM_BOARD_BAUD);
 				bootState = BOOTING_ARM;
 				robot.restartHeartbeat();
+				debugBlink(2);
 			}
 		}
 		break;
@@ -150,6 +161,7 @@ void bootup() {
 		armParser.run();
 
 		if(robot.armPresent && robot.armResponding){
+//			debugBlink(3);
 			bootState = CONNECT_COM;
 		}
 		// Timeout in case arm is not there
@@ -164,15 +176,17 @@ void bootup() {
 	}
 
 	case CONNECT_COM: {
+		debugBlink(3);
 		Serial.begin(ROBOT_COM_BAUD);
 		comStartedTime = millis();
 		bootState = CONNECTING_COM;
+		debugBlink(1);
 		break;
 	}
 
 	case CONNECTING_COM: {
 		if ((millis() - comStartedTime > 250)) {
-			Serial.print(RMB_STARTUP_STRING);
+			Serial.print(F(RMB_STARTUP_STRING));
 			char gitbuf[9];
 			strncpy(gitbuf, GIT_HASH, 8);
 			gitbuf[8] = 0;
@@ -292,7 +306,7 @@ void rawDataCallback(char* p){
 void armParserCallback(char* aCommand){
 	if(strcmp(aCommand, ARM_INIT_COMPLETE) == 0){
 		robot.armPresent = true;
-		Serial1.print(RMB_ARM_TEST_STRING);
+		Serial1.print(F(RMB_ARM_TEST_STRING));
 	}
 	else if(strcmp(aCommand, ARM_CONNECT_RESPONSE) == 0){
 		robot.armResponding = true;

@@ -22,7 +22,9 @@ AVR_TOOLS_DIR = /usr/bin
 
 USER_LIB_PATH = /home/david/Arduino/libraries
 ARDUINO_PLATFORM_LIB_PATH = /home/david/.arduino15/packages/MightyCore/hardware/avr/2.2.1/libraries
-
+AVRDUDE_CONF = /etc/avrdude.conf
+AVRDUDE_ARD_PROGRAMMER = arduino
+AVRDUDE_ARD_BAUDRATE = 115200
 
 TARGET = RobotMainBrain.cpp
 
@@ -40,7 +42,7 @@ BOOTLOADER_PATH   = optiboot
 BOOTLOADER_FILE   = optiboot_atmega1284p.hex
 ISP_PROG     	   = usbasp
 AVRDUDE_OPTS 	   = -v
-ARDUINO_PORT = /dev/ttyACM0  # change this to the port used by your board
+ARDUINO_PORT = /dev/ttyUSB0  # change this to the port used by your board
 
 ARDUINO_LIBS = RobotSharedDefines
 ARDUINO_LIBS += CommandParser
