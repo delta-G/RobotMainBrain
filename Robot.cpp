@@ -454,31 +454,22 @@ void Robot::regularResponse(){
 
 	case 2: {
 		if (armResponding) {
-//			boolean gotNew = newArmData;
-//			newArmData = false;
-			if (newArmData) {
-				newArmData = false;
-				if (!nosendArmData) {
-					for (int i = 0; i < ARM_DUMP_SIZE; i++) {
-						Serial.write(armDumpBuffer[i]);
-					}
-					if (armDumpBuffer[4] == 't') {
-						Serial1.print("<A,Rp>");
-					} else {
-						Serial1.print("<A,RR>");
-					}
-					break; // since we send something to base we can break the switch.
+			//  If it is a dump send it
+			if (armDumpBuffer[0] == '<') {
+				for (int i = 0; i < ARM_DUMP_SIZE; i++) {
+					Serial.write(armDumpBuffer[i]);
+					armDumpBuffer[0] = 0;  // Using first slot as a flag
+				}
+				if (armDumpBuffer[4] == 't') {
+					Serial1.print("<A,Rp>");
 				} else {
-					nosendArmData = false;
-
 					Serial1.print("<A,RR>");
 				}
-
+				break; // since we send something to base we can break the switch.
 			}
 		}
 		// We get here if armResponding is false OR if there's no new arm data to send out
 		counter++; /* no break */
-
 	}
 		/* no break */
 	case 3:
@@ -578,13 +569,6 @@ void Robot::saveLastRawCommand(uint8_t* p){
 
 void Robot::saveArmReport(uint8_t* p){
 	memcpy(robot.armDumpBuffer, p, ARM_DUMP_SIZE);
-	newArmData = true;
-	nosendArmData = false;
-}
-
-void Robot::redundantArmReport(){
-	newArmData = true;
-	nosendArmData = true;
 }
 
 void Robot::setDriveMode(DriveModeEnum aDriveMode) {

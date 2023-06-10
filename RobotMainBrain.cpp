@@ -310,11 +310,11 @@ void armParserCallback(char* aCommand){
 	}
 	else if(strcmp(aCommand, ARM_CONNECT_RESPONSE) == 0){
 		robot.armResponding = true;
+		Serial1.print("<A,RR>");  //Start the regular report cycle
 	}
 	else if(strcmp(aCommand, ARM_NO_NEW_DATA) == 0){
 		// if no new arm data, call regular response again and get a dump or voltages
-//		robot.regularResponse();
-		robot.redundantArmReport();
+		Serial1.print("<A,RR>");
 	}
 	else if(strcmp(aCommand, ARM_MOVEMENT_DONE) == 0){
 		if(robot.movementDoneWait){
