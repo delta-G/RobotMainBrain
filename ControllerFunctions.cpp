@@ -258,9 +258,10 @@ void armButtonMode() {
 			Serial1.print("<A,S0,a200>");
 		} else if (xbox_ptr->isPressed(R1)) {
 			Serial1.print("<A,S0,a-200>");
-		} else {
-			Serial1.print("<A,S0,J0>");
 		}
+//		else {
+//			Serial1.print("<A,S0,J0>");
+//		}
 	}
 }
 
