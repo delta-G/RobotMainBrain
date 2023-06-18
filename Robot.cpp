@@ -106,6 +106,21 @@ void Robot::init() {
 //	battery.initReadings();
 }
 
+void Robot::powerDownForReset(){
+	// power off all accessories
+	sonarPower.disable();
+	auxPower.disable();
+	camera.disable();
+	headlight.disable();
+	v12Power.disable();
+	arm.disable();
+	motorController.disable();
+	motorPower.disable();
+
+	silenceHeartbeat();
+
+}
+
 void Robot::setTaskLoopCallback(boolean (*aCallback)()){
 	taskLoopCallback = aCallback;
 }

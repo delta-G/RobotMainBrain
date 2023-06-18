@@ -68,7 +68,25 @@ void debugBlink(uint8_t numTimes) {
 void parseCommand(char *aCommand) {
 	if (strcmp(aCommand, "<LOST_COM>") == 0) {
 		robot.allStop();
+	} else if(strcmp(aCommand, "<UPLOAD>") == 0){
+		// power down robot (kills heartbeat too)
+		robot.powerDownForReset();
+
+		// Turn off Serial1
+		Serial1.end();
+
+		// Turn of SPI bus (clear SPE bit)
+		SPCR &= ~(1<<SPE);
+
+		Serial.print("<UPLOAD_READY>");
+		Serial.flush();
+		delay(50);
+		Serial.end();
+		while(1); ///  Hold here, about to be reset and reprogrammed.
+
+
 	} else {
+
 		cp.parseCommandString(aCommand);
 		lastCommandTime = millis();
 	}
@@ -314,6 +332,10 @@ void armParserCallback(char* aCommand){
 	}
 	else if(strcmp(aCommand, ARM_NO_NEW_DATA) == 0){
 		// if no new arm data, call regular response again and get a dump or voltages
+		Serial1.print("<A,RR>");
+	}
+	else if(strcmp(aCommand, "<n>") == 0){
+		sendError(ECODE_ARM_BAD_N);
 		Serial1.print("<A,RR>");
 	}
 	else if(strcmp(aCommand, ARM_MOVEMENT_DONE) == 0){

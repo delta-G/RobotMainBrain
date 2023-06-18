@@ -40,6 +40,7 @@ void sendError(uint8_t aErrorCode);
 #define ECODE_FAKE_CODE 19
 
 #define ECODE_ARM_BOOT_TIMEOUT 101
+#define ECODE_ARM_BAD_N 102
 
 
 

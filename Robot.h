@@ -141,6 +141,7 @@ public:
 	void restartHeartbeat();
 
 	void init();
+	void powerDownForReset();
 	void mainLoop();
 	void autoLoop();
 
