@@ -324,7 +324,7 @@ void rawDataCallback(char* p){
 void armParserCallback(char* aCommand){
 	if(strcmp(aCommand, ARM_INIT_COMPLETE) == 0){
 		robot.armPresent = true;
-		Serial1.print(F(RMB_ARM_TEST_STRING));
+		Serial1.print(RMB_ARM_TEST_STRING);
 	}
 	else if(strcmp(aCommand, ARM_CONNECT_RESPONSE) == 0){
 		robot.armResponding = true;
@@ -334,10 +334,10 @@ void armParserCallback(char* aCommand){
 		// if no new arm data, call regular response again and get a dump or voltages
 		Serial1.print("<A,RR>");
 	}
-	else if(strcmp(aCommand, "<n>") == 0){
-		sendError(ECODE_ARM_BAD_N);
-		Serial1.print("<A,RR>");
-	}
+//	else if(strcmp(aCommand, "<n>") == 0){
+//		sendError(ECODE_ARM_BAD_N);
+//		Serial1.print("<A,RR>");
+//	}
 	else if(strcmp(aCommand, ARM_MOVEMENT_DONE) == 0){
 		if(robot.movementDoneWait){
 			robot.movementDoneWait = false;

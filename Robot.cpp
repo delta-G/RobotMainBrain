@@ -473,10 +473,10 @@ void Robot::regularResponse(){
 			if (armDumpBuffer[0] == '<') {
 				for (int i = 0; i < ARM_DUMP_SIZE; i++) {
 					Serial.write(armDumpBuffer[i]);
-					armDumpBuffer[0] = 0;  // Using first slot as a flag
-					// Ask for another report
-					Serial1.print("<A,RR>");
 				}
+				armDumpBuffer[0] = 0;  // Using first slot as a flag
+				// Ask for another report
+				Serial1.print("<A,RR>");
 				break; // since we send something to base we can break the switch.
 			}
 		}
