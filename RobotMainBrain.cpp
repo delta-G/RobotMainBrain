@@ -356,6 +356,13 @@ void armParserRawCallback(char* p) {
 	if(p[0]=='<' && p[2]==ARM_DUMP_SIZE && p[ARM_DUMP_SIZE-1]=='>'){
 		//  This will get sent out with next regular response.
 		robot.saveArmReport((uint8_t*)p);
+	} else if (p[0]=='<' && p[2]==17 && p[16]=='>'){
+		// an Arm Calibration Report
+		// Send it out and request another report
+		for(uint8_t i=0; i<17; i++){
+			Serial.write(p[i]);
+		}
+		Serial1.print("<A,RR>");
 	}
 }
 
