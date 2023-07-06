@@ -29,7 +29,7 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
  *
  *
  *                                   +---\/---+
-                xp0 Reset (D 0) PB0 1|        |40 PA0 (AI 0 / D24)     battery
+                xp0 Reset (D 0) PB0 1|        |40 PA0 (AI 0 / D24)     Motor VIN
                 xp0 CS    (D 1) PB1 2|        |39 PA1 (AI 1 / D25)     M1FB
                 xp0 INT   (D 2) PB2 3|        |38 PA2 (AI 2 / D26)     M2FB
                  M1D2 ~   (D 3) PB3 4|        |37 PA3 (AI 3 / D27)
