@@ -287,7 +287,7 @@ void Robot::readSupplyVoltages(){
 	unsigned long cm = millis();
 	if (cm - pm >= VOLTAGE_READING_INTERVAL) {
 		pm = cm;
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < NUM_VOLTAGES_MONITORED; i++) {
 			uint16_t volts;
 
 			if (i == VOLT_ENUM_MOTOR) {
