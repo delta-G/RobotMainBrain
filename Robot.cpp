@@ -319,7 +319,7 @@ void Robot::readSupplyVoltages(){
 uint8_t* Robot::reportSupplyVoltages(){
 	lastVoltageReportMillis = millis();
 	voltageReportNeeded = false;
-	for(int i=0; i<6; i++){
+	for(int i=0; i<NUM_VOLTAGES_MONITORED; i++){
 		voltageLastReport[i] = voltages[i];
 	}
 	static uint8_t data[18];
@@ -342,7 +342,7 @@ uint8_t* Robot::reportSupplyVoltages(){
 	data[16] = (voltages[VOLT_ENUM_CURRENT_SENSOR] & 0xFF);
 	data[17] = '>';
 
-	for (int i = 0; i < 16; i++) {
+	for (int i = 0; i < 18; i++) {
 		Serial.write(data[i]);
 	}
 
