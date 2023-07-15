@@ -290,12 +290,13 @@ void Robot::readSupplyVoltages(){
 		for (int i = 0; i < 6; i++) {
 			uint16_t volts;
 
-			if (i < 5) {
-				// first five are on the ADC chip
-				volts = powerADC.read(voltagePins[i]) * voltageCals[i];
-			} else {
+			if (i == VOLT_ENUM_MOTOR) {
 				// the motor voltage reads on an analog pin on the 1284 chip
 				volts = (analogRead(0) + 29.64) / 0.05132;
+
+			} else {
+				// the rest are on the ADC chip
+				volts = powerADC.read(voltagePins[i]) * voltageCals[i];
 			}
 			// if voltage has changed by more than 10%
 			// since last report
@@ -308,6 +309,7 @@ void Robot::readSupplyVoltages(){
 			voltages[i] = volts;
 		}
 	}
+	// We will send voltages to DiscoBot at least this often even if not changed.
 	if (millis() - lastVoltageReportMillis >= VOLTAGE_REPORTING_INTERVAL) {
 		voltageReportNeeded = true;
 	}
@@ -320,10 +322,10 @@ uint8_t* Robot::reportSupplyVoltages(){
 	for(int i=0; i<6; i++){
 		voltageLastReport[i] = voltages[i];
 	}
-	static uint8_t data[16];
+	static uint8_t data[18];
 	data[0] = '<';
 	data[1] = 0x13;
-	data[2] = 16;
+	data[2] = 18;
 	data[3] = (voltages[VOLT_ENUM_BATTERY] >> 8);
 	data[4] = (voltages[VOLT_ENUM_BATTERY] & 0xFF);
 	data[5] = (voltages[VOLT_ENUM_MOTOR] >> 8);
@@ -336,7 +338,9 @@ uint8_t* Robot::reportSupplyVoltages(){
 	data[12] = (voltages[VOLT_ENUM_AUX] & 0xFF);
 	data[13] = (voltages[VOLT_ENUM_V12] >> 8);
 	data[14] = (voltages[VOLT_ENUM_V12] & 0xFF);
-	data[15] = '>';
+	data[15] = (voltages[VOLT_ENUM_CURRENT_SENSOR] >> 8);
+	data[16] = (voltages[VOLT_ENUM_CURRENT_SENSOR] & 0xFF);
+	data[17] = '>';
 
 	for (int i = 0; i < 16; i++) {
 		Serial.write(data[i]);

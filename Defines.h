@@ -153,14 +153,17 @@ Robot Main Brain  --  runs on 1284P and handles onboard control of my robot
 enum VoltageEnum {
 	VOLT_ENUM_BATTERY,
 	VOLT_ENUM_V12,
+	VOLT_ENUM_CURRENT_SENSOR,
 	VOLT_ENUM_AUX,
 	VOLT_ENUM_MAIN5,
 	VOLT_ENUM_RADIO,
-	VOLT_ENUM_MOTOR
+	VOLT_ENUM_MOTOR,
+	NUM_VOLTAGES_MONITORED
 };
 
 #define BATTERY_ADC_PIN 0
 #define V12_ADC_PIN 1
+#define CURRENT_SENSOR_ADC_PIN 3
 #define AUX_ADC_PIN 4
 #define MAIN5_ADC_PIN 6
 #define RADIO_ADC_PIN 7
@@ -170,6 +173,9 @@ enum VoltageEnum {
 #define AUX_ADC_CAL_FACTOR 9.25
 #define MAIN5_ADC_CAL_FACTOR 9.41
 #define RADIO_ADC_CAL_FACTOR 9.54
+// cal factor for current sensor hasn't been measured.
+// was taken as an average of the other three that share the same resistor values.
+#define CURRENT_SENSOR_CAL_FACTOR 9.4
 
 
 #define NUMBER_BATTERY_READINGS_TO_AVERAGE 30
