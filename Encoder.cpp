@@ -71,6 +71,9 @@ ISR(PCINT2_vect){
 
 
 void setupPCint(){
+	// set DDR to input and set pullups on
+	DDRC |= (RIGHT_INT_MASK | RIGHT_B_MASK | LEFT_INT_MASK | LEFT_B_MASK);
+	PORTC |= (RIGHT_INT_MASK | RIGHT_B_MASK | LEFT_INT_MASK | LEFT_B_MASK);
 
 	PCICR = PCICR | (1 << PCIE2);   //  Turn on pin change interrupt 2
 	PCIFR = (1 << PCIF2);   // Clear any pending interrupt flag for pin change interrupt 2
