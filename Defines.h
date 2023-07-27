@@ -173,9 +173,7 @@ enum VoltageEnum {
 #define AUX_ADC_CAL_FACTOR 9.25
 #define MAIN5_ADC_CAL_FACTOR 9.41
 #define RADIO_ADC_CAL_FACTOR 9.54
-// cal factor for current sensor hasn't been measured.
-// was taken as an average of the other three that share the same resistor values.
-#define CURRENT_SENSOR_CAL_FACTOR 9.4
+#define CURRENT_SENSOR_CAL_FACTOR 6.245
 
 
 #define NUMBER_BATTERY_READINGS_TO_AVERAGE 30
